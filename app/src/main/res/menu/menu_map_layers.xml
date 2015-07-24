@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/back_items_map"
+        android:checkable="true"
+        android:orderInCategory="100"
+        
+        android:title="@string/map.menu.back"/>
+    <item
+        android:id="@+id/cafe_items_map"
+        android:checkable="true"
+        android:orderInCategory="100"
+        
+        android:title="@string/map.menu.cafe"/>
+    <item
+        android:id="@+id/ice_items_map"
+        android:checkable="true"
+        android:orderInCategory="100"
+        android:title="@string/map.menu.icecream"/>
+    <item
+        android:id="@+id/food_items_map"
+        android:checkable="true"
+        android:orderInCategory="100"
+        android:title="@string/map.menu.food"/>
+    <item
+        android:id="@+id/shopping_items_map"
+        android:checkable="true"
+        android:orderInCategory="100"
+        android:title="@string/map.menu.shopping"/>
+    <item
+        android:id="@+id/vokue_items_map"
+        android:checkable="true"
+        android:orderInCategory="100"
+        android:title="@string/map.menu.vokue"/>
+    <item
+        android:id="@+id/fav_items_map"
+        android:checkable="true"
+        android:orderInCategory="100"
+        android:title="@string/map.menu.showFav"/>
+    <item
+        android:id="@+id/showAll_items_map"
+        android:orderInCategory="100"
+        android:title="@string/map.menu.showAll"/>
+    <item
+        android:id="@+id/hideAll_items_map"
+        android:orderInCategory="100"
+        android:title="@string/map.menu.hideAll"/>
+</menu>

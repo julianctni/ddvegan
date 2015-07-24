@@ -1,0 +1,90 @@
+package com.pasta.ddvegan.models;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
+/**
+ * Created by julian on 02.04.15.
+ */
+public class VeganNews {
+
+    int newsId;
+    int newsType;
+    int spotId;
+    String newsTime;
+    String newsContent;
+
+    public VeganNews (int newsId, int newsType, int spotId, String newsContent, String newsTime){
+        this.newsId = newsId;
+        this.newsType = newsType;
+        this.spotId = spotId;
+        this.newsContent = createNewsContent (newsType, newsContent);
+        this.newsTime = newsTime;
+    }
+
+
+    /**
+     1 -> contact
+     2 -> address
+     3 -> hours
+     4 -> info
+     5 -> new spot
+     6 -> spot deleted
+     7 -> individual news
+     */
+    public String createNewsContent (int type, String content) {
+        switch (type){
+            case 1:
+                return "Kontaktdaten bei "+content+" geändert.";
+            case 2:
+                return "Adressdaten bei "+content+" geändert.";
+            case 3:
+                return "Öffnungszeiten bei "+content+" geändert.";
+            case 4:
+                return "Infoangaben bei "+content+" geändert.";
+            case 5:
+                return "Neuer Laden: "+content;
+            case 6:
+                return content+" wurde aus der Datenbank entfernt.";
+            case 7:
+                return content;
+        }
+        return "";
+    }
+
+    public String formatNewsTime() {
+        Calendar currentTime = Calendar.getInstance();
+        Calendar messageTime = Calendar.getInstance();
+
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat dfShort = new SimpleDateFormat("HH:mm");
+        SimpleDateFormat dfDate = new SimpleDateFormat("dd.MM.yy, HH:mm");
+
+        try {
+            messageTime.setTime(df.parse(newsTime));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        if (currentTime.get(Calendar.DAY_OF_YEAR) == (messageTime
+                .get(Calendar.DAY_OF_YEAR) + 1))
+            return ("yesterday, " + dfShort.format(messageTime.getTime()));
+        else if (currentTime.get(Calendar.DAY_OF_YEAR) == messageTime
+                .get(Calendar.DAY_OF_YEAR))
+            return ("today, " + dfShort.format(messageTime.getTime()));
+        else
+            return (dfDate.format(messageTime.getTime()));
+    }
+
+    public int getSpotId(){
+        return spotId;
+    }
+    public String getNewsContent() {
+        return newsContent;
+    }
+
+    public String getNewsTime() {
+        return newsTime;
+    }
+}
