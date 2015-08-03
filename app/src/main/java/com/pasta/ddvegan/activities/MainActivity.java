@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 import com.pasta.ddvegan.adapters.NavigationGridAdapter;
 import com.pasta.ddvegan.R;
 import com.pasta.ddvegan.fragments.MapFragment;
+import com.pasta.ddvegan.fragments.NewsFragment;
 import com.pasta.ddvegan.fragments.SpotDetailFragment;
 import com.pasta.ddvegan.fragments.SpotListFragment;
 import com.pasta.ddvegan.fragments.StartPageFragment;
@@ -39,8 +41,10 @@ public class MainActivity extends ActionBarActivity
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
     private Toolbar toolbar;
+    private ImageView homeButton;
     private Menu menu;
     private GridView navigationGrid;
+    private FragmentManager fragmentManager;
     private ArrayList<NavGridItem> navGridItems = new ArrayList<NavGridItem>();
     private NavigationGridAdapter navAdapter;
 
@@ -50,6 +54,7 @@ public class MainActivity extends ActionBarActivity
         setContentView(R.layout.activity_main);
         DatabaseUpdater updater = new DatabaseUpdater(this);
         updater.execute();
+        fragmentManager = getSupportFragmentManager();
         initView();
         if (toolbar != null) {
             setSupportActionBar(toolbar);
@@ -57,6 +62,15 @@ public class MainActivity extends ActionBarActivity
         }
         initDrawer();
         this.setUpStartPage();
+        homeButton = (ImageView)findViewById(R.id.home_button);
+        homeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Fragment current = fragmentManager.findFragmentById(R.id.content_frame);
+                if (!(current instanceof StartPageFragment))
+                    setUpStartPage();
+            }
+        });
     }
 
 
@@ -105,7 +119,6 @@ public class MainActivity extends ActionBarActivity
             fragment = new MapFragment();
         } else
             fragment = SpotListFragment.create(item.getType());
-        FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment current = fragmentManager.findFragmentById(R.id.content_frame);
 
         fragmentManager.beginTransaction()
@@ -119,9 +132,7 @@ public class MainActivity extends ActionBarActivity
         for (NavGridItem n : navGridItems)
             n.setSelected(false);
         navAdapter.notifyDataSetChanged();
-        navAdapter.notifyDataSetChanged();
         Fragment fragment = new StartPageFragment();
-        FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.content_frame, fragment)
                 .commit();
@@ -186,7 +197,6 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public void onFragmentInteraction(int venueId) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment fragment = new SpotDetailFragment();
         Bundle bundle = new Bundle();
         bundle.putInt("venueId", venueId);
@@ -198,9 +208,9 @@ public class MainActivity extends ActionBarActivity
     }
 
     public void onBackPressed() {
-        Fragment current = this.getSupportFragmentManager().findFragmentById(R.id.content_frame);
+        Fragment current = fragmentManager.findFragmentById(R.id.content_frame);
         if (current instanceof SpotDetailFragment)
-            getSupportFragmentManager().popBackStack();
+            fragmentManager.popBackStack();
         else if (!(current instanceof StartPageFragment)) {
             this.setUpStartPage();
         } else {
