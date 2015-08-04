@@ -24,22 +24,29 @@ import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 
+import com.pasta.ddvegan.R;
+import com.pasta.ddvegan.activities.LoadingActivity;
+import com.pasta.ddvegan.activities.MainActivity;
 import com.pasta.ddvegan.fragments.NewsFragment;
 import com.pasta.ddvegan.models.DataRepo;
 
 
 public class NewsAndSpotUpdater extends AsyncTask<Integer, Integer, Integer> {
-    Context context;
+    LoadingActivity context;
     SharedPreferences prefs;
     ProgressDialog dialog;
 
-    public NewsAndSpotUpdater(Context context) {
+    public NewsAndSpotUpdater(LoadingActivity context) {
         this.context = context;
         dialog = new ProgressDialog(context);
     }
@@ -58,7 +65,7 @@ public class NewsAndSpotUpdater extends AsyncTask<Integer, Integer, Integer> {
                         cancel(true);
                     }
                 });
-        dialog.show();
+        //dialog.show();
     }
 
     @Override
@@ -107,8 +114,31 @@ public class NewsAndSpotUpdater extends AsyncTask<Integer, Integer, Integer> {
 
     protected void onPostExecute(Integer result) {
         super.onPostExecute(result);
-        dialog.dismiss();
-        NewsFragment.newsAdapter.notifyDataSetChanged();
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                Animation x = new AlphaAnimation(1,0);
+                x.setFillAfter(true);
+                x.setDuration(200);
+                x.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {}
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        Intent intent = new Intent(context, MainActivity.class);
+                        context.startActivity(intent);
+                        context.overridePendingTransition(R.anim.anim_slide_in, R.anim.anim_slide_out);
+                        context.finish();
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {}
+                });
+                context.icon.startAnimation(x);
+
+            }
+        }, 2000);
     }
 
     public String requestNews(int maxId) {

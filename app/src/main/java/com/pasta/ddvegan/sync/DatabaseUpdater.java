@@ -24,21 +24,24 @@ import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.pasta.ddvegan.activities.LoadingActivity;
+import com.pasta.ddvegan.activities.MainActivity;
 import com.pasta.ddvegan.models.DataRepo;
 
 
 public class DatabaseUpdater extends AsyncTask<Integer, Integer, Integer> {
-    Context context;
+    LoadingActivity context;
     SharedPreferences prefs;
     ProgressDialog dialog;
 
-    public DatabaseUpdater(Context context) {
+    public DatabaseUpdater(LoadingActivity context) {
         this.context = context;
         dialog = new ProgressDialog(context);
     }
@@ -57,7 +60,7 @@ public class DatabaseUpdater extends AsyncTask<Integer, Integer, Integer> {
                         cancel(true);
                     }
                 });
-        dialog.show();
+        //dialog.show();
     }
 
     @Override
@@ -147,7 +150,7 @@ public class DatabaseUpdater extends AsyncTask<Integer, Integer, Integer> {
 
     protected void onPostExecute(Integer result) {
         super.onPostExecute(result);
-        dialog.dismiss();
+        //dialog.dismiss()
         NewsAndSpotUpdater updater = new NewsAndSpotUpdater(context);
         updater.execute();
         /*

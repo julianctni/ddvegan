@@ -52,8 +52,7 @@ public class MainActivity extends ActionBarActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        DatabaseUpdater updater = new DatabaseUpdater(this);
-        updater.execute();
+
         fragmentManager = getSupportFragmentManager();
         initView();
         if (toolbar != null) {
@@ -136,6 +135,8 @@ public class MainActivity extends ActionBarActivity
         fragmentManager.beginTransaction()
                 .replace(R.id.content_frame, fragment)
                 .commit();
+        if (NewsFragment.newsAdapter != null)
+            NewsFragment.newsAdapter.notifyDataSetChanged();
     }
 
 
