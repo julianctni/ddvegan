@@ -4,6 +4,7 @@ package com.pasta.ddvegan.fragments;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -127,13 +128,11 @@ public class SpotDetailFragment extends Fragment {
             hourLayout.setVisibility(View.GONE);
         else
             for (TextView tv : hours) {
-                tv.setText(tv.getText() + spot.getHoursForDay(day));
+                tv.setText(spot.getHoursForDay(day));
                 if (day == today) {
-                    tv.setTypeface(null, Typeface.BOLD);
-                    tv.setTextSize(16);
+                    tv.setTextColor(getResources().getColor(R.color.primary_bright));
                 } else {
-                    tv.setTypeface(null, Typeface.NORMAL);
-                    tv.setTextSize(14);
+                    tv.setTextColor(Color.BLACK);
                 }
 
                 day++;
