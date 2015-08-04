@@ -3,6 +3,8 @@ package com.pasta.ddvegan.adapters;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -67,6 +69,7 @@ public class SpotListAdapter extends RecyclerView.Adapter<SpotListAdapter.ViewHo
         public TextView distance;
         public ImageView openSign;
         public CardView card;
+
 
         @Override
         public void onClick(View v) {

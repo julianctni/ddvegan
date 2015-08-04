@@ -4,13 +4,11 @@
     android:id="@+id/spotCardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="5dp"
-    android:layout_marginLeft="5dp"
-    android:layout_marginRight="5dp"
-    android:orientation="horizontal"
-    android:foreground="?selectableItemBackground"
-    card_view:cardBackgroundColor="#fdfdfd"
-    card_view:cardCornerRadius="0dp" >
+    android:layout_margin="8dp"
+    android:clickable="true"
+    android:foreground="@drawable/ripple_card"
+    card_view:cardBackgroundColor="#FDFDFD"
+    card_view:cardCornerRadius="2dp" >
 
     <RelativeLayout
         android:layout_width="match_parent"
