@@ -75,11 +75,14 @@ public class DatabaseManager extends SQLiteOpenHelper {
                 DataRepo.vokueSpots.add(s);
             if (catCafe == 1)
                 DataRepo.cafeSpots.add(s);
-            if (isFavorite == 1)
-                DataRepo.favoriteSpots.add(s);
+            if (isFavorite == 1) {
+                DataRepo.favoriteMap.put(s.getID(), s);
+                s.setFavorite(true);
+            }
 			Log.i("SQLITE", "getting stored spot " + spotId);
 		}
 		db.close();
+        DataRepo.updateFavorites();
 	}
 
     public void getVeganNewsFromDatabase() {
@@ -99,6 +102,22 @@ public class DatabaseManager extends SQLiteOpenHelper {
             Log.i("SQLITE", "getting stored news " + newsId);
         }
         db.close();
+    }
+
+    public void setAsFavorite(VeganSpot spot, boolean b) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "UPDATE veganSpots SET isFavorite=";
+        spot.setFavorite(b);
+        if (b) {
+            DataRepo.favoriteMap.put(spot.getID(), spot);
+            query += "1 WHERE spotId="+spot.getID()+";";
+        } else {
+            DataRepo.favoriteMap.remove(spot.getID());
+            query += "0 WHERE spotId="+spot.getID()+";";
+        }
+        db.execSQL(query);
+        db.close();
+        DataRepo.updateFavorites();
     }
 
 	public void createSpotTable(SQLiteDatabase db) {

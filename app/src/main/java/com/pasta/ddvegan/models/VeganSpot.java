@@ -25,6 +25,7 @@ public class VeganSpot implements Comparable<VeganSpot> {
     private String info;
     private String offer;
     public boolean hasHours = false;
+    private boolean isFavorite = false;
     private float distance = -1f;
     public HashMap<Integer, ArrayList<Integer>> timeMap = new HashMap<Integer, ArrayList<Integer>>();
     Calendar cal = Calendar.getInstance();
@@ -120,6 +121,14 @@ public class VeganSpot implements Comparable<VeganSpot> {
     public void setDistance(float disttance) {
         this.distance = disttance;
 
+    }
+
+    public boolean isFavorite(){
+        return isFavorite;
+    }
+
+    public void setFavorite(boolean b) {
+        isFavorite = b;
     }
 
     // Hours

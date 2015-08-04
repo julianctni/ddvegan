@@ -41,7 +41,7 @@ public class SpotListFragment extends Fragment {
     ArrayList<VeganSpot> spots;
     RecyclerView rv;
     LinearLayoutManager layoutParams;
-    SpotListAdapter spotListAdapter;
+    public static SpotListAdapter spotListAdapter;
     LinearLayout spotListHeader;
     public static Handler listHandler;
     GpsUtil gps;
@@ -93,7 +93,7 @@ public class SpotListFragment extends Fragment {
                 title = "Café & Kuchen";
                 break;
             case (DataRepo.FAVORITES):
-                spots.addAll(DataRepo.veganSpots.values());
+                spots = DataRepo.favoriteSpots;
                 break;
         }
         gps = new GpsUtil(this);

@@ -8,6 +8,13 @@
         android:orderInCategory="100"
         android:icon="@drawable/ic_place_white_24dp"
         app:showAsAction="always">
+    </item>
 
+    <item
+        android:id="@+id/menu_favorite"
+        android:title="Favorit"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_favorite_outline_white_24dp"
+        app:showAsAction="always">
     </item>
 </menu>

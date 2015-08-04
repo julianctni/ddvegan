@@ -1,13 +1,13 @@
 package com.pasta.ddvegan.fragments;
 
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -28,7 +28,7 @@ import android.widget.Toast;
 import com.pasta.ddvegan.R;
 import com.pasta.ddvegan.models.DataRepo;
 import com.pasta.ddvegan.models.VeganSpot;
-import com.pasta.ddvegan.sync.NetworkUtil;
+import com.pasta.ddvegan.sync.DatabaseManager;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -195,6 +195,16 @@ public class SpotDetailFragment extends Fragment {
     }
 
     @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        if (spot.isFavorite()) {
+            menu.findItem(R.id.menu_favorite).setIcon(R.drawable.ic_favorite_white_24dp);
+        } else {
+            menu.findItem(R.id.menu_favorite).setIcon(R.drawable.ic_favorite_outline_white_24dp);
+        }
+    }
+
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_show_on_map:
@@ -204,6 +214,18 @@ public class SpotDetailFragment extends Fragment {
                         .replace(R.id.content_frame, fragment)
                         .addToBackStack(null)
                         .commit();
+                return true;
+
+            case R.id.menu_favorite:
+                DatabaseManager dbMan = new DatabaseManager(getActivity());
+                if (!spot.isFavorite())
+                    dbMan.setAsFavorite(spot,true);
+                else
+                    dbMan.setAsFavorite(spot,false);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+                    getActivity().invalidateOptionsMenu();
+                DataRepo.updateFavorites();
+                SpotListFragment.spotListAdapter.notifyDataSetChanged();
                 return true;
         }
         return true;

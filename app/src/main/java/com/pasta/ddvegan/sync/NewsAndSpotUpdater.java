@@ -20,52 +20,32 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.ProgressDialog;
 import android.content.ContentValues;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 
 import com.pasta.ddvegan.R;
-import com.pasta.ddvegan.activities.LoadingActivity;
+import com.pasta.ddvegan.activities.SplashActivity;
 import com.pasta.ddvegan.activities.MainActivity;
-import com.pasta.ddvegan.fragments.NewsFragment;
 import com.pasta.ddvegan.models.DataRepo;
+import com.pasta.ddvegan.utils.NetworkUtil;
 
 
 public class NewsAndSpotUpdater extends AsyncTask<Integer, Integer, Integer> {
-    LoadingActivity context;
-    SharedPreferences prefs;
-    ProgressDialog dialog;
+    SplashActivity context;
 
-    public NewsAndSpotUpdater(LoadingActivity context) {
+    public NewsAndSpotUpdater(SplashActivity context) {
         this.context = context;
-        dialog = new ProgressDialog(context);
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        dialog.setMessage("Lade Daten...");
-        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        dialog.setCancelable(false);
-        dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Abbrechen",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        cancel(true);
-                    }
-                });
-        //dialog.show();
     }
 
     @Override

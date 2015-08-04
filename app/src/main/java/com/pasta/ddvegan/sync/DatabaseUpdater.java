@@ -1,66 +1,38 @@
 package com.pasta.ddvegan.sync;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.ProgressDialog;
 import android.content.ContentValues;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.pasta.ddvegan.activities.LoadingActivity;
-import com.pasta.ddvegan.activities.MainActivity;
+import com.pasta.ddvegan.activities.SplashActivity;
 import com.pasta.ddvegan.models.DataRepo;
+import com.pasta.ddvegan.utils.NetworkUtil;
 
 
 public class DatabaseUpdater extends AsyncTask<Integer, Integer, Integer> {
-    LoadingActivity context;
-    SharedPreferences prefs;
-    ProgressDialog dialog;
+    SplashActivity context;
 
-    public DatabaseUpdater(LoadingActivity context) {
+    public DatabaseUpdater(SplashActivity context) {
         this.context = context;
-        dialog = new ProgressDialog(context);
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        dialog.setMessage("Aktualisiere Datenbank...");
-        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        dialog.setCancelable(false);
-        dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Abbrechen",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        cancel(true);
-                    }
-                });
-        //dialog.show();
     }
 
     @Override
@@ -150,19 +122,8 @@ public class DatabaseUpdater extends AsyncTask<Integer, Integer, Integer> {
 
     protected void onPostExecute(Integer result) {
         super.onPostExecute(result);
-        //dialog.dismiss()
         NewsAndSpotUpdater updater = new NewsAndSpotUpdater(context);
         updater.execute();
-        /*
-        if (result == Utils.noInternet)
-            Utils.noInternetToast(context);
-        else if (result == Utils.serverError)
-            Utils.serverErrorToast(context);
-
-
-        MainActivity.shoutAdapter.notifyDataSetChanged();
-        MainActivity.swiper.setRefreshing(false);
-        ShoutInterface.getRemainingShouts(context);*/
     }
 
     public String requestVeganSpots() {

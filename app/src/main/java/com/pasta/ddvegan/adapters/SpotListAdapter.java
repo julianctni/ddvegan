@@ -24,7 +24,7 @@ import com.pasta.ddvegan.models.VeganSpot;
 
 public class SpotListAdapter extends RecyclerView.Adapter<SpotListAdapter.ViewHolder> {
 
-    private ArrayList<VeganSpot> items;
+    public ArrayList<VeganSpot> items;
     public Fragment fragment;
 
     public SpotListAdapter(ArrayList<VeganSpot> items, SpotListFragment fragment) {

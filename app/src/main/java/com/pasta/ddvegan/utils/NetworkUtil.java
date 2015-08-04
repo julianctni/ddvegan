@@ -1,4 +1,4 @@
-package com.pasta.ddvegan.sync;
+package com.pasta.ddvegan.utils;
 
 import java.io.IOException;
 

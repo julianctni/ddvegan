@@ -30,7 +30,13 @@ public class DataRepo {
     public static ArrayList<VeganSpot> bakerySpots = new ArrayList<VeganSpot>();
     public static ArrayList<VeganSpot> vokueSpots = new ArrayList<VeganSpot>();
     public static ArrayList<VeganSpot> icecreamSpots = new ArrayList<VeganSpot>();
+    public static HashMap<Integer,VeganSpot> favoriteMap = new HashMap<Integer,VeganSpot>();
     public static ArrayList<VeganSpot> favoriteSpots = new ArrayList<VeganSpot>();
+
+    public static void updateFavorites(){
+        favoriteSpots.clear();
+        favoriteSpots.addAll(favoriteMap.values());
+    }
 
     public static ArrayList<VeganNews> veganNews = new ArrayList<VeganNews>();
 
