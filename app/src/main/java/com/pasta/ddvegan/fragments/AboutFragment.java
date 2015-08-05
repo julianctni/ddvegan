@@ -1,6 +1,8 @@
 package com.pasta.ddvegan.fragments;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,6 +13,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,6 +21,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -63,7 +67,7 @@ public class AboutFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
-        inflater.inflate(R.menu.menu_spot_detail, menu);
+        inflater.inflate(R.menu.menu_about, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -71,14 +75,22 @@ public class AboutFragment extends Fragment {
     public void onPrepareOptionsMenu(Menu menu) {
     }
 
+    public void shareThisGreatApp() {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, "Dresden Vegan - Die App für veganes Leben in Dresden und Umgebung!\nhttps://goo.gl/hLkl1s");
+        startActivity(Intent.createChooser(shareIntent, "Wähle eine App aus:"));
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_show_on_map:
+            case R.id.menu_share_app:
+                shareThisGreatApp();
                 return true;
 
-            case R.id.menu_favorite:
+            case R.id.menu_contact:
                 return true;
         }
         return true;

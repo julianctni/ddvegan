@@ -6,8 +6,21 @@
     <string name="drawer_open">open</string>
     <string name="drawer_closed">closed</string>
 
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    <string name="info.content.annotations">Anmerkungen</string>
+    <string name="info.content.impressum">Impressum</string>
+    <string name="info.content.version">Version 2.0 / Aug 2015</string>
+    <string name="info.content.code.header">Lizenz</string>
+    <string name="info.content.rating">Über eine Bewertung im Appstore oder per Mail würden wir uns sehr freuen. </string>
+    <string name="info.content.code">Der Quellcode ist auf GitHub verfügbar und unter der GNU Public License lizensiert.\n\nLove pasta, hate racism!</string>
+    <string name="info.content.developerz">Pasta Software\naka Julian Catoni / Stephan Dinter</string>
+    <string name="info.content.thanks"><b>#</b> ein dickes Dankeschön geht an die Admins/Mitglieder der \'Dresden Vegan\' Facebook-Gruppe (www.dresdenvegan.de) für die Bereitstellung ihrer Essens- und Einkaufslisten.\n</string>
+    <string name="info.content.disagree"><b>#</b> falls eines der in dieser App erwähnten Geschäfte/Unternehmen Einwände gegen die Verwendung seines Namens/Logos hat, bitten wir um Mitteilung. Wir werden dann umgehend die relevanten Inhalte entfernen.\n</string>
+    <string name="info.content.noGuarantuee"><b>#</b> für eventuelle Ungenauigkeiten, Fehler oder Unvollständigkeiten bei Öffnungszeiten und anderen Angaben übernehmen wir keine Gewährleistung.\n</string>
+    <string name="info.content.notAll"><b>#</b> wir möchten darauf hinweisen, dass die hier vorzufindenden Listen kein vollständiges Abbild des veganen Angebots in Dresden darstellen, da sie aus nicht offiziell zusammengetragenen Daten stammen.\n</string>
+    <string name="info.content.mailUs"><b>#</b> habt Ihr Fehler gefunden oder allgemein Verbesserungsvorschläge? Dann klickt einfach oben auf den Kontakt-Button und schreibt uns eine Nachricht. Gleiches gilt für unvollständige Informationen zu den Angeboten der verschiedenen Geschäfte/Restaurants.\n</string>
+    <string name="info.content.feedback">Feedback</string>
 
 
     <string name="map.menu.back">Backwaren</string>
