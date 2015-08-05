@@ -66,6 +66,8 @@ public class SpotListFragment extends Fragment {
         if (getArguments() != null) {
             type = getArguments().getInt("spotType");
         }
+        if (type != DataRepo.FAVORITES)
+            setRetainInstance(true);
         spots = new ArrayList<VeganSpot>();
         switch (type) {
             case (DataRepo.FOOD):

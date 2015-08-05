@@ -9,6 +9,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 
 import com.pasta.ddvegan.adapters.NavigationGridAdapter;
 import com.pasta.ddvegan.R;
+import com.pasta.ddvegan.fragments.AboutFragment;
 import com.pasta.ddvegan.fragments.MapFragment;
 import com.pasta.ddvegan.fragments.NewsFragment;
 import com.pasta.ddvegan.fragments.SpotDetailFragment;
@@ -51,6 +53,7 @@ public class MainActivity extends ActionBarActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("SAVED INSTANCE STATE", ""+(savedInstanceState == null));
         setContentView(R.layout.activity_main);
 
         fragmentManager = getSupportFragmentManager();
@@ -60,7 +63,8 @@ public class MainActivity extends ActionBarActivity
             getSupportActionBar().setTitle(null);
         }
         initDrawer();
-        this.setUpStartPage();
+        if (fragmentManager.findFragmentById(R.id.content_frame) == null)
+            this.setUpStartPage();
         homeButton = (ImageView)findViewById(R.id.home_button);
         homeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,13 +119,13 @@ public class MainActivity extends ActionBarActivity
         if (item.getType() == DataRepo.MAP) {
             fragment = new MapFragment();
         } else if (item.getType() == DataRepo.ABOUT) {
-            fragment = new MapFragment();
+            fragment = new AboutFragment();
         } else
             fragment = SpotListFragment.create(item.getType());
         Fragment current = fragmentManager.findFragmentById(R.id.content_frame);
 
         fragmentManager.beginTransaction()
-                .replace(R.id.content_frame, fragment)
+                .replace(R.id.content_frame, fragment, "SPOTLIST")
                 .commit();
 
         drawerLayout.closeDrawer(Gravity.START);
@@ -133,7 +137,7 @@ public class MainActivity extends ActionBarActivity
         navAdapter.notifyDataSetChanged();
         Fragment fragment = new StartPageFragment();
         fragmentManager.beginTransaction()
-                .replace(R.id.content_frame, fragment)
+                .replace(R.id.content_frame, fragment, "STARTPAGE")
                 .commit();
         if (NewsFragment.newsAdapter != null)
             NewsFragment.newsAdapter.notifyDataSetChanged();
@@ -171,7 +175,6 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_spotlist, menu);
         menu.findItem(R.id.menu_sort).setVisible(false);
         return true;
@@ -186,26 +189,20 @@ public class MainActivity extends ActionBarActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        /*
-        if (id == R.id.menu_startpage) {
-            menu.findItem(R.id.menu_startpage).setVisible(false);
-            this.setUpStartPage();
-            return true;
-        }*/
 
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onFragmentInteraction(int venueId) {
-        Fragment fragment = new SpotDetailFragment();
+        /*Fragment fragment = new SpotDetailFragment();
         Bundle bundle = new Bundle();
         bundle.putInt("venueId", venueId);
         fragment.setArguments(bundle);
         fragmentManager.beginTransaction()
                 .replace(R.id.content_frame, fragment)
                 .addToBackStack(null)
-                .commit();
+                .commit();*/
     }
 
     public void onBackPressed() {

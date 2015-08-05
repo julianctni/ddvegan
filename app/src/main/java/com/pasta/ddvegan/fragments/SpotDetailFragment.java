@@ -1,6 +1,7 @@
 package com.pasta.ddvegan.fragments;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -31,6 +32,10 @@ import com.pasta.ddvegan.models.DataRepo;
 import com.pasta.ddvegan.models.VeganSpot;
 import com.pasta.ddvegan.sync.DatabaseManager;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
@@ -60,7 +65,7 @@ public class SpotDetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setRetainInstance(true);
         if (getArguments() != null) {
             spot = DataRepo.veganSpots.get(getArguments().getInt("spotId"));
         }
@@ -137,8 +142,8 @@ public class SpotDetailFragment extends Fragment {
 
                 day++;
             }
-        String phone = spot.getPhone()+"\n";
-        String mail = spot.getMail()+"\n";
+        String phone = spot.getPhone() + "\n";
+        String mail = spot.getMail() + "\n";
         String web = spot.getURL();
         if (spot.getPhone().equals(""))
             phone = "";
@@ -218,9 +223,9 @@ public class SpotDetailFragment extends Fragment {
             case R.id.menu_favorite:
                 DatabaseManager dbMan = new DatabaseManager(getActivity());
                 if (!spot.isFavorite())
-                    dbMan.setAsFavorite(spot,true);
+                    dbMan.setAsFavorite(spot, true);
                 else
-                    dbMan.setAsFavorite(spot,false);
+                    dbMan.setAsFavorite(spot, false);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
                     getActivity().invalidateOptionsMenu();
                 DataRepo.updateFavorites();
@@ -242,29 +247,49 @@ public class SpotDetailFragment extends Fragment {
 
     private class ImageLoader extends AsyncTask<Void, Integer, Integer> {
         Bitmap foodPicture;
+        String pictureName = "";
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
         }
+
         @Override
         protected Integer doInBackground(Void... voids) {
-            Log.i("LOADING IMAGE","loading...");
+
             try {
-                Log.i("LOADING IMAGE","loading jpg");
-                foodPicture = BitmapFactory
-                        .decodeStream((InputStream) new URL("http://www.ddvegan.pastayouth.org/ddvegan/images/" + spot.getImgKey() + "_banner.jpg").getContent());
-            } catch (Exception e1) {
-                e1.printStackTrace();
+                FileInputStream fis = getActivity().openFileInput(spot.getImgKey()+".png");
+                foodPicture = BitmapFactory.decodeStream(fis);
+                Log.i("LOADING IMAGE", "loading image from internal storage");
+            } catch (FileNotFoundException e) {
+                //e.printStackTrace();
+                Log.i("LOADING IMAGE", "loading image from web");
                 try {
-                    Log.i("LOADING IMAGE","loading png");
+                    Log.i("LOADING IMAGE", "loading jpg");
                     foodPicture = BitmapFactory
-                            .decodeStream((InputStream) new URL("http://www.ddvegan.pastayouth.org/ddvegan/images/" + spot.getImgKey() + "_banner.png").getContent());
-                } catch (Exception e2) {
-                    e1.printStackTrace();
+                            .decodeStream((InputStream) new URL("http://www.ddvegan.pastayouth.org/ddvegan/images/" + spot.getImgKey() + "_banner.jpg").getContent());
+
+                } catch (Exception e1) {
+                    //e1.printStackTrace();
+                    try {
+                        Log.i("LOADING IMAGE", "loading png");
+                        foodPicture = BitmapFactory
+                                .decodeStream((InputStream) new URL("http://www.ddvegan.pastayouth.org/ddvegan/images/" + spot.getImgKey() + "_banner.png").getContent());
+                    } catch (Exception e2) {
+                        //e1.printStackTrace();
+                    }
+                }
+                if (foodPicture != null) {
+                    FileOutputStream fos = null;
+                    try {
+                        fos = getActivity().openFileOutput(spot.getImgKey() + ".png", getActivity().MODE_PRIVATE);
+                        foodPicture.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                        fos.close();
+                    } catch (Exception e2) {
+                        //e2.printStackTrace();
+                    }
                 }
             }
-
             return 0;
         }
 

@@ -39,7 +39,7 @@ public class NewsFragment extends ListFragment {
         VeganNews news = (VeganNews)l.getItemAtPosition(position);
         SpotDetailFragment detailFragment = SpotDetailFragment.create(news.getSpotId());
         this.getParentFragment().getFragmentManager().beginTransaction()
-                .replace(R.id.content_frame, detailFragment)
+                .replace(R.id.content_frame, detailFragment, "SPOTDETAIL")
                 .addToBackStack(null)
                 .commit();
     }

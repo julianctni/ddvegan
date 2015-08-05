@@ -78,7 +78,7 @@ public class SpotListAdapter extends RecyclerView.Adapter<SpotListAdapter.ViewHo
             Fragment detailFragment = SpotDetailFragment.create(items.get(getPosition()).getID());
             fragment.getFragmentManager().beginTransaction()
                     .addToBackStack(null)
-                    .replace(R.id.content_frame, detailFragment)
+                    .replace(R.id.content_frame, detailFragment, "SPOTDETAIL")
                     .commit();
         }
 
