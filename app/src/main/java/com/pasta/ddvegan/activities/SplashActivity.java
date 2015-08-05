@@ -1,5 +1,6 @@
 package com.pasta.ddvegan.activities;
 
+import android.content.pm.PackageManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -13,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pasta.ddvegan.R;
+import com.pasta.ddvegan.models.DataRepo;
 import com.pasta.ddvegan.sync.DatabaseUpdater;
 
 public class SplashActivity extends ActionBarActivity {
@@ -27,6 +29,12 @@ public class SplashActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        try {
+            DataRepo.appVersion = getPackageManager()
+                    .getPackageInfo(this.getPackageName(), 0).versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
         DatabaseUpdater updater = new DatabaseUpdater(this);
         updater.execute();
 

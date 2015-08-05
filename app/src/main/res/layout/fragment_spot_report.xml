@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="4dp"
+    android:layout_marginRight="4dp"
+    android:background="@color/primary"
+    android:minWidth="250dp"
+    android:orientation="vertical"
+    android:padding="10dp"
+    tools:context="com.pasta.ddvegan.activity.MainActivity">
+
+    <RelativeLayout
+        android:id="@+id/report_checkboxes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:layout_below="@id/sendMessageText"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <CheckBox
+                android:id="@+id/checkbox_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Adresse" />
+
+            <CheckBox
+                android:id="@+id/checkbox_contact"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Kontaktdaten" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:orientation="vertical">
+
+            <CheckBox
+                android:id="@+id/checkbox_hours"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Öffnungszeiten" />
+
+            <CheckBox
+                android:id="@+id/checkbox_offer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Angebot" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/mailAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/report_checkboxes"
+        android:background="#FFFFFF"
+        android:cursorVisible="true"
+        android:inputType="textEmailAddress"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="50dp"
+        android:hint="Deine E-Mail"
+        android:textColorHint="#888888"
+        android:maxLength="500"
+        android:padding="6dp"
+        android:textColor="#666666"
+        android:textCursorDrawable="@null" />
+
+    <EditText
+        android:id="@+id/messageInput"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_below="@id/mailAddress"
+        android:background="#FFFFFF"
+        android:cursorVisible="true"
+        android:gravity="top|left"
+        android:hint="Deine Nachricht an uns"
+        android:inputType="textMultiLine"
+        android:maxLength="750"
+        android:padding="6dp"
+        android:textColor="#666666"
+        android:textColorHint="#888888"
+        android:textCursorDrawable="@null" />
+
+    <TextView
+        android:id="@+id/charCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/messageInput"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="1dp"
+        android:text="0 / 750"
+        android:textColor="#DDDDDD"
+        android:textSize="10sp" />
+
+    <Button
+        android:id="@+id/sendMessageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/messageInput"
+        android:layout_marginTop="10dp"
+        android:background="@color/primary"
+        android:padding="4dp"
+        android:stateListAnimator="@null"
+        android:text="send"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp" />
+
+
+</RelativeLayout>

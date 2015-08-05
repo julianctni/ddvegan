@@ -21,6 +21,8 @@ public class DataRepo {
             MAP = 8,
             ABOUT = 9;
 
+    public static String appVersion = "";
+
     public static HashMap<Integer, VeganSpot> veganSpots = new HashMap<Integer, VeganSpot>();
     public static HashSet<Integer> chosenMapItems = new HashSet<Integer>();
     public static HashSet<Integer> mapMind = new HashSet<Integer>();

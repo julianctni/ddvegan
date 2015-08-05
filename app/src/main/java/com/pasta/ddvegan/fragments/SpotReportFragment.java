@@ -1,7 +1,6 @@
 package com.pasta.ddvegan.fragments;
 
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.text.Editable;
@@ -11,12 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pasta.ddvegan.R;
 import com.pasta.ddvegan.models.DataRepo;
+import com.pasta.ddvegan.models.VeganSpot;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -30,19 +31,48 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FeedbackFragment extends DialogFragment {
+public class SpotReportFragment extends DialogFragment {
 
+    VeganSpot spot;
     EditText message;
     EditText from;
     TextView charCount;
+    CheckBox wrongOffer;
+    CheckBox wrongHours;
+    CheckBox wrongAddress;
+    CheckBox wrongContact;
+    String errors = "Fehlerkategorien:\n";
 
-    public FeedbackFragment() {
+    public SpotReportFragment() {
+    }
+
+    public static SpotReportFragment createSpotReportFragment(VeganSpot spot) {
+        SpotReportFragment fragment = new SpotReportFragment();
+        Bundle args = new Bundle();
+        args.putInt("spotId", spot.getID());
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+        if (getArguments() != null) {
+            spot = DataRepo.veganSpots.get(getArguments().getInt("spotId"));
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_feedback, container);
+
+        View view = inflater.inflate(R.layout.fragment_spot_report, container);
+        wrongAddress = (CheckBox) view.findViewById(R.id.checkbox_address);
+        wrongHours = (CheckBox) view.findViewById(R.id.checkbox_hours);
+        wrongContact = (CheckBox) view.findViewById(R.id.checkbox_contact);
+        wrongOffer = (CheckBox) view.findViewById(R.id.checkbox_offer);
+
         Button b = (Button) view.findViewById(R.id.sendMessageButton);
         message = (EditText) view.findViewById(R.id.messageInput);
         from = (EditText) view.findViewById(R.id.mailAddress);
@@ -67,6 +97,7 @@ public class FeedbackFragment extends DialogFragment {
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 if (message.getText().toString().length() < 5
                         || message.getText().toString().trim().length() == 0)
                     Toast.makeText(getActivity(),
@@ -76,8 +107,20 @@ public class FeedbackFragment extends DialogFragment {
                     Toast.makeText(getActivity(),
                             "Gebe bitte eine gültige E-Mail Adresse an.",
                             Toast.LENGTH_SHORT).show();
-                else {
-                    MailSender ms = new MailSender(message.getText().toString(), from.getText().toString(), DataRepo.appVersion);
+                else if (!(wrongAddress.isChecked() || wrongHours.isChecked() || wrongOffer.isChecked() || wrongContact.isChecked())) {
+                    Toast.makeText(getActivity(),
+                            "Wähle mindestens eine Fehlerkategorie aus.",
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    if (wrongAddress.isChecked())
+                        errors += "Adressdaten\n";
+                    if (wrongOffer.isChecked())
+                        errors += "Angebot\n";
+                    if (wrongHours.isChecked())
+                        errors += "Öffnungszeiten\n";
+                    if (wrongContact.isChecked())
+                        errors += "Kontaktdaten\n";
+                    MailSender ms = new MailSender("Fehlerreport " + spot.getName() + " (" + spot.getID() + ")\n\n" + errors + "\n\nPersönliche Nachricht:\n\n" + message.getText().toString(), from.getText().toString(), DataRepo.appVersion);
                     ms.execute();
                 }
             }
@@ -94,14 +137,15 @@ public class FeedbackFragment extends DialogFragment {
 
     private class MailSender extends AsyncTask<Void, Integer, Integer> {
         String msg = "";
-        String from = "";
         String version = "";
+        String from = "";
 
-        public MailSender(String msg, String from, String version){
+        public MailSender(String msg, String from, String version) {
             this.msg = msg;
-            this.from = from;
             this.version = version;
+            this.from = from;
         }
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -116,7 +160,7 @@ public class FeedbackFragment extends DialogFragment {
             try {
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(3);
 
-                nameValuePairs.add(new BasicNameValuePair("msg", msg+"\n"+from));
+                nameValuePairs.add(new BasicNameValuePair("msg", msg));
                 nameValuePairs.add(new BasicNameValuePair("version", version));
                 nameValuePairs.add(new BasicNameValuePair("from", from));
                 httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));

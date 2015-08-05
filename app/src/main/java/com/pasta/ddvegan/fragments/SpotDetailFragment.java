@@ -20,6 +20,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -49,6 +51,8 @@ public class SpotDetailFragment extends Fragment {
     VeganSpot spot;
     ImageView spotImage;
     ProgressBar imageProgress;
+    Button errorButton;
+
 
     public SpotDetailFragment() {
     }
@@ -82,6 +86,14 @@ public class SpotDetailFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         spotImage = (ImageView) view.findViewById(R.id.spot_detail_image);
         imageProgress = (ProgressBar) view.findViewById(R.id.spot_detail_progress);
+        errorButton = (Button) view.findViewById(R.id.error_button);
+        errorButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SpotReportFragment srf = SpotReportFragment.createSpotReportFragment(spot);
+                srf.show(getFragmentManager(),"SPOTREPORT");
+            }
+        });
         ImageLoader loader = new ImageLoader();
         loader.execute();
         TextView header = (TextView) view.findViewById(R.id.spot_detail_header);
