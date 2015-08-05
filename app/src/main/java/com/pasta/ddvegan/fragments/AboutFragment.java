@@ -91,6 +91,8 @@ public class AboutFragment extends Fragment {
                 return true;
 
             case R.id.menu_contact:
+                FeedbackFragment feedback = new FeedbackFragment();
+                feedback.show(getFragmentManager(),"FEEDBACK");
                 return true;
         }
         return true;
