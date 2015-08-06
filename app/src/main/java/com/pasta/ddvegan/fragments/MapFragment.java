@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.PopupMenu;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,18 +20,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.mapbox.mapboxsdk.overlay.Icon;
+import com.mapbox.mapboxsdk.overlay.ItemizedIconOverlay;
+import com.mapbox.mapboxsdk.overlay.Marker;
+import com.mapbox.mapboxsdk.tileprovider.tilesource.MapboxTileLayer;
+import com.mapbox.mapboxsdk.views.MapView;
 import com.pasta.ddvegan.R;
 import com.pasta.ddvegan.models.DataRepo;
 import com.pasta.ddvegan.models.VeganSpot;
 import com.pasta.ddvegan.utils.GpsUtil;
-
-import org.osmdroid.ResourceProxy;
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
-import org.osmdroid.util.GeoPoint;
-import org.osmdroid.util.ResourceProxyImpl;
-import org.osmdroid.views.MapView;
-import org.osmdroid.views.overlay.ItemizedIconOverlay;
-import org.osmdroid.views.overlay.OverlayItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +39,7 @@ public class MapFragment extends Fragment {
 
 
     private OnFragmentInteractionListener mListener;
-    protected MapView mapView;
+    protected MapView mapView;/*
     protected ResourceProxy mResourceProxy;
     ArrayList<OverlayItem> bakeryOverlayList = new ArrayList<OverlayItem>();
     ArrayList<OverlayItem> cafeOverlayList = new ArrayList<OverlayItem>();
@@ -49,21 +48,40 @@ public class MapFragment extends Fragment {
     ArrayList<OverlayItem> shoppingOverlayList = new ArrayList<OverlayItem>();
     ArrayList<OverlayItem> vokueOverlayList = new ArrayList<OverlayItem>();
     ArrayList<OverlayItem> favOverlayList = new ArrayList<OverlayItem>();
-    CustomItemizedOverlay bakeryOverlay;
-    CustomItemizedOverlay cafeOverlay;
-    CustomItemizedOverlay foodOverlay;
-    CustomItemizedOverlay icecreamOverlay;
-    CustomItemizedOverlay shoppingOverlay;
-    CustomItemizedOverlay vokueOverlay;
-    CustomItemizedOverlay favOverlay;
-    ItemizedIconOverlay<OverlayItem> singleSpotOverlay;
-    ItemizedIconOverlay<OverlayItem> locationMarkerOverlay;
+    SpotOverlay bakeryOverlay;
+    SpotOverlay cafeOverlay;
+    SpotOverlay foodOverlay;
+    SpotOverlay icecreamOverlay;
+    SpotOverlay shoppingOverlay;
+    SpotOverlay vokueOverlay;
+    SpotOverlay favOverlay;*/
+    /*ItemizedIconOverlay<OverlayItem> singleSpotOverlay;
+    ItemizedIconOverlay<OverlayItem> locationMarkerOverlay;*/
     ProgressDialog dialog;
     public static Handler mapHandler;
     private GpsUtil gps = new GpsUtil(this);
     PopupMenu popupMenu;
     boolean singleSpot;
     int singleSpotId;
+
+    SpotOverlay bakeryOverlay;
+    SpotOverlay cafeOverlay;
+    SpotOverlay foodOverlay;
+    SpotOverlay icecreamOverlay;
+    SpotOverlay shoppingOverlay;
+    SpotOverlay vokueOverlay;
+    SpotOverlay favOverlay;
+
+    ArrayList<Marker> bakeryMarkers = new ArrayList<Marker>();
+    ArrayList<Marker> cafeMarkers = new ArrayList<Marker>();
+    ArrayList<Marker> foodMarkers = new ArrayList<Marker>();
+    ArrayList<Marker> icecreamMarkers = new ArrayList<Marker>();
+    ArrayList<Marker> shoppingMarkers = new ArrayList<Marker>();
+    ArrayList<Marker> vokueMarkers = new ArrayList<Marker>();
+    ArrayList<Marker> favMarkers = new ArrayList<Marker>();
+
+    Marker singleSpotMarker;
+    Marker currentPositionMarker;
 
 
     public MapFragment() {
@@ -82,6 +100,7 @@ public class MapFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
         if (getArguments() != null) {
             singleSpot = getArguments().getBoolean("showSingleSpot");
             singleSpotId = getArguments().getInt("spotId");
@@ -91,8 +110,14 @@ public class MapFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mResourceProxy = new ResourceProxyImpl(inflater.getContext().getApplicationContext());
-        mapView = new MapView(inflater.getContext(), 256, mResourceProxy);
+        //mResourceProxy = new ResourceProxyImpl(inflater.getContext().getApplicationContext());
+        //mapView = new MapView(inflater.getContext(), 256, mResourceProxy);
+        mapView = new MapView(getActivity());
+        mapView.setAccessToken("pk.eyJ1IjoicGFzdGFzb2Z0d2FyZSIsImEiOiJhZjJkYjBhNzMyMTNiMzI4ZmY5NDM0MDU1YjJmNTlmZCJ9.-nkTpeqduWxnSeizwuyV2Q");
+        mapView.setTileSource(new MapboxTileLayer("mapbox.streets"));
+        mapView.setCenter(new LatLng(51.056553, 13.742202));
+        mapView.setMaxZoomLevel(20);
+        mapView.setZoom(14);
         setHasOptionsMenu(true);
         return mapView;
 
@@ -101,39 +126,6 @@ public class MapFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        mapView.setMultiTouchControls(true);
-        mapView.getController().setZoom(13);
-        mapView.setTileSource(TileSourceFactory.MAPNIK);
-        GeoPoint center = new GeoPoint(51.054503, 13.742888);
-        mapView.getController().setCenter(center);
-
-        mapHandler = new Handler() {
-            public void handleMessage(Message msg) {
-                dialog.dismiss();
-                Toast.makeText(getActivity(), "Hier bist du!", Toast.LENGTH_LONG)
-                        .show();
-                mapView.getController().setZoom(14);
-                mapView.getController().setCenter(new GeoPoint(gps.getLatitude(), gps.getLongitude()));
-                if (locationMarkerOverlay != null)
-                    mapView.getOverlays().remove(locationMarkerOverlay);
-                OverlayItem LocationMarkerItem = new OverlayItem("locationMarker", "Marks the location",
-                        new GeoPoint(gps.getLatitude(), gps.getLongitude()));
-                LocationMarkerItem.setMarker(getActivity().getResources().getDrawable(
-                        R.drawable.fadenkreuz));
-                LocationMarkerItem.setMarkerHotspot(OverlayItem.HotspotPlace.CENTER);
-                ArrayList<OverlayItem> tempList = new ArrayList<OverlayItem>();
-                tempList.add(LocationMarkerItem);
-                locationMarkerOverlay = new ItemizedIconOverlay<OverlayItem>(getActivity(), tempList,
-                        null);
-
-                mapView.getOverlays().add(locationMarkerOverlay);
-                mapView.postInvalidate();
-                gps.stop();
-
-                super.handleMessage(msg);
-            }
-        };
         if (!singleSpot) {
             loadOverlays();
             this.reloadMapMind();
@@ -141,16 +133,33 @@ public class MapFragment extends Fragment {
             Drawable spotMarker = this.getResources().getDrawable(R.drawable.marker_single);
             spotMarker.setBounds(0, 0, 20, 20);
             VeganSpot spot = DataRepo.veganSpots.get(singleSpotId);
-            OverlayItem singleSpotItem = new OverlayItem("" + spot.getID(), spot.getName(), new GeoPoint(
+            singleSpotMarker = new Marker("" + spot.getID(), spot.getName(), new LatLng(
                     spot.getGPS_lat(), spot.getGPS_long()));
-            singleSpotItem.setMarker(this.getResources().getDrawable(R.drawable.marker_single));
-            singleSpotItem.setMarkerHotspot(OverlayItem.HotspotPlace.BOTTOM_CENTER);
-            ArrayList<OverlayItem> tempList = new ArrayList<OverlayItem>();
-            tempList.add(singleSpotItem);
-            singleSpotOverlay = new ItemizedIconOverlay<OverlayItem>(getActivity(), tempList, null);
-            mapView.getOverlays().add(singleSpotOverlay);
+            singleSpotMarker.setIcon(new Icon(this.getResources().getDrawable(R.drawable.marker_single)));
+            singleSpotMarker.setHotspot(Marker.HotspotPlace.BOTTOM_CENTER);
+            mapView.addMarker(singleSpotMarker);
             mapView.postInvalidate();
         }
+
+        mapHandler = new Handler() {
+            public void handleMessage(Message msg) {
+                dialog.dismiss();
+                Toast.makeText(getActivity(), "Hier bist du!", Toast.LENGTH_LONG)
+                        .show();
+                mapView.setZoom(14);
+                mapView.setCenter(new LatLng(gps.getLatitude(), gps.getLongitude()));
+                currentPositionMarker = new Marker("locationMarker", "Marks the location",
+                        new LatLng(gps.getLatitude(), gps.getLongitude()));
+                currentPositionMarker.setIcon(new Icon(getActivity().getResources().getDrawable(
+                        R.drawable.fadenkreuz)));
+                currentPositionMarker.setHotspot(Marker.HotspotPlace.CENTER);
+                mapView.addMarker(currentPositionMarker);
+                mapView.postInvalidate();
+                gps.stop();
+
+                super.handleMessage(msg);
+            }
+        };
     }
 
     public Handler getHandler(){
@@ -158,128 +167,113 @@ public class MapFragment extends Fragment {
     }
 
     public void loadOverlays() {
-        Drawable bakeryMarker = this.getResources().getDrawable(R.drawable.marker_bakery);
-        Drawable cafeMarker = this.getResources().getDrawable(R.drawable.marker_cafe);
-        Drawable foodMarker = this.getResources().getDrawable(R.drawable.marker_food);
-        Drawable icecreamMarker = this.getResources().getDrawable(R.drawable.marker_icecream);
-        Drawable shoppingMarker = this.getResources().getDrawable(R.drawable.marker_shopping);
-        Drawable vokueMarker = this.getResources().getDrawable(R.drawable.marker_vokue);
-        Drawable favMarker = this.getResources().getDrawable(R.drawable.marker_fav);
+        Icon bakeryMarker = new Icon(this.getResources().getDrawable(R.drawable.marker_bakery));
+        Icon cafeMarker = new Icon(this.getResources().getDrawable(R.drawable.marker_cafe));
+        Icon foodMarker = new Icon(this.getResources().getDrawable(R.drawable.marker_food));
+        Icon icecreamMarker = new Icon(this.getResources().getDrawable(R.drawable.marker_icecream));
+        Icon shoppingMarker = new Icon(this.getResources().getDrawable(R.drawable.marker_shopping));
+        Icon vokueMarker = new Icon(this.getResources().getDrawable(R.drawable.marker_vokue));
+        Icon favMarker = new Icon(this.getResources().getDrawable(R.drawable.marker_fav));
 
-        icecreamMarker.setBounds(0, 0, 20, 20);
-        foodMarker.setBounds(0, 0, 20, 20);
-        cafeMarker.setBounds(0, 0, 20, 20);
-        bakeryMarker.setBounds(0, 0, 20, 20);
-        shoppingMarker.setBounds(0, 0, 20, 20);
-        vokueMarker.setBounds(0, 0, 20, 20);
-        favMarker.setBounds(0, 0, 20, 20);
-
-        if (foodOverlayList.isEmpty()) {
-            for (VeganSpot current : DataRepo.foodSpots) {
-                OverlayItem currentItem = new OverlayItem("" + current.getID(), current.getName(),
-                        new GeoPoint(current.getGPS_lat(), current.getGPS_long()));
-                currentItem.setMarker(foodMarker);
-                currentItem.setMarkerHotspot(OverlayItem.HotspotPlace.BOTTOM_CENTER);
-                foodOverlayList.add(currentItem);
+        if (foodMarkers.isEmpty()) {
+            Log.i("test", foodMarkers.size()+"");
+            for (VeganSpot v : DataRepo.foodSpots) {
+                Marker m = new Marker(v.getID()+"",v.getName(),new LatLng(v.getGPS_lat(),v.getGPS_long()));
+                m.setIcon(foodMarker);
+                m.setHotspot(Marker.HotspotPlace.BOTTOM_CENTER);
+                foodMarkers.add(m);
+                Log.i("test", foodMarkers.size()+"");
             }
-            foodOverlay = new CustomItemizedOverlay(getActivity(), foodOverlayList);
+            foodOverlay = new SpotOverlay(getActivity(), foodMarkers, null);
         }
 
-        if (shoppingOverlayList.isEmpty()) {
-            for (VeganSpot current : DataRepo.shoppingSpots) {
-                OverlayItem currentItem = new OverlayItem("" + current.getID(), current.getName(),
-                        new GeoPoint(current.getGPS_lat(), current.getGPS_long()));
-                currentItem.setMarker(shoppingMarker);
-                currentItem.setMarkerHotspot(OverlayItem.HotspotPlace.BOTTOM_CENTER);
-                shoppingOverlayList.add(currentItem);
+        if (shoppingMarkers.isEmpty()) {
+            for (VeganSpot v : DataRepo.shoppingSpots) {
+                Marker m = new Marker(v.getID()+"",v.getName(),new LatLng(v.getGPS_lat(),v.getGPS_long()));
+                m.setIcon(shoppingMarker);
+                m.setHotspot(Marker.HotspotPlace.BOTTOM_CENTER);
+                shoppingMarkers.add(m);
             }
-            shoppingOverlay = new CustomItemizedOverlay(getActivity(), shoppingOverlayList);
+            shoppingOverlay = new SpotOverlay(getActivity(), shoppingMarkers, null);
         }
 
-        if (vokueOverlayList.isEmpty()) {
-            for (VeganSpot current : DataRepo.vokueSpots) {
-                OverlayItem currentItem = new OverlayItem("" + current.getID(), current.getName(),
-                        new GeoPoint(current.getGPS_lat(), current.getGPS_long()));
-                currentItem.setMarker(vokueMarker);
-                currentItem.setMarkerHotspot(OverlayItem.HotspotPlace.BOTTOM_CENTER);
-                vokueOverlayList.add(currentItem);
+        if (bakeryMarkers.isEmpty()) {
+            for (VeganSpot v : DataRepo.bakerySpots) {
+                Marker m = new Marker(v.getID()+"",v.getName(),new LatLng(v.getGPS_lat(),v.getGPS_long()));
+                m.setIcon(bakeryMarker);
+                m.setHotspot(Marker.HotspotPlace.BOTTOM_CENTER);
+                bakeryMarkers.add(m);
             }
-            vokueOverlay = new CustomItemizedOverlay(getActivity(), vokueOverlayList);
+            bakeryOverlay = new SpotOverlay(getActivity(), bakeryMarkers, null);
         }
 
-        if (bakeryOverlayList.isEmpty()) {
-            for (VeganSpot current : DataRepo.bakerySpots) {
-                OverlayItem currentItem = new OverlayItem("" + current.getID(), current.getName(),
-                        new GeoPoint(current.getGPS_lat(), current.getGPS_long()));
-                currentItem.setMarker(bakeryMarker);
-                currentItem.setMarkerHotspot(OverlayItem.HotspotPlace.BOTTOM_CENTER);
-                bakeryOverlayList.add(currentItem);
+        if (cafeMarkers.isEmpty()) {
+            for (VeganSpot v : DataRepo.cafeSpots) {
+                Marker m = new Marker(v.getID()+"",v.getName(),new LatLng(v.getGPS_lat(),v.getGPS_long()));
+                m.setIcon(cafeMarker);
+                m.setHotspot(Marker.HotspotPlace.BOTTOM_CENTER);
+                cafeMarkers.add(m);
             }
-            bakeryOverlay = new CustomItemizedOverlay(getActivity(), bakeryOverlayList);
+            cafeOverlay = new SpotOverlay(getActivity(), cafeMarkers, null);
         }
 
-        if (icecreamOverlayList.isEmpty()) {
-            for (VeganSpot current : DataRepo.icecreamSpots) {
-                OverlayItem currentItem = new OverlayItem("" + current.getID(), current.getName(),
-                        new GeoPoint(current.getGPS_lat(), current.getGPS_long()));
-                currentItem.setMarker(icecreamMarker);
-                currentItem.setMarkerHotspot(OverlayItem.HotspotPlace.BOTTOM_CENTER);
-                icecreamOverlayList.add(currentItem);
+        if (icecreamMarkers.isEmpty()) {
+            for (VeganSpot v : DataRepo.icecreamSpots) {
+                Marker m = new Marker(v.getID()+"",v.getName(),new LatLng(v.getGPS_lat(),v.getGPS_long()));
+                m.setIcon(icecreamMarker);
+                m.setHotspot(Marker.HotspotPlace.BOTTOM_CENTER);
+                icecreamMarkers.add(m);
             }
-            icecreamOverlay = new CustomItemizedOverlay(getActivity(), icecreamOverlayList);
+            icecreamOverlay = new SpotOverlay(getActivity(), icecreamMarkers, null);
         }
 
-        if (cafeOverlayList.isEmpty()) {
-            for (VeganSpot current : DataRepo.cafeSpots) {
-                OverlayItem currentItem = new OverlayItem("" + current.getID(), current.getName(),
-                        new GeoPoint(current.getGPS_lat(), current.getGPS_long()));
-                currentItem.setMarker(cafeMarker);
-                currentItem.setMarkerHotspot(OverlayItem.HotspotPlace.BOTTOM_CENTER);
-                cafeOverlayList.add(currentItem);
+        if (vokueMarkers.isEmpty()) {
+            for (VeganSpot v : DataRepo.vokueSpots) {
+                Marker m = new Marker(v.getID()+"",v.getName(),new LatLng(v.getGPS_lat(),v.getGPS_long()));
+                m.setIcon(vokueMarker);
+                m.setHotspot(Marker.HotspotPlace.BOTTOM_CENTER);
+                vokueMarkers.add(m);
             }
-            cafeOverlay = new CustomItemizedOverlay(getActivity(), cafeOverlayList);
+            vokueOverlay = new SpotOverlay(getActivity(), vokueMarkers, null);
         }
 
-        if (favOverlayList.isEmpty()) {
-            for (VeganSpot current : DataRepo.favoriteSpots) {
-                OverlayItem currentItem = new OverlayItem("" + current.getID(), current.getName(),
-                        new GeoPoint(current.getGPS_lat(), current.getGPS_long()));
-                currentItem.setMarker(favMarker);
-                currentItem.setMarkerHotspot(OverlayItem.HotspotPlace.BOTTOM_CENTER);
-                favOverlayList.add(currentItem);
+        if (favMarkers.isEmpty()) {
+            for (VeganSpot v : DataRepo.favoriteSpots) {
+                Marker m = new Marker(v.getID()+"",v.getName(),new LatLng(v.getGPS_lat(),v.getGPS_long()));
+                m.setIcon(favMarker);
+                m.setHotspot(Marker.HotspotPlace.BOTTOM_CENTER);
+                favMarkers.add(m);
             }
-            favOverlay = new CustomItemizedOverlay(getActivity(), favOverlayList);
+            favOverlay = new SpotOverlay(getActivity(), favMarkers, null);
         }
 
     }
 
-    /*
-     * Reload the last map status during runtime.
-     */
+
     public void reloadMapMind() {
-        if (!DataRepo.mapMind.isEmpty() /*&& showIt == null*/) {
+        if (!DataRepo.mapMind.isEmpty()) {
             if (DataRepo.mapMind.contains(DataRepo.BAKERY)) {
-                mapView.getOverlays().add(bakeryOverlay);
+                mapView.addItemizedOverlay(bakeryOverlay);
                 mapView.postInvalidate();
             }
             if (DataRepo.mapMind.contains(DataRepo.CAFE)) {
-                mapView.getOverlays().add(cafeOverlay);
+                mapView.addItemizedOverlay(cafeOverlay);
                 mapView.postInvalidate();
             }
             if (DataRepo.mapMind.contains(DataRepo.ICECREAM)) {
-                mapView.getOverlays().add(icecreamOverlay);
+                mapView.addItemizedOverlay(icecreamOverlay);
                 mapView.postInvalidate();
             }
             if (DataRepo.mapMind.contains(DataRepo.FOOD)) {
-                mapView.getOverlays().add(foodOverlay);
+                mapView.addItemizedOverlay(foodOverlay);
                 mapView.postInvalidate();
             }
             if (DataRepo.mapMind.contains(DataRepo.SHOPPING)) {
-                mapView.getOverlays().add(shoppingOverlay);
+                mapView.addItemizedOverlay(shoppingOverlay);
                 mapView.postInvalidate();
             }
             if (DataRepo.mapMind.contains(DataRepo.VOKUE)) {
-                mapView.getOverlays().add(vokueOverlay);
+                mapView.addItemizedOverlay(vokueOverlay);
                 mapView.postInvalidate();
             }
             if (DataRepo.mapMind.contains(DataRepo.FAVORITES)) {
@@ -297,15 +291,17 @@ public class MapFragment extends Fragment {
     }
 
 
-    public void handleMenuClick(MenuItem menuItem, CustomItemizedOverlay overlay, int mapMindKey) {
+    public void handleMenuClick(MenuItem menuItem, SpotOverlay overlay, int mapMindKey) {
         if (!menuItem.isChecked()) {
             menuItem.setChecked(true);
-            mapView.getOverlays().add(overlay);
+            mapView.addItemizedOverlay(overlay);
+            Log.i("Overlay Size", "" + overlay.size());
+            Log.i("Overlays", "" + mapView.getItemizedOverlays().size());
             mapView.postInvalidate();
             DataRepo.mapMind.add(mapMindKey);
         } else {
             menuItem.setChecked(false);
-            mapView.getOverlays().remove(overlay);
+            mapView.removeOverlay(overlay);
             mapView.postInvalidate();
             DataRepo.mapMind.remove(mapMindKey);
         }
@@ -462,6 +458,35 @@ public class MapFragment extends Fragment {
     }
 
 
+    public class SpotOverlay extends ItemizedIconOverlay {
+
+        public SpotOverlay(Context pContext, List<Marker> pList, OnItemGestureListener<Marker> pOnItemGestureListener) {
+            super(pContext, pList, new OnItemGestureListener<Marker>() {
+                @Override
+                public boolean onItemSingleTapUp(int i, Marker m) {
+                    VeganSpot spot = DataRepo.veganSpots.get(Integer.parseInt(m.getTitle()));
+                    if (!DataRepo.chosenMapItems.contains(spot.getID())) {
+                        SpotDetailFragment fragment = SpotDetailFragment.create(spot.getID());
+                        getFragmentManager().beginTransaction()
+                                .replace(R.id.content_frame, fragment)
+                                .addToBackStack(null)
+                                .commit();
+                        DataRepo.chosenMapItems.add(spot.getID());
+                    }
+                    return false;
+                }
+
+                @Override
+                public boolean onItemLongPress(int i, Marker m) {
+                    return false;
+                }
+            });
+        }
+
+
+    }
+
+    /*
     public class CustomItemizedOverlay extends ItemizedIconOverlay<OverlayItem> {
 
         public CustomItemizedOverlay(final Context context, final List<OverlayItem> aList) {
@@ -486,5 +511,5 @@ public class MapFragment extends Fragment {
                 }
             });
         }
-    }
+    }*/
 }

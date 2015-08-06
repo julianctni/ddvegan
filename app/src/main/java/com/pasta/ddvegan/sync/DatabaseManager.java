@@ -125,7 +125,6 @@ public class DatabaseManager extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "DELETE FROM veganSpots WHERE spotId = "+spotId;
         db.execSQL(query);
-        db.close();
     }
 
 	public void createSpotTable(SQLiteDatabase db) {

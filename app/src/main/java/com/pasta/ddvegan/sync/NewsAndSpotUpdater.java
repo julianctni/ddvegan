@@ -199,6 +199,7 @@ public class NewsAndSpotUpdater extends AsyncTask<Integer, Integer, Integer> {
     public HashSet<Integer> updateNews() {
         HashSet<Integer> updateTheseSpots = new HashSet<Integer>();
         String result = requestNews(dbMan.getMaxNewsId());
+        db = dbMan.getWritableDatabase();
         JSONArray jArray = null;
         try {
             jArray = new JSONArray(result);
@@ -211,9 +212,10 @@ public class NewsAndSpotUpdater extends AsyncTask<Integer, Integer, Integer> {
                 String newsTime = jsonNews.getString("newsTime");
                 if (newsType <= 6) {
                     updateSpots = true;
-                    if (newsType == 6)
-                        dbMan.deleteVeganSpotFromDb(spotId);
-                    else {
+                    if (newsType == 6) {
+                        String query = "DELETE FROM veganSpots WHERE spotId = " + spotId;
+                        db.execSQL(query);
+                    } else {
                         updateTheseSpots.add(spotId);
                     }
                 }
