@@ -52,6 +52,8 @@ public class DataRepo {
         bakerySpots.clear();
         vokueSpots.clear();
         icecreamSpots.clear();
+        favoriteMap.clear();
+        favoriteSpots.clear();
     }
 
 

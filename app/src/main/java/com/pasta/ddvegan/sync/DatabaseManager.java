@@ -26,6 +26,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
 	}
 
 	public void getVeganSpotsFromDatabase() {
+        DataRepo.clearSpotLists();
 		SQLiteDatabase db = this.getReadableDatabase();
 		Log.i("SQLite", "importing vegan spots");
 		String[] projection = { "spotId", "spotName", "spotAddress", "spotPhone",
@@ -118,6 +119,13 @@ public class DatabaseManager extends SQLiteOpenHelper {
         db.execSQL(query);
         db.close();
         DataRepo.updateFavorites();
+    }
+
+    public void deleteVeganSpotFromDb(int spotId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "DELETE FROM veganSpots WHERE spotId = "+spotId;
+        db.execSQL(query);
+        db.close();
     }
 
 	public void createSpotTable(SQLiteDatabase db) {

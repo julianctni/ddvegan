@@ -17,6 +17,7 @@ import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.pasta.ddvegan.activities.SplashActivity;
 import com.pasta.ddvegan.models.DataRepo;
@@ -40,13 +41,16 @@ public class DatabaseUpdater extends AsyncTask<Integer, Integer, Integer> {
         int ret = 0;
         String result = "";
         DatabaseManager dbMan = new DatabaseManager(context);
-        DataRepo.clearSpotLists();
         dbMan.getVeganSpotsFromDatabase();
+
         if (!DataRepo.veganSpots.isEmpty()) {
+            Log.i("DatabaseUpdater", "Database has already been downloaded.");
             dbMan.close();
-            return 0;
+            return ret;
         }
+
         if (NetworkUtil.isConnected(context)) {
+            Log.i("DatabaseUpdater", "Downloading complete database.");
             result = requestVeganSpots();
             SQLiteDatabase db = dbMan.getWritableDatabase();
             db.execSQL ("DELETE FROM veganSpots");
@@ -109,21 +113,29 @@ public class DatabaseUpdater extends AsyncTask<Integer, Integer, Integer> {
                     db.insert("veganSpots", null, values);
                 }
             } catch (JSONException e) {
-                //ret = Utils.serverError;
                 e.printStackTrace();
+                ret = NetworkUtil.serverError;
             }
             db.close();
         } else {
-            //ret = Utils.noInternet;
+            ret = NetworkUtil.connectionError;
         }
 
-        return ret;
+        return -1;
     }
 
     protected void onPostExecute(Integer result) {
         super.onPostExecute(result);
-        NewsAndSpotUpdater updater = new NewsAndSpotUpdater(context);
-        updater.execute();
+        if (result <= 0) {
+            NewsAndSpotUpdater updater = new NewsAndSpotUpdater(context, result);
+            updater.execute();
+        } else if (result == NetworkUtil.connectionError){
+            Toast.makeText(context, "Um die Appdaten zu initialisieren, benötigst du eine Internetverbindung.", Toast.LENGTH_SHORT).show();
+            context.finish();
+        } else if (result == NetworkUtil.serverError){
+            Toast.makeText(context, "Aus technischen Gründen können die Appdaten nicht initialisiert werden. Versuche es später erneut.", Toast.LENGTH_SHORT).show();
+            context.finish();
+        }
     }
 
     public String requestVeganSpots() {
@@ -132,7 +144,7 @@ public class DatabaseUpdater extends AsyncTask<Integer, Integer, Integer> {
         HttpPost httppost = new HttpPost("http://ddvegan.pastayouth.org/json/veganSpots.json");
 
         InputStream inputStream = null;
-        String result = null;
+        String result = "";
         try {
             HttpResponse response = httpclient.execute(httppost);
             HttpEntity entity = response.getEntity();
