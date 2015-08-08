@@ -1,9 +1,12 @@
 package com.pasta.ddvegan.fragments;
 
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,6 +21,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mapbox.mapboxsdk.geometry.LatLng;
@@ -32,6 +37,7 @@ import com.pasta.ddvegan.models.VeganSpot;
 import com.pasta.ddvegan.utils.GpsUtil;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 
@@ -39,24 +45,7 @@ public class MapFragment extends Fragment {
 
 
     private OnFragmentInteractionListener mListener;
-    protected MapView mapView;/*
-    protected ResourceProxy mResourceProxy;
-    ArrayList<OverlayItem> bakeryOverlayList = new ArrayList<OverlayItem>();
-    ArrayList<OverlayItem> cafeOverlayList = new ArrayList<OverlayItem>();
-    ArrayList<OverlayItem> foodOverlayList = new ArrayList<OverlayItem>();
-    ArrayList<OverlayItem> icecreamOverlayList = new ArrayList<OverlayItem>();
-    ArrayList<OverlayItem> shoppingOverlayList = new ArrayList<OverlayItem>();
-    ArrayList<OverlayItem> vokueOverlayList = new ArrayList<OverlayItem>();
-    ArrayList<OverlayItem> favOverlayList = new ArrayList<OverlayItem>();
-    SpotOverlay bakeryOverlay;
-    SpotOverlay cafeOverlay;
-    SpotOverlay foodOverlay;
-    SpotOverlay icecreamOverlay;
-    SpotOverlay shoppingOverlay;
-    SpotOverlay vokueOverlay;
-    SpotOverlay favOverlay;*/
-    /*ItemizedIconOverlay<OverlayItem> singleSpotOverlay;
-    ItemizedIconOverlay<OverlayItem> locationMarkerOverlay;*/
+    protected MapView mapView;
     ProgressDialog dialog;
     public static Handler mapHandler;
     private GpsUtil gps = new GpsUtil(this);
@@ -82,6 +71,10 @@ public class MapFragment extends Fragment {
 
     Marker singleSpotMarker;
     Marker currentPositionMarker;
+
+    LinearLayout spotDetailView;
+    ObjectAnimator transDown;
+    ObjectAnimator transUp;
 
 
     public MapFragment() {
@@ -110,22 +103,88 @@ public class MapFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        //mResourceProxy = new ResourceProxyImpl(inflater.getContext().getApplicationContext());
-        //mapView = new MapView(inflater.getContext(), 256, mResourceProxy);
-        mapView = new MapView(getActivity());
+        setHasOptionsMenu(true);
+        return inflater.inflate(R.layout.fragment_map, container, false);
+
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        view.post(new Runnable() {
+            @Override
+            public void run() {
+                spotDetailView = (LinearLayout) getView().findViewById(R.id.map_spot_details);
+
+                transDown = ObjectAnimator.ofFloat(spotDetailView, "translationY", spotDetailView.getMeasuredHeight());
+                transDown.setDuration(200);
+
+                transUp = ObjectAnimator.ofFloat(spotDetailView, "translationY", -spotDetailView.getMeasuredHeight());
+                transUp.setDuration(200);
+
+                spotDetailView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        transUp.start();
+                        DataRepo.chosenMapItems.clear();
+                    }
+                });
+
+            }
+        });
+
+        mapView = (MapView) getView().findViewById(R.id.mapview);
         mapView.setAccessToken("pk.eyJ1IjoicGFzdGFzb2Z0d2FyZSIsImEiOiJhZjJkYjBhNzMyMTNiMzI4ZmY5NDM0MDU1YjJmNTlmZCJ9.-nkTpeqduWxnSeizwuyV2Q");
         mapView.setTileSource(new MapboxTileLayer("mapbox.streets"));
         mapView.setCenter(new LatLng(51.056553, 13.742202));
         mapView.setMaxZoomLevel(20);
         mapView.setZoom(14);
-        setHasOptionsMenu(true);
-        return mapView;
+    }
 
+
+    public void setUpSpotDetailView(final int spotId) {
+        VeganSpot spot = DataRepo.veganSpots.get(spotId);
+        TextView name = (TextView) getView().findViewById(R.id.spot_detail_header);
+        TextView address = (TextView) getView().findViewById(R.id.spot_detail_address);
+        TextView hours = (TextView) getView().findViewById(R.id.spot_detail_hours);
+        TextView info = (TextView) getView().findViewById(R.id.spot_detail_info);
+        Calendar cal = Calendar.getInstance();
+        TextView detail = (TextView) getView().findViewById(R.id.show_spot_detail_fragment);
+        if (spot.hasHours) {
+            hours.setText(spot.getHoursForDay(cal.get(Calendar.DAY_OF_WEEK)));
+            if (spot.checkIfOpen())
+                hours.setTextColor(Color.GREEN);
+            else
+                hours.setTextColor(Color.RED);
+        } else {
+            hours.setText("keine Öffnungszeiten angegeben");
+            hours.setTextColor(Color.parseColor("#333333"));
+        }
+        name.setText(spot.getName());
+        address.setText(spot.getAdresse());
+        if (spot.getInfo().length() > 110)
+            info.setText((spot.getInfo().substring(0, 110) + "...").replace("\n\n", "\n"));
+        else
+            info.setText(spot.getInfo());
+
+
+        detail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SpotDetailFragment fragment = SpotDetailFragment.create(spotId);
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.content_frame, fragment)
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+
         if (!singleSpot) {
             loadOverlays();
             this.reloadMapMind();
@@ -162,35 +221,44 @@ public class MapFragment extends Fragment {
         };
     }
 
-    public Handler getHandler(){
+    public Handler getHandler() {
         return mapHandler;
     }
 
     public void loadOverlays() {
-        Icon bakeryMarker = new Icon(this.getResources().getDrawable(R.drawable.marker_bakery));
-        Icon cafeMarker = new Icon(this.getResources().getDrawable(R.drawable.marker_cafe));
-        Icon foodMarker = new Icon(this.getResources().getDrawable(R.drawable.marker_food));
-        Icon icecreamMarker = new Icon(this.getResources().getDrawable(R.drawable.marker_icecream));
-        Icon shoppingMarker = new Icon(this.getResources().getDrawable(R.drawable.marker_shopping));
-        Icon vokueMarker = new Icon(this.getResources().getDrawable(R.drawable.marker_vokue));
-        Icon favMarker = new Icon(this.getResources().getDrawable(R.drawable.marker_fav));
+
+        Drawable bakeryMarker = this.getResources().getDrawable(R.drawable.marker_bakery);
+        Drawable cafeMarker = this.getResources().getDrawable(R.drawable.marker_cafe);
+        Drawable foodMarker = this.getResources().getDrawable(R.drawable.marker_food);
+        Drawable icecreamMarker = this.getResources().getDrawable(R.drawable.marker_icecream);
+        Drawable shoppingMarker = this.getResources().getDrawable(R.drawable.marker_shopping);
+        Drawable vokueMarker = this.getResources().getDrawable(R.drawable.marker_vokue);
+        Drawable favMarker = this.getResources().getDrawable(R.drawable.marker_fav);
+        Rect rect = new Rect(0, 0, bakeryMarker.getIntrinsicWidth(), bakeryMarker.getIntrinsicHeight());
+        bakeryMarker.setBounds(rect);
+        cafeMarker.setBounds(rect);
+        foodMarker.setBounds(rect);
+        icecreamMarker.setBounds(rect);
+        shoppingMarker.setBounds(rect);
+        vokueMarker.setBounds(rect);
+        favMarker.setBounds(rect);
+
 
         if (foodMarkers.isEmpty()) {
-            Log.i("test", foodMarkers.size()+"");
+            Log.i("test", foodMarkers.size() + "");
             for (VeganSpot v : DataRepo.foodSpots) {
-                Marker m = new Marker(v.getID()+"",v.getName(),new LatLng(v.getGPS_lat(),v.getGPS_long()));
-                m.setIcon(foodMarker);
-                m.setHotspot(Marker.HotspotPlace.BOTTOM_CENTER);
+                Marker m = new Marker(v.getID() + "", v.getName(), new LatLng(v.getGPS_lat(), v.getGPS_long()));
+                m.setMarker(foodMarker);
+                m.setHotspot(Marker.HotspotPlace.TOP_CENTER);
                 foodMarkers.add(m);
-                Log.i("test", foodMarkers.size()+"");
             }
             foodOverlay = new SpotOverlay(getActivity(), foodMarkers, null);
         }
 
         if (shoppingMarkers.isEmpty()) {
             for (VeganSpot v : DataRepo.shoppingSpots) {
-                Marker m = new Marker(v.getID()+"",v.getName(),new LatLng(v.getGPS_lat(),v.getGPS_long()));
-                m.setIcon(shoppingMarker);
+                Marker m = new Marker(v.getID() + "", v.getName(), new LatLng(v.getGPS_lat(), v.getGPS_long()));
+                m.setMarker(shoppingMarker);
                 m.setHotspot(Marker.HotspotPlace.BOTTOM_CENTER);
                 shoppingMarkers.add(m);
             }
@@ -199,8 +267,8 @@ public class MapFragment extends Fragment {
 
         if (bakeryMarkers.isEmpty()) {
             for (VeganSpot v : DataRepo.bakerySpots) {
-                Marker m = new Marker(v.getID()+"",v.getName(),new LatLng(v.getGPS_lat(),v.getGPS_long()));
-                m.setIcon(bakeryMarker);
+                Marker m = new Marker(v.getID() + "", v.getName(), new LatLng(v.getGPS_lat(), v.getGPS_long()));
+                m.setMarker(bakeryMarker);
                 m.setHotspot(Marker.HotspotPlace.BOTTOM_CENTER);
                 bakeryMarkers.add(m);
             }
@@ -209,8 +277,8 @@ public class MapFragment extends Fragment {
 
         if (cafeMarkers.isEmpty()) {
             for (VeganSpot v : DataRepo.cafeSpots) {
-                Marker m = new Marker(v.getID()+"",v.getName(),new LatLng(v.getGPS_lat(),v.getGPS_long()));
-                m.setIcon(cafeMarker);
+                Marker m = new Marker(v.getID() + "", v.getName(), new LatLng(v.getGPS_lat(), v.getGPS_long()));
+                m.setMarker(cafeMarker);
                 m.setHotspot(Marker.HotspotPlace.BOTTOM_CENTER);
                 cafeMarkers.add(m);
             }
@@ -219,8 +287,8 @@ public class MapFragment extends Fragment {
 
         if (icecreamMarkers.isEmpty()) {
             for (VeganSpot v : DataRepo.icecreamSpots) {
-                Marker m = new Marker(v.getID()+"",v.getName(),new LatLng(v.getGPS_lat(),v.getGPS_long()));
-                m.setIcon(icecreamMarker);
+                Marker m = new Marker(v.getID() + "", v.getName(), new LatLng(v.getGPS_lat(), v.getGPS_long()));
+                m.setMarker(icecreamMarker);
                 m.setHotspot(Marker.HotspotPlace.BOTTOM_CENTER);
                 icecreamMarkers.add(m);
             }
@@ -229,8 +297,8 @@ public class MapFragment extends Fragment {
 
         if (vokueMarkers.isEmpty()) {
             for (VeganSpot v : DataRepo.vokueSpots) {
-                Marker m = new Marker(v.getID()+"",v.getName(),new LatLng(v.getGPS_lat(),v.getGPS_long()));
-                m.setIcon(vokueMarker);
+                Marker m = new Marker(v.getID() + "", v.getName(), new LatLng(v.getGPS_lat(), v.getGPS_long()));
+                m.setMarker(vokueMarker);
                 m.setHotspot(Marker.HotspotPlace.BOTTOM_CENTER);
                 vokueMarkers.add(m);
             }
@@ -239,8 +307,8 @@ public class MapFragment extends Fragment {
 
         if (favMarkers.isEmpty()) {
             for (VeganSpot v : DataRepo.favoriteSpots) {
-                Marker m = new Marker(v.getID()+"",v.getName(),new LatLng(v.getGPS_lat(),v.getGPS_long()));
-                m.setIcon(favMarker);
+                Marker m = new Marker(v.getID() + "", v.getName(), new LatLng(v.getGPS_lat(), v.getGPS_long()));
+                m.setMarker(favMarker);
                 m.setHotspot(Marker.HotspotPlace.BOTTOM_CENTER);
                 favMarkers.add(m);
             }
@@ -295,6 +363,7 @@ public class MapFragment extends Fragment {
         if (!menuItem.isChecked()) {
             menuItem.setChecked(true);
             mapView.addItemizedOverlay(overlay);
+            //mapView.addMarkers(foodMarkers);
             Log.i("Overlay Size", "" + overlay.size());
             Log.i("Overlays", "" + mapView.getItemizedOverlays().size());
             mapView.postInvalidate();
@@ -302,6 +371,7 @@ public class MapFragment extends Fragment {
         } else {
             menuItem.setChecked(false);
             mapView.removeOverlay(overlay);
+            //mapView.removeMarkers(foodMarkers);
             mapView.postInvalidate();
             DataRepo.mapMind.remove(mapMindKey);
         }
@@ -464,14 +534,15 @@ public class MapFragment extends Fragment {
             super(pContext, pList, new OnItemGestureListener<Marker>() {
                 @Override
                 public boolean onItemSingleTapUp(int i, Marker m) {
-                    VeganSpot spot = DataRepo.veganSpots.get(Integer.parseInt(m.getTitle()));
-                    if (!DataRepo.chosenMapItems.contains(spot.getID())) {
-                        SpotDetailFragment fragment = SpotDetailFragment.create(spot.getID());
-                        getFragmentManager().beginTransaction()
-                                .replace(R.id.content_frame, fragment)
-                                .addToBackStack(null)
-                                .commit();
-                        DataRepo.chosenMapItems.add(spot.getID());
+                    //VeganSpot spot = DataRepo.veganSpots.get(Integer.parseInt(m.getTitle()));
+                    int spotId = Integer.parseInt(m.getTitle());
+                    if (!DataRepo.chosenMapItems.contains(spotId)) {
+                        setUpSpotDetailView(spotId);
+                        transDown.start();
+
+                        //spotDetailView.setVisibility(View.VISIBLE);
+
+                        DataRepo.chosenMapItems.add(spotId);
                     }
                     return false;
                 }

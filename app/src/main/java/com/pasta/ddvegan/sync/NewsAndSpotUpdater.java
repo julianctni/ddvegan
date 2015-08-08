@@ -109,7 +109,7 @@ public class NewsAndSpotUpdater extends AsyncTask<Integer, Integer, Integer> {
                 context.icon.startAnimation(x);
 
             }
-        }, 2000);
+        }, 1000);
     }
 
 
