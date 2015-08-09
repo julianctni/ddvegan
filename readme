@@ -4,8 +4,9 @@ much to do!
 
 - add drawables in different resolutions
 - fix overlapping fragments bug
-- add single-spot-updater
-- create some nice api
+- bugfixing
+- code cleanup
+
 
 
 done!
@@ -13,3 +14,5 @@ done!
 - cache pictures
 - add contact form and script
 - fix contact/hours view on info fragment
+- create some nice api
+- add single-spot-updater
