@@ -23,6 +23,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
@@ -35,12 +36,15 @@ import android.widget.Toast;
 import com.pasta.ddvegan.R;
 import com.pasta.ddvegan.activities.SplashActivity;
 import com.pasta.ddvegan.activities.MainActivity;
+import com.pasta.ddvegan.fragments.NewsFragment;
+import com.pasta.ddvegan.fragments.SpotListFragment;
 import com.pasta.ddvegan.models.DataRepo;
 import com.pasta.ddvegan.utils.NetworkUtil;
 
 
 public class NewsAndSpotUpdater extends AsyncTask<Integer, Integer, Integer> {
-    SplashActivity context;
+    SplashActivity splashActivity;
+    Context context;
     DatabaseManager dbMan;
     SQLiteDatabase db;
     int ret = 0;
@@ -49,8 +53,14 @@ public class NewsAndSpotUpdater extends AsyncTask<Integer, Integer, Integer> {
     boolean updateSpots = false;
     boolean spotDeleted = false;
 
-    public NewsAndSpotUpdater(SplashActivity context, int result) {
-        this.context = context;
+    public NewsAndSpotUpdater(SplashActivity splashActivity, int result) {
+        this.splashActivity = splashActivity;
+        this.context = splashActivity.getApplicationContext();
+        freshDB = (result == -1);
+    }
+
+    public NewsAndSpotUpdater(Context c, int result) {
+        this.context = c;
         freshDB = (result == -1);
     }
 
@@ -85,33 +95,42 @@ public class NewsAndSpotUpdater extends AsyncTask<Integer, Integer, Integer> {
                 Toast.makeText(context, "Aus technischen Gründen konnten keine Daten aktualisiert werden.", Toast.LENGTH_SHORT).show();
                 break;
         }
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            public void run() {
-                Animation x = new AlphaAnimation(1, 0);
-                x.setFillAfter(true);
-                x.setDuration(200);
-                x.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-                    }
 
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        Intent intent = new Intent(context, MainActivity.class);
-                        context.startActivity(intent);
-                        context.overridePendingTransition(R.anim.anim_slide_in, R.anim.anim_slide_out);
-                        context.finish();
-                    }
+        if (NewsFragment.newsRefresher != null) {
+            NewsFragment.newsAdapter.notifyDataSetChanged();
+            SpotListFragment.spotListAdapter.notifyDataSetChanged();
+            NewsFragment.newsRefresher.setRefreshing(false);
+        }
 
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-                    }
-                });
-                context.icon.startAnimation(x);
+        if (splashActivity != null) {
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    Animation x = new AlphaAnimation(1, 0);
+                    x.setFillAfter(true);
+                    x.setDuration(200);
+                    x.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
+                        }
 
-            }
-        }, 1000);
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            Intent intent = new Intent(context, MainActivity.class);
+                            splashActivity.startActivity(intent);
+                            splashActivity.overridePendingTransition(R.anim.anim_slide_in, R.anim.anim_slide_out);
+                            splashActivity.finish();
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+                        }
+                    });
+                    splashActivity.icon.startAnimation(x);
+
+                }
+            }, 1000);
+        }
     }
 
 

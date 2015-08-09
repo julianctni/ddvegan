@@ -4,6 +4,7 @@ package com.pasta.ddvegan.fragments;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,12 +16,14 @@ import com.pasta.ddvegan.R;
 import com.pasta.ddvegan.adapters.NewsAdapter;
 import com.pasta.ddvegan.models.DataRepo;
 import com.pasta.ddvegan.models.VeganNews;
+import com.pasta.ddvegan.sync.NewsAndSpotUpdater;
 
 
 public class NewsFragment extends ListFragment {
 
 
     public static NewsAdapter newsAdapter;
+    public static SwipeRefreshLayout newsRefresher;
 
     public NewsFragment() {
     }
@@ -30,7 +33,22 @@ public class NewsFragment extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         newsAdapter = new NewsAdapter(getActivity(), DataRepo.veganNews);
-        this.setListAdapter(newsAdapter);
+
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        newsRefresher = (SwipeRefreshLayout) getView().findViewById(R.id.news_refresher);
+        newsRefresher.setColorSchemeResources(R.color.primary, R.color.primary_bright, R.color.primary_dark);
+        newsRefresher.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                NewsAndSpotUpdater updater = new NewsAndSpotUpdater(getActivity().getApplicationContext(), 0);
+                updater.execute();
+            }
+        });
+        ListView lv = (ListView)getView().findViewById(R.id.news_list);
+        lv.setAdapter(newsAdapter);
     }
 
 
