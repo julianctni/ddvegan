@@ -53,7 +53,6 @@ public class MainActivity extends ActionBarActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("SAVED INSTANCE STATE", ""+(savedInstanceState == null));
         setContentView(R.layout.activity_main);
 
         fragmentManager = getSupportFragmentManager();

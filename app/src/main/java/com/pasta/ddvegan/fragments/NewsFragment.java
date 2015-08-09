@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.pasta.ddvegan.R;
 import com.pasta.ddvegan.adapters.NewsAdapter;
@@ -37,11 +38,15 @@ public class NewsFragment extends ListFragment {
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
         VeganNews news = (VeganNews)l.getItemAtPosition(position);
-        SpotDetailFragment detailFragment = SpotDetailFragment.create(news.getSpotId());
-        this.getParentFragment().getFragmentManager().beginTransaction()
-                .replace(R.id.content_frame, detailFragment, "SPOTDETAIL")
-                .addToBackStack(null)
-                .commit();
+        if (!DataRepo.veganSpots.containsKey(news.getSpotId()))
+            Toast.makeText(getActivity(), news.getNewsContent(), Toast.LENGTH_SHORT).show();
+        else {
+            SpotDetailFragment detailFragment = SpotDetailFragment.create(news.getSpotId());
+            this.getParentFragment().getFragmentManager().beginTransaction()
+                    .replace(R.id.content_frame, detailFragment, "SPOTDETAIL")
+                    .addToBackStack(null)
+                    .commit();
+        }
     }
 
     @Override

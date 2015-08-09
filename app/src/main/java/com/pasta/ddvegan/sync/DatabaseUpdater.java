@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
@@ -43,7 +44,7 @@ public class DatabaseUpdater extends AsyncTask<Integer, Integer, Integer> {
         DatabaseManager dbMan = new DatabaseManager(context);
         dbMan.getVeganSpotsFromDatabase();
 
-        if (!DataRepo.veganSpots.isEmpty()) {
+        if (!dbMan.dbEmpty()) {
             Log.i("DatabaseUpdater", "Database has already been downloaded.");
             dbMan.close();
             return ret;
@@ -84,7 +85,7 @@ public class DatabaseUpdater extends AsyncTask<Integer, Integer, Integer> {
                     double gpsLat = Float.parseFloat(jsonSpot.getString("spotLocLat"));
                     double gpsLong = Float.parseFloat(jsonSpot.getString("spotLocLong"));
 
-                    Log.i("SQLITE", "inserting veganSpot" + id);
+                    Log.i("DatabaseUpdater", "Inserting vegan spot: " + name);
                     ContentValues values = new ContentValues();
                     values.put("spotId", id);
                     values.put("spotName", name);
@@ -141,12 +142,12 @@ public class DatabaseUpdater extends AsyncTask<Integer, Integer, Integer> {
     public String requestVeganSpots() {
 
         HttpClient httpclient = new DefaultHttpClient();
-        HttpPost httppost = new HttpPost("http://ddvegan.pastayouth.org/json/veganSpots.json");
+        HttpGet httpGet = new HttpGet(DataRepo.apiVeganSpots);
 
         InputStream inputStream = null;
         String result = "";
         try {
-            HttpResponse response = httpclient.execute(httppost);
+            HttpResponse response = httpclient.execute(httpGet);
             HttpEntity entity = response.getEntity();
 
             inputStream = entity.getContent();

@@ -23,6 +23,13 @@ public class DataRepo {
 
     public static String appVersion = "";
 
+    public static String apiUrl = "http://www.pastayouth.org/ddvegan/api/v1/";
+    public static String apiVeganNews = apiUrl + "get/veganNews";
+    public static String apiVeganSpots = apiUrl + "get/veganSpots";
+    public static String apiVeganSpotUpdates = apiUrl + "post/veganSpotUpdates";
+    public static String apiFeedback = apiUrl + "post/feedback";
+    public static String apiReport = apiUrl + "post/report";
+
     public static HashMap<Integer, VeganSpot> veganSpots = new HashMap<Integer, VeganSpot>();
     public static HashSet<Integer> chosenMapItems = new HashSet<Integer>();
     public static HashSet<Integer> mapMind = new HashSet<Integer>();
@@ -55,6 +62,7 @@ public class DataRepo {
         favoriteMap.clear();
         favoriteSpots.clear();
     }
+
 
 
 

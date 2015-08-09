@@ -25,6 +25,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.HTTP;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -109,19 +110,20 @@ public class FeedbackFragment extends DialogFragment {
 
         @Override
         protected Integer doInBackground(Void... voids) {
-            HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost("http://www.ddvegan.pastayouth.org/sendFeedback.php");
+            HttpClient httpClient = new DefaultHttpClient();
+            HttpPost httpPost = new HttpPost(DataRepo.apiFeedback);
+            httpPost.setHeader(HTTP.CONTENT_TYPE,
+                    "application/x-www-form-urlencoded;charset=UTF-8");
             //httpclient.getParams().setParameter(CoreProtocolPNames.USER_AGENT,"ddvegan-android");
 
             try {
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(3);
 
-                nameValuePairs.add(new BasicNameValuePair("msg", msg+"\n"+from));
+                nameValuePairs.add(new BasicNameValuePair("msg", msg));
                 nameValuePairs.add(new BasicNameValuePair("version", version));
                 nameValuePairs.add(new BasicNameValuePair("from", from));
-                httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-
-                httpclient.execute(httppost);
+                httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs, "UTF-8"));
+                httpClient.execute(httpPost);
 
             } catch (ClientProtocolException e) {
                 e.printStackTrace();

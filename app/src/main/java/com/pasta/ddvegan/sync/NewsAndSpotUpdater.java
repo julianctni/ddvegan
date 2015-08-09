@@ -14,6 +14,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
@@ -46,6 +47,7 @@ public class NewsAndSpotUpdater extends AsyncTask<Integer, Integer, Integer> {
     boolean freshDB = false;
 
     boolean updateSpots = false;
+    boolean spotDeleted = false;
 
     public NewsAndSpotUpdater(SplashActivity context, int result) {
         this.context = context;
@@ -114,8 +116,14 @@ public class NewsAndSpotUpdater extends AsyncTask<Integer, Integer, Integer> {
 
 
     public void updateVeganSpots(HashSet<Integer> spots) {
-        if (spots.isEmpty())
+        if (spots.isEmpty() && spotDeleted)
+            dbMan.getVeganSpotsFromDatabase();
+
+        if (spots.isEmpty()) {
+            Log.i("NewsAndSpotUpdater", "No spot updates!");
             return;
+        }
+
         JSONObject spotObj = new JSONObject();
         JSONArray idArray = new JSONArray();
         for (int i : spots) {
@@ -130,6 +138,7 @@ public class NewsAndSpotUpdater extends AsyncTask<Integer, Integer, Integer> {
 
         String result = requestSpotUpdates(spotObj.toString());
         JSONArray jArray = null;
+        db = dbMan.getWritableDatabase();
         try {
             jArray = new JSONArray(result);
             for (int i = 0; i < jArray.length(); i++) {
@@ -159,7 +168,7 @@ public class NewsAndSpotUpdater extends AsyncTask<Integer, Integer, Integer> {
                 double gpsLat = Float.parseFloat(jsonSpot.getString("spotLocLat"));
                 double gpsLong = Float.parseFloat(jsonSpot.getString("spotLocLong"));
 
-                Log.i("SQLITE", "updating veganSpot" + id);
+                Log.i("NewsAndSpotUpdater", "updating vegan spot: " + name);
                 ContentValues values = new ContentValues();
                 values.put("spotId", id);
                 values.put("spotName", name);
@@ -213,13 +222,15 @@ public class NewsAndSpotUpdater extends AsyncTask<Integer, Integer, Integer> {
                 if (newsType <= 6) {
                     updateSpots = true;
                     if (newsType == 6) {
+                        Log.i("NewsAndSpotUpdater", "Deleting vegan spot: " + newsContent);
                         String query = "DELETE FROM veganSpots WHERE spotId = " + spotId;
                         db.execSQL(query);
+                        spotDeleted = true;
                     } else {
                         updateTheseSpots.add(spotId);
                     }
                 }
-                Log.i("SQLITE", "inserting news" + newsId);
+                Log.i("NewsAndSpotUpdater", "Inserting vegan news: " + newsId);
                 ContentValues values = new ContentValues();
                 values.put("newsId", newsId);
                 values.put("newsType", newsType);
@@ -242,20 +253,13 @@ public class NewsAndSpotUpdater extends AsyncTask<Integer, Integer, Integer> {
 
     public String requestNews(int maxId) {
 
-        HttpClient httpclient = new DefaultHttpClient();
-        HttpPost httppost = new HttpPost("http://ddvegan.pastayouth.org/getVeganNews.php");
-
-        try {
-            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
-            nameValuePairs.add(new BasicNameValuePair("maxId", "" + maxId));
-            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-        } catch (IOException e) {
-        }
+        HttpClient httpClient = new DefaultHttpClient();
+        HttpGet httpGet = new HttpGet(DataRepo.apiVeganNews+"/"+maxId);
 
         InputStream inputStream = null;
         String result = "";
         try {
-            HttpResponse response = httpclient.execute(httppost);
+            HttpResponse response = httpClient.execute(httpGet);
             HttpEntity entity = response.getEntity();
 
             inputStream = entity.getContent();
@@ -282,20 +286,20 @@ public class NewsAndSpotUpdater extends AsyncTask<Integer, Integer, Integer> {
 
     public String requestSpotUpdates(String spotIds) {
 
-        HttpClient httpclient = new DefaultHttpClient();
-        HttpPost httppost = new HttpPost("http://ddvegan.pastayouth.org/updateVeganSpot.php");
+        HttpClient httpClient = new DefaultHttpClient();
+        HttpPost httpPost = new HttpPost(DataRepo.apiVeganSpotUpdates);
 
         try {
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
             nameValuePairs.add(new BasicNameValuePair("spotIds", "" + spotIds));
-            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+            httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
         } catch (IOException e) {
         }
 
         InputStream inputStream = null;
         String result = "";
         try {
-            HttpResponse response = httpclient.execute(httppost);
+            HttpResponse response = httpClient.execute(httpPost);
             HttpEntity entity = response.getEntity();
 
             inputStream = entity.getContent();

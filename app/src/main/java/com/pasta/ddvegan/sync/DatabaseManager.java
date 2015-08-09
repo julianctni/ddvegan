@@ -80,7 +80,6 @@ public class DatabaseManager extends SQLiteOpenHelper {
                 DataRepo.favoriteMap.put(s.getID(), s);
                 s.setFavorite(true);
             }
-			Log.i("SQLITE", "getting stored spot " + spotId);
 		}
 		db.close();
         DataRepo.updateFavorites();
@@ -121,10 +120,14 @@ public class DatabaseManager extends SQLiteOpenHelper {
         DataRepo.updateFavorites();
     }
 
-    public void deleteVeganSpotFromDb(int spotId) {
+    public boolean dbEmpty() {
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = "DELETE FROM veganSpots WHERE spotId = "+spotId;
-        db.execSQL(query);
+        String count = "SELECT count(*) FROM veganSpots";
+        Cursor c = db.rawQuery(count, null);
+        if (c != null && c.moveToFirst()) {
+            return (c.getInt(0) == 0);
+        }
+        return false;
     }
 
 	public void createSpotTable(SQLiteDatabase db) {

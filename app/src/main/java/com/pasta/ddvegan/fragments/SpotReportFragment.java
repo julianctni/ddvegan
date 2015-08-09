@@ -26,6 +26,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.HTTP;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -120,7 +121,8 @@ public class SpotReportFragment extends DialogFragment {
                         errors += "Öffnungszeiten\n";
                     if (wrongContact.isChecked())
                         errors += "Kontaktdaten\n";
-                    MailSender ms = new MailSender("Fehlerreport " + spot.getName() + " (" + spot.getID() + ")\n\n" + errors + "\n\nPersönliche Nachricht:\n\n" + message.getText().toString(), from.getText().toString(), DataRepo.appVersion);
+                    String content = "Fehlerreport " + spot.getName() + " (" + spot.getID() + ")\n\n" + errors + "\n\nPersönliche Nachricht:\n\n" + message.getText().toString();
+                    MailSender ms = new MailSender(content, from.getText().toString(), DataRepo.appVersion, spot.getName());
                     ms.execute();
                 }
             }
@@ -139,11 +141,13 @@ public class SpotReportFragment extends DialogFragment {
         String msg = "";
         String version = "";
         String from = "";
+        String spotName = "";
 
-        public MailSender(String msg, String from, String version) {
+        public MailSender(String msg, String from, String version, String spotName) {
             this.msg = msg;
             this.version = version;
             this.from = from;
+            this.spotName = spotName;
         }
 
         @Override
@@ -153,19 +157,21 @@ public class SpotReportFragment extends DialogFragment {
 
         @Override
         protected Integer doInBackground(Void... voids) {
-            HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost("http://www.ddvegan.pastayouth.org/sendFeedback.php");
-            //httpclient.getParams().setParameter(CoreProtocolPNames.USER_AGENT,"ddvegan-android");
+            HttpClient httpClient = new DefaultHttpClient();
+            HttpPost httpPost = new HttpPost(DataRepo.apiReport);
+            httpPost.setHeader(HTTP.CONTENT_TYPE,
+                    "application/x-www-form-urlencoded;charset=UTF-8");
 
             try {
-                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(3);
+                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(4);
 
                 nameValuePairs.add(new BasicNameValuePair("msg", msg));
                 nameValuePairs.add(new BasicNameValuePair("version", version));
                 nameValuePairs.add(new BasicNameValuePair("from", from));
-                httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+                nameValuePairs.add(new BasicNameValuePair("spot", spotName));
+                httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs, "UTF-8"));
 
-                httpclient.execute(httppost);
+                httpClient.execute(httpPost);
 
             } catch (ClientProtocolException e) {
                 e.printStackTrace();
