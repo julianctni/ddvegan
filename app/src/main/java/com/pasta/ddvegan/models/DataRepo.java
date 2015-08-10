@@ -32,7 +32,6 @@ public class DataRepo {
 
     public static HashMap<Integer, VeganSpot> veganSpots = new HashMap<Integer, VeganSpot>();
     public static HashSet<Integer> chosenMapItems = new HashSet<Integer>();
-    public static HashSet<Integer> mapMind = new HashSet<Integer>();
     public static ArrayList<VeganSpot> foodSpots = new ArrayList<VeganSpot>();
     public static ArrayList<VeganSpot> shoppingSpots = new ArrayList<VeganSpot>();
     public static ArrayList<VeganSpot> cafeSpots = new ArrayList<VeganSpot>();

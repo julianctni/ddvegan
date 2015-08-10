@@ -157,16 +157,15 @@ public class SpotDetailFragment extends Fragment {
         String phone = spot.getPhone() + "\n";
         String mail = spot.getMail() + "\n";
         String web = spot.getURL();
-        if (spot.getPhone().equals(""))
+        if (spot.getPhone().equals("") || spot.getPhone().toLowerCase().equals("null"))
             phone = "";
-        if (spot.getMail().equals(""))
+        if (spot.getMail().equals("") || spot.getMail().toLowerCase().equals("null"))
             mail = "";
         if (spot.getPhone().equals("") && spot.getMail().equals("") && spot.getURL().equals(""))
             contact.setText("keine Kontaktdaten vorhanden");
         else
             contact.setText(phone + mail + web);
         info.setText(spot.getInfo());
-
     }
 
 

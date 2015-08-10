@@ -9,8 +9,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,10 +17,8 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-
-import com.pasta.ddvegan.adapters.NavigationGridAdapter;
 import com.pasta.ddvegan.R;
+import com.pasta.ddvegan.adapters.NavigationGridAdapter;
 import com.pasta.ddvegan.fragments.AboutFragment;
 import com.pasta.ddvegan.fragments.MapFragment;
 import com.pasta.ddvegan.fragments.NewsFragment;
@@ -30,9 +26,9 @@ import com.pasta.ddvegan.fragments.SpotDetailFragment;
 import com.pasta.ddvegan.fragments.SpotListFragment;
 import com.pasta.ddvegan.fragments.StartPageFragment;
 import com.pasta.ddvegan.models.DataRepo;
-import com.pasta.ddvegan.models.VeganSpot;
-import com.pasta.ddvegan.sync.DatabaseUpdater;
 import com.pasta.ddvegan.utils.NavGridItem;
+
+import java.util.ArrayList;
 
 
 public class MainActivity extends ActionBarActivity
@@ -54,14 +50,9 @@ public class MainActivity extends ActionBarActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         fragmentManager = getSupportFragmentManager();
         initView();
-        if (toolbar != null) {
-            setSupportActionBar(toolbar);
-            getSupportActionBar().setTitle(null);
-        }
-        initDrawer();
+        setDrawerToggle();
         if (fragmentManager.findFragmentById(R.id.content_frame) == null)
             this.setUpStartPage();
         homeButton = (ImageView)findViewById(R.id.home_button);
@@ -75,9 +66,12 @@ public class MainActivity extends ActionBarActivity
         });
     }
 
-
     private void initView() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setTitle(null);
+        }
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationGrid = (GridView) findViewById(R.id.navigationGrid);
         if (navGridItems.isEmpty())
@@ -91,7 +85,6 @@ public class MainActivity extends ActionBarActivity
             }
         });
     }
-
 
     public void setUpGridItems() {
         navGridItems.add(new NavGridItem(DataRepo.SHOPPING, getResources().getDrawable(R.drawable.button_shopping)));
@@ -114,20 +107,22 @@ public class MainActivity extends ActionBarActivity
             n.setSelected(false);
         item.setSelected(true);
         navAdapter.notifyDataSetChanged();
-
+        String fragTag = "";
         if (item.getType() == DataRepo.MAP) {
             fragment = new MapFragment();
+            fragTag = "MAP";
         } else if (item.getType() == DataRepo.ABOUT) {
             fragment = new AboutFragment();
-        } else
+            fragTag = "ABOUT";
+        } else {
             fragment = SpotListFragment.create(item.getType());
-        Fragment current = fragmentManager.findFragmentById(R.id.content_frame);
-
+            fragTag = "SPOTLIST"+item.getType();
+        }
         fragmentManager.beginTransaction()
-                .replace(R.id.content_frame, fragment, "SPOTLIST")
+                .replace(R.id.content_frame, fragment, fragTag)
                 .commit();
 
-        drawerLayout.closeDrawer(Gravity.START);
+        drawerLayout.closeDrawers();
     }
 
     private void setUpStartPage() {
@@ -142,9 +137,7 @@ public class MainActivity extends ActionBarActivity
             NewsFragment.newsAdapter.notifyDataSetChanged();
     }
 
-
-
-    private void initDrawer() {
+    private void setDrawerToggle() {
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_closed) {
             @Override
             public void onDrawerClosed(View drawerView) {
@@ -171,7 +164,6 @@ public class MainActivity extends ActionBarActivity
         drawerToggle.onConfigurationChanged(newConfig);
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_spotlist, menu);
@@ -187,21 +179,7 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onFragmentInteraction(int venueId) {
-        /*Fragment fragment = new SpotDetailFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt("venueId", venueId);
-        fragment.setArguments(bundle);
-        fragmentManager.beginTransaction()
-                .replace(R.id.content_frame, fragment)
-                .addToBackStack(null)
-                .commit();*/
     }
 
     public void onBackPressed() {
@@ -220,7 +198,8 @@ public class MainActivity extends ActionBarActivity
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
+    public void onFragmentInteraction(int venueId) {}
 
-    }
+    @Override
+    public void onFragmentInteraction(Uri uri) {}
 }

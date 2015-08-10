@@ -46,11 +46,9 @@ public class SplashActivity extends ActionBarActivity {
 
         transUp = new TranslateAnimation(icon.getLeft(), icon.getLeft(), icon.getTop(), icon.getTop()-300);
         transUp.setDuration(600);
-        //transUp.setFillAfter(true);
 
         transDown = new TranslateAnimation(icon.getLeft(), icon.getLeft(), icon.getTop()-300, icon.getTop());
         transDown.setDuration(600);
-        //transDown.setFillAfter(true);
 
         rotate = new RotateAnimation(0,360, Animation.RELATIVE_TO_SELF,0.5f , Animation.RELATIVE_TO_SELF,0.5f);
         rotate.setDuration(400);

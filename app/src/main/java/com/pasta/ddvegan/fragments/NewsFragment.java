@@ -21,7 +21,6 @@ import com.pasta.ddvegan.sync.NewsAndSpotUpdater;
 
 public class NewsFragment extends ListFragment {
 
-
     public static NewsAdapter newsAdapter;
     public static SwipeRefreshLayout newsRefresher;
 

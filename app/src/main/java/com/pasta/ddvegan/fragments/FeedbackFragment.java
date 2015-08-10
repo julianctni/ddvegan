@@ -1,7 +1,6 @@
 package com.pasta.ddvegan.fragments;
 
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.text.Editable;
@@ -98,11 +97,12 @@ public class FeedbackFragment extends DialogFragment {
         String from = "";
         String version = "";
 
-        public MailSender(String msg, String from, String version){
+        public MailSender(String msg, String from, String version) {
             this.msg = msg;
             this.from = from;
             this.version = version;
         }
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -114,7 +114,6 @@ public class FeedbackFragment extends DialogFragment {
             HttpPost httpPost = new HttpPost(DataRepo.apiFeedback);
             httpPost.setHeader(HTTP.CONTENT_TYPE,
                     "application/x-www-form-urlencoded;charset=UTF-8");
-            //httpclient.getParams().setParameter(CoreProtocolPNames.USER_AGENT,"ddvegan-android");
 
             try {
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(3);

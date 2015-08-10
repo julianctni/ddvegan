@@ -38,20 +38,27 @@ import com.pasta.ddvegan.utils.GpsUtil;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 
 public class MapFragment extends Fragment {
 
 
-    private OnFragmentInteractionListener mListener;
-    protected MapView mapView;
+    OnFragmentInteractionListener mListener;
+    MapView mapView;
     ProgressDialog dialog;
     public static Handler mapHandler;
-    private GpsUtil gps = new GpsUtil(this);
+    GpsUtil gps = new GpsUtil(this);
     PopupMenu popupMenu;
     boolean singleSpot;
     int singleSpotId;
+
+    LatLng mapCenter;
+    float mapZoom;
+    HashSet<Integer> visibleMarkers = new HashSet<Integer>();
 
     SpotOverlay bakeryOverlay;
     SpotOverlay cafeOverlay;
@@ -77,10 +84,6 @@ public class MapFragment extends Fragment {
     ObjectAnimator transUp;
 
 
-    public MapFragment() {
-    }
-
-
     public static MapFragment create(boolean showSingleSpot, int id) {
         MapFragment fragment = new MapFragment();
         Bundle args = new Bundle();
@@ -93,11 +96,49 @@ public class MapFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRetainInstance(true);
+        if (savedInstanceState != null) {
+            mapCenter = new LatLng(savedInstanceState.getDouble("mapCenterLat"), savedInstanceState.getDouble("mapCenterLng"));
+            mapZoom = savedInstanceState.getFloat("mapZoom");
+            visibleMarkers.addAll(savedInstanceState.getIntegerArrayList("visibleMarkers"));
+            Log.i("VISIBLE MARKERS", visibleMarkers.size()+"");
+        } else {
+            mapCenter = new LatLng(51.056553, 13.742202);
+            mapZoom = 14;
+        }
         if (getArguments() != null) {
             singleSpot = getArguments().getBoolean("showSingleSpot");
             singleSpotId = getArguments().getInt("spotId");
         }
+        mapHandler = new Handler() {
+            public void handleMessage(Message msg) {
+                dialog.dismiss();
+                Toast.makeText(getActivity(), "Hier bist du!", Toast.LENGTH_LONG)
+                        .show();
+                mapView.setZoom(14);
+                mapView.setCenter(new LatLng(gps.getLatitude(), gps.getLongitude()));
+                if (currentPositionMarker != null)
+                    mapView.removeMarker(currentPositionMarker);
+                currentPositionMarker = new Marker("Hier bist du!", "",
+                        new LatLng(gps.getLatitude(), gps.getLongitude()));
+                currentPositionMarker.setMarker((getActivity().getResources().getDrawable(
+                        R.drawable.fadenkreuz)));
+                currentPositionMarker.setHotspot(Marker.HotspotPlace.LOWER_LEFT_CORNER);
+                mapView.addMarker(currentPositionMarker);
+                mapView.postInvalidate();
+                gps.stop();
+
+                super.handleMessage(msg);
+            }
+        };
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putDouble("mapCenterLng", mapView.getCenter().getLongitude());
+        savedInstanceState.putDouble("mapCenterLat", mapView.getCenter().getLatitude());
+        savedInstanceState.putFloat("mapZoom", mapView.getZoomLevel());
+        savedInstanceState.putIntegerArrayList("visibleMarkers", new ArrayList<Integer>(visibleMarkers));
     }
 
     @Override
@@ -136,9 +177,9 @@ public class MapFragment extends Fragment {
         mapView = (MapView) getView().findViewById(R.id.mapview);
         mapView.setAccessToken("pk.eyJ1IjoicGFzdGFzb2Z0d2FyZSIsImEiOiJhZjJkYjBhNzMyMTNiMzI4ZmY5NDM0MDU1YjJmNTlmZCJ9.-nkTpeqduWxnSeizwuyV2Q");
         mapView.setTileSource(new MapboxTileLayer("mapbox.streets"));
-        mapView.setCenter(new LatLng(51.056553, 13.742202));
+        mapView.setCenter(mapCenter);
         mapView.setMaxZoomLevel(20);
-        mapView.setZoom(14);
+        mapView.setZoom(mapZoom);
     }
 
 
@@ -183,8 +224,6 @@ public class MapFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-
         if (!singleSpot) {
             loadOverlays();
             this.reloadMapMind();
@@ -199,26 +238,6 @@ public class MapFragment extends Fragment {
             mapView.addMarker(singleSpotMarker);
             mapView.postInvalidate();
         }
-
-        mapHandler = new Handler() {
-            public void handleMessage(Message msg) {
-                dialog.dismiss();
-                Toast.makeText(getActivity(), "Hier bist du!", Toast.LENGTH_LONG)
-                        .show();
-                mapView.setZoom(14);
-                mapView.setCenter(new LatLng(gps.getLatitude(), gps.getLongitude()));
-                currentPositionMarker = new Marker("locationMarker", "Marks the location",
-                        new LatLng(gps.getLatitude(), gps.getLongitude()));
-                currentPositionMarker.setIcon(new Icon(getActivity().getResources().getDrawable(
-                        R.drawable.fadenkreuz)));
-                currentPositionMarker.setHotspot(Marker.HotspotPlace.CENTER);
-                mapView.addMarker(currentPositionMarker);
-                mapView.postInvalidate();
-                gps.stop();
-
-                super.handleMessage(msg);
-            }
-        };
     }
 
     public Handler getHandler() {
@@ -319,32 +338,32 @@ public class MapFragment extends Fragment {
 
 
     public void reloadMapMind() {
-        if (!DataRepo.mapMind.isEmpty()) {
-            if (DataRepo.mapMind.contains(DataRepo.BAKERY)) {
+        if (!visibleMarkers.isEmpty()) {
+            if (visibleMarkers.contains(DataRepo.BAKERY)) {
                 mapView.addItemizedOverlay(bakeryOverlay);
                 mapView.postInvalidate();
             }
-            if (DataRepo.mapMind.contains(DataRepo.CAFE)) {
+            if (visibleMarkers.contains(DataRepo.CAFE)) {
                 mapView.addItemizedOverlay(cafeOverlay);
                 mapView.postInvalidate();
             }
-            if (DataRepo.mapMind.contains(DataRepo.ICECREAM)) {
+            if (visibleMarkers.contains(DataRepo.ICECREAM)) {
                 mapView.addItemizedOverlay(icecreamOverlay);
                 mapView.postInvalidate();
             }
-            if (DataRepo.mapMind.contains(DataRepo.FOOD)) {
+            if (visibleMarkers.contains(DataRepo.FOOD)) {
                 mapView.addItemizedOverlay(foodOverlay);
                 mapView.postInvalidate();
             }
-            if (DataRepo.mapMind.contains(DataRepo.SHOPPING)) {
+            if (visibleMarkers.contains(DataRepo.SHOPPING)) {
                 mapView.addItemizedOverlay(shoppingOverlay);
                 mapView.postInvalidate();
             }
-            if (DataRepo.mapMind.contains(DataRepo.VOKUE)) {
+            if (visibleMarkers.contains(DataRepo.VOKUE)) {
                 mapView.addItemizedOverlay(vokueOverlay);
                 mapView.postInvalidate();
             }
-            if (DataRepo.mapMind.contains(DataRepo.FAVORITES)) {
+            if (visibleMarkers.contains(DataRepo.FAVORITES)) {
                 mapView.getOverlays().add(favOverlay);
                 mapView.postInvalidate();
             }
@@ -353,7 +372,7 @@ public class MapFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        menu.clear();
+        //menu.clear();
         inflater.inflate(R.menu.menu_map, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
@@ -363,17 +382,13 @@ public class MapFragment extends Fragment {
         if (!menuItem.isChecked()) {
             menuItem.setChecked(true);
             mapView.addItemizedOverlay(overlay);
-            //mapView.addMarkers(foodMarkers);
-            Log.i("Overlay Size", "" + overlay.size());
-            Log.i("Overlays", "" + mapView.getItemizedOverlays().size());
             mapView.postInvalidate();
-            DataRepo.mapMind.add(mapMindKey);
+            visibleMarkers.add(mapMindKey);
         } else {
             menuItem.setChecked(false);
             mapView.removeOverlay(overlay);
-            //mapView.removeMarkers(foodMarkers);
             mapView.postInvalidate();
-            DataRepo.mapMind.remove(mapMindKey);
+            visibleMarkers.remove(mapMindKey);
         }
     }
 
@@ -383,16 +398,15 @@ public class MapFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.menu_show_layers:
                 View menuItemView = this.getActivity().findViewById(R.id.menu_show_layers);
-                if (popupMenu == null) {
                     popupMenu = new PopupMenu(this.getActivity(), menuItemView);
                     popupMenu.inflate(R.menu.menu_map_layers);
                     if (!singleSpot) {
-                        popupMenu.getMenu().findItem(R.id.back_items_map).setChecked(DataRepo.mapMind.contains(DataRepo.BAKERY));
-                        popupMenu.getMenu().findItem(R.id.food_items_map).setChecked(DataRepo.mapMind.contains(DataRepo.FOOD));
-                        popupMenu.getMenu().findItem(R.id.cafe_items_map).setChecked(DataRepo.mapMind.contains(DataRepo.CAFE));
-                        popupMenu.getMenu().findItem(R.id.vokue_items_map).setChecked(DataRepo.mapMind.contains(DataRepo.VOKUE));
-                        popupMenu.getMenu().findItem(R.id.shopping_items_map).setChecked(DataRepo.mapMind.contains(DataRepo.SHOPPING));
-                        popupMenu.getMenu().findItem(R.id.ice_items_map).setChecked(DataRepo.mapMind.contains(DataRepo.ICECREAM));
+                        popupMenu.getMenu().findItem(R.id.back_items_map).setChecked(visibleMarkers.contains(DataRepo.BAKERY));
+                        popupMenu.getMenu().findItem(R.id.food_items_map).setChecked(visibleMarkers.contains(DataRepo.FOOD));
+                        popupMenu.getMenu().findItem(R.id.cafe_items_map).setChecked(visibleMarkers.contains(DataRepo.CAFE));
+                        popupMenu.getMenu().findItem(R.id.vokue_items_map).setChecked(visibleMarkers.contains(DataRepo.VOKUE));
+                        popupMenu.getMenu().findItem(R.id.shopping_items_map).setChecked(visibleMarkers.contains(DataRepo.SHOPPING));
+                        popupMenu.getMenu().findItem(R.id.ice_items_map).setChecked(visibleMarkers.contains(DataRepo.ICECREAM));
                     }
                     popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                         @Override
@@ -400,32 +414,26 @@ public class MapFragment extends Fragment {
                             switch (menuItem.getItemId()) {
                                 case R.id.food_items_map:
                                     handleMenuClick(menuItem, foodOverlay, DataRepo.FOOD);
-                                    //showIt = null;
                                     return true;
 
                                 case R.id.shopping_items_map:
                                     handleMenuClick(menuItem, shoppingOverlay, DataRepo.SHOPPING);
-                                    //showIt = null;
                                     return true;
 
                                 case R.id.back_items_map:
                                     handleMenuClick(menuItem, bakeryOverlay, DataRepo.BAKERY);
-                                    //showIt = null;
                                     return true;
 
                                 case R.id.cafe_items_map:
                                     handleMenuClick(menuItem, cafeOverlay, DataRepo.CAFE);
-                                    //showIt = null;
                                     return true;
 
                                 case R.id.ice_items_map:
                                     handleMenuClick(menuItem, icecreamOverlay, DataRepo.ICECREAM);
-                                    //showIt = null;
                                     return true;
 
                                 case R.id.vokue_items_map:
                                     handleMenuClick(menuItem, vokueOverlay, DataRepo.VOKUE);
-                                    //showIt = null;
                                     return true;
                                 case R.id.fav_items_map:
                                     if (!menuItem.isChecked()) {
@@ -436,37 +444,33 @@ public class MapFragment extends Fragment {
                                         menuItem.setChecked(true);
                                         mapView.getOverlays().add(favOverlay);
                                         mapView.postInvalidate();
-                                        DataRepo.mapMind.add(DataRepo.FAVORITES);
+                                        visibleMarkers.add(DataRepo.FAVORITES);
                                     } else {
                                         menuItem.setChecked(false);
                                         mapView.getOverlays().remove(favOverlay);
                                         mapView.postInvalidate();
-                                        DataRepo.mapMind.remove(DataRepo.FAVORITES);
+                                        visibleMarkers.remove(DataRepo.FAVORITES);
                                     }
-                                    //showIt = null;
                                     return true;
                                 case R.id.showAll_items_map:
-                                    DataRepo.mapMind.add(DataRepo.VOKUE);
-                                    DataRepo.mapMind.add(DataRepo.SHOPPING);
-                                    DataRepo.mapMind.add(DataRepo.ICECREAM);
-                                    DataRepo.mapMind.add(DataRepo.BAKERY);
-                                    DataRepo.mapMind.add(DataRepo.CAFE);
-                                    DataRepo.mapMind.add(DataRepo.FOOD);
-                                    //showIt = null;
+                                    visibleMarkers.add(DataRepo.VOKUE);
+                                    visibleMarkers.add(DataRepo.SHOPPING);
+                                    visibleMarkers.add(DataRepo.ICECREAM);
+                                    visibleMarkers.add(DataRepo.BAKERY);
+                                    visibleMarkers.add(DataRepo.CAFE);
+                                    visibleMarkers.add(DataRepo.FOOD);
                                     reloadMapMind();
                                     return true;
 
                                 case R.id.hideAll_items_map:
-                                    DataRepo.mapMind.clear();
+                                    visibleMarkers.clear();
                                     mapView.getOverlays().clear();
                                     mapView.postInvalidate();
-                                    //showIt = null;
                                     return true;
                             }
                             return false;
                         }
                     });
-                }
                 popupMenu.show();
                 return true;
 
@@ -523,7 +527,6 @@ public class MapFragment extends Fragment {
 
 
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
     }
 
@@ -556,31 +559,4 @@ public class MapFragment extends Fragment {
 
 
     }
-
-    /*
-    public class CustomItemizedOverlay extends ItemizedIconOverlay<OverlayItem> {
-
-        public CustomItemizedOverlay(final Context context, final List<OverlayItem> aList) {
-            super(context, aList, new OnItemGestureListener<OverlayItem>() {
-                @Override
-                public boolean onItemSingleTapUp(final int index, final OverlayItem item) {
-                    VeganSpot spot = DataRepo.veganSpots.get(Integer.parseInt(item.getTitle()));
-                    if (!DataRepo.chosenMapItems.contains(spot.getID())) {
-                        SpotDetailFragment fragment = SpotDetailFragment.create(spot.getID());
-                        getFragmentManager().beginTransaction()
-                                .replace(R.id.content_frame, fragment)
-                                .addToBackStack(null)
-                                .commit();
-                        DataRepo.chosenMapItems.add(spot.getID());
-                    }
-                    return false;
-                }
-
-                @Override
-                public boolean onItemLongPress(final int index, final OverlayItem item) {
-                    return false;
-                }
-            });
-        }
-    }*/
 }
