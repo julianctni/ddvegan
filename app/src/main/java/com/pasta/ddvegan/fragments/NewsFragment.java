@@ -19,11 +19,11 @@ import com.pasta.ddvegan.models.VeganNews;
 import com.pasta.ddvegan.sync.NewsAndSpotUpdater;
 
 
-public class NewsFragment extends ListFragment {
+public class NewsFragment extends Fragment {
 
     public static NewsAdapter newsAdapter;
     public static SwipeRefreshLayout newsRefresher;
-
+    ListView newsList;
     public NewsFragment() {
     }
 
@@ -46,25 +46,25 @@ public class NewsFragment extends ListFragment {
                 updater.execute();
             }
         });
-        ListView lv = (ListView)getView().findViewById(R.id.news_list);
-        lv.setAdapter(newsAdapter);
+        newsList = (ListView)getView().findViewById(R.id.news_list);
+        newsList.setAdapter(newsAdapter);
+        newsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                VeganNews news = (VeganNews)newsList.getItemAtPosition(i);
+                if (!DataRepo.veganSpots.containsKey(news.getSpotId()))
+                    Toast.makeText(getActivity(), news.getNewsContent(), Toast.LENGTH_SHORT).show();
+                else {
+                    SpotDetailFragment detailFragment = SpotDetailFragment.create(news.getSpotId());
+                    getParentFragment().getFragmentManager().beginTransaction()
+                            .replace(R.id.content_frame, detailFragment, "SPOTDETAIL")
+                            .addToBackStack(null)
+                            .commit();
+                }
+            }
+        });
     }
 
-
-    @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
-        VeganNews news = (VeganNews)l.getItemAtPosition(position);
-        if (!DataRepo.veganSpots.containsKey(news.getSpotId()))
-            Toast.makeText(getActivity(), news.getNewsContent(), Toast.LENGTH_SHORT).show();
-        else {
-            SpotDetailFragment detailFragment = SpotDetailFragment.create(news.getSpotId());
-            this.getParentFragment().getFragmentManager().beginTransaction()
-                    .replace(R.id.content_frame, detailFragment, "SPOTDETAIL")
-                    .addToBackStack(null)
-                    .commit();
-        }
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

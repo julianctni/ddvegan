@@ -121,7 +121,7 @@ public class MapFragment extends Fragment {
                 currentPositionMarker = new Marker("Hier bist du!", "",
                         new LatLng(gps.getLatitude(), gps.getLongitude()));
                 currentPositionMarker.setMarker((getActivity().getResources().getDrawable(
-                        R.drawable.fadenkreuz)));
+                        R.drawable.flag)));
                 currentPositionMarker.setHotspot(Marker.HotspotPlace.LOWER_LEFT_CORNER);
                 mapView.addMarker(currentPositionMarker);
                 mapView.postInvalidate();

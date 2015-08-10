@@ -10,6 +10,6 @@
         android:layout_width="wrap_content"
         android:layout_height="24dp"
         android:layout_gravity="center"
-        android:src="@drawable/logo1"/>
+        android:src="@drawable/banner"/>
     </android.support.v7.widget.Toolbar>
 
