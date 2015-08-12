@@ -170,11 +170,21 @@
                     android:background="#88666666" />
 
                 <TextView
+                    android:id="@+id/about_sourcecode"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="#333333"
                     android:text="@string/info.content.code"
                     android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/info.content.lovepasta"
+                    android:textColor="#333333"
+                    android:textStyle="bold"
+                    android:textSize="18sp" />
 
             </LinearLayout>
         </android.support.v7.widget.CardView>

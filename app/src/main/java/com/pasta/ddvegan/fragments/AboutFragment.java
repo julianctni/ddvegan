@@ -4,12 +4,15 @@ package com.pasta.ddvegan.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.pasta.ddvegan.R;
 
@@ -30,6 +33,11 @@ public class AboutFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        TextView sourcecode = (TextView) getView()
+                .findViewById(R.id.about_sourcecode);
+        sourcecode.setMovementMethod(LinkMovementMethod.getInstance());
+        sourcecode.setText(Html
+                .fromHtml(getString(R.string.info_content_code)));
     }
 
 

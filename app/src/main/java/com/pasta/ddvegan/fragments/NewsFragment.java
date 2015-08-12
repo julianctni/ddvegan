@@ -48,6 +48,7 @@ public class NewsFragment extends Fragment {
         });
         newsList = (ListView)getView().findViewById(R.id.news_list);
         newsList.setAdapter(newsAdapter);
+        newsList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         newsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {

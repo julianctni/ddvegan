@@ -1,6 +1,7 @@
 package com.pasta.ddvegan.adapters;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,23 +16,23 @@ import java.util.ArrayList;
 
 public class NewsAdapter extends BaseAdapter {
 
-    private ArrayList<VeganNews> news;
+    private ArrayList<VeganNews> newsList;
     protected LayoutInflater mInflater;
 
-    public NewsAdapter(Context context, ArrayList<VeganNews> news) {
-        this.news = news;
+    public NewsAdapter(Context context, ArrayList<VeganNews> newsList) {
+        this.newsList = newsList;
         mInflater = LayoutInflater.from(context);
     }
 
     public int getCount() {
-        if (news == null)
+        if (newsList == null)
             return 0;
         else
-            return news.size();
+            return newsList.size();
     }
 
     public Object getItem(int position) {
-        return news.get(position);
+        return newsList.get(position);
     }
 
     public long getItemId(int position) {
@@ -39,6 +40,7 @@ public class NewsAdapter extends BaseAdapter {
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
+        VeganNews news = newsList.get(position);
         ViewHolder holder;
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.news_list_item, null);
@@ -49,9 +51,12 @@ public class NewsAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-
-        holder.header.setText(news.get(position).getNewsContent());
-        holder.time.setText(news.get(position).formatNewsTime());
+        if (news.isNew())
+            holder.header.setTypeface(null, Typeface.BOLD);
+        else
+            holder.header.setTypeface(null, Typeface.NORMAL);
+        holder.header.setText(news.getNewsContent());
+        holder.time.setText(news.formatNewsTime());
         return convertView;
     }
 

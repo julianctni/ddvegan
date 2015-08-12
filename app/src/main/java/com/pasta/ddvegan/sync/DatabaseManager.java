@@ -97,7 +97,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
             String newsTime = c.getString(c.getColumnIndex("newsTime"));
             String newsContent = c.getString(c.getColumnIndex("newsContent"));
 
-            VeganNews n = new VeganNews(newsId, newsType, spotId, newsContent, newsTime);
+            VeganNews n = new VeganNews(newsId, newsType, spotId, newsContent, newsTime, false);
             DataRepo.veganNews.add(n);
             Log.i("SQLITE", "getting stored news " + newsId);
         }

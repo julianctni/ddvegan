@@ -4,9 +4,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-/**
- * Created by julian on 02.04.15.
- */
 public class VeganNews {
 
     int newsId;
@@ -14,13 +11,15 @@ public class VeganNews {
     int spotId;
     String newsTime;
     String newsContent;
+    boolean isNew;
 
-    public VeganNews (int newsId, int newsType, int spotId, String newsContent, String newsTime){
+    public VeganNews (int newsId, int newsType, int spotId, String newsContent, String newsTime, boolean isNew){
         this.newsId = newsId;
         this.newsType = newsType;
         this.spotId = spotId;
         this.newsContent = createNewsContent (newsType, newsContent);
         this.newsTime = newsTime;
+        this.isNew = isNew;
     }
 
 
@@ -84,7 +83,7 @@ public class VeganNews {
         return newsContent;
     }
 
-    public String getNewsTime() {
-        return newsTime;
+    public boolean isNew(){
+        return isNew;
     }
 }

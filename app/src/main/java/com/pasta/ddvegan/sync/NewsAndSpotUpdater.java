@@ -39,6 +39,7 @@ import com.pasta.ddvegan.activities.MainActivity;
 import com.pasta.ddvegan.fragments.NewsFragment;
 import com.pasta.ddvegan.fragments.SpotListFragment;
 import com.pasta.ddvegan.models.DataRepo;
+import com.pasta.ddvegan.models.VeganNews;
 import com.pasta.ddvegan.utils.NetworkUtil;
 
 
@@ -225,6 +226,7 @@ public class NewsAndSpotUpdater extends AsyncTask<Integer, Integer, Integer> {
 
 
     public HashSet<Integer> updateNews() {
+        dbMan.getVeganNewsFromDatabase();
         HashSet<Integer> updateTheseSpots = new HashSet<Integer>();
         String result = requestNews(dbMan.getMaxNewsId());
         db = dbMan.getWritableDatabase();
@@ -257,14 +259,13 @@ public class NewsAndSpotUpdater extends AsyncTask<Integer, Integer, Integer> {
                 values.put("newsContent", newsContent);
                 values.put("newsTime", newsTime);
                 db.insert("veganNews", null, values);
+                DataRepo.veganNews.add(new VeganNews(newsId,newsType,spotId,newsContent,newsTime,true));
             }
         } catch (JSONException e) {
             ret = NetworkUtil.serverError;
             //e.printStackTrace();
         }
 
-        DataRepo.veganNews.clear();
-        dbMan.getVeganNewsFromDatabase();
         Collections.reverse(DataRepo.veganNews);
 
         return updateTheseSpots;
