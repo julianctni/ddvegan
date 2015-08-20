@@ -2,9 +2,7 @@ pasta vegan dawgs, yo!
 
 much to do!
 
-- add drawables in different resolutions
 - fix overlapping fragments bug
-- fix contact view in SpotDetail
 - bugfixing
 - code cleanup
 
@@ -17,3 +15,5 @@ done!
 - fix contact/hours view on info fragment
 - create some nice api
 - add single-spot-updater
+- fix contact view in SpotDetail
+- add drawables in different resolutions
