@@ -94,7 +94,7 @@ public class StartPageFragment extends Fragment {
         @Override
         public CharSequence getPageTitle(int position) {
             if (position == 0)
-                return "News";
+                return "Pinnwand";
             else
                 return "Favoriten";
         }

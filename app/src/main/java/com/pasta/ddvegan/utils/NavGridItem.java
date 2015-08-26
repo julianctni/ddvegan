@@ -8,12 +8,14 @@ import android.graphics.drawable.Drawable;
 public class NavGridItem {
 
     int type;
+    String name;
     Drawable tileImage;
     boolean selected;
 
-    public NavGridItem(int type, Drawable image) {
+    public NavGridItem(int type, Drawable image, String name) {
         this.type = type;
         tileImage = image;
+        this.name = name;
     }
 
     public Drawable getTileImage() {
@@ -26,6 +28,9 @@ public class NavGridItem {
 
     public boolean isSelected(){
         return selected;
+    }
+    public String getName(){
+        return name;
     }
 
     public void setSelected(boolean b){

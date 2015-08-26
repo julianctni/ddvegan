@@ -1,6 +1,7 @@
 package com.pasta.ddvegan.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,20 +48,31 @@ public class NewsAdapter extends BaseAdapter {
             holder = new ViewHolder();
             holder.header = (TextView) convertView.findViewById(R.id.news_item_header);
             holder.time = (TextView) convertView.findViewById(R.id.news_item_time);
+            holder.type = (TextView) convertView.findViewById(R.id.news_item_type);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        if (news.isNew())
-            holder.header.setTypeface(null, Typeface.BOLD);
-        else
-            holder.header.setTypeface(null, Typeface.NORMAL);
         holder.header.setText(news.getNewsContent());
+        holder.type.setText(news.getNewsType());
         holder.time.setText(news.formatNewsTime());
+
+        if (news.getNewsTypeInt() < 7) {
+            holder.header.setTextColor(Color.parseColor("#AA666666"));
+            holder.time.setTextColor(Color.parseColor("#AA888888"));
+            holder.type.setTextColor(Color.parseColor("#AA333333"));
+        }else {
+            holder.header.setTextColor(Color.parseColor("#FF444444"));
+            holder.time.setTextColor(Color.parseColor("#FF888888"));
+            holder.type.setTextColor(Color.parseColor("#FF333333"));
+        }
+
+
         return convertView;
     }
 
     static class ViewHolder {
+        TextView type;
         TextView header;
         TextView time;
     }

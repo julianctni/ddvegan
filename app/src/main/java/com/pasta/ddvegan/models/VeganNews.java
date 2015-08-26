@@ -3,6 +3,7 @@ package com.pasta.ddvegan.models;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 public class VeganNews {
 
@@ -51,14 +52,26 @@ public class VeganNews {
         }
         return "";
     }
+    public String getNewsType() {
+        String type = "";
+        if (isNew)
+            type = "#update ";
+        if (newsType < 7)
+            return type + "#info";
+        else
+            return "#news";
+    }
 
+    public int getNewsTypeInt(){
+        return newsType;
+    }
     public String formatNewsTime() {
         Calendar currentTime = Calendar.getInstance();
         Calendar messageTime = Calendar.getInstance();
 
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        SimpleDateFormat dfShort = new SimpleDateFormat("HH:mm");
-        SimpleDateFormat dfDate = new SimpleDateFormat("dd.MM.yy, HH:mm");
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.GERMAN);
+        SimpleDateFormat dfShort = new SimpleDateFormat("HH:mm", Locale.GERMAN);
+        SimpleDateFormat dfDate = new SimpleDateFormat("dd. MMM, HH:mm", Locale.GERMAN);
 
         try {
             messageTime.setTime(df.parse(newsTime));
@@ -68,12 +81,12 @@ public class VeganNews {
 
         if (currentTime.get(Calendar.DAY_OF_YEAR) == (messageTime
                 .get(Calendar.DAY_OF_YEAR) + 1))
-            return ("yesterday, " + dfShort.format(messageTime.getTime()));
+            return ("yesterday, " + dfShort.format(messageTime.getTime())+" Uhr");
         else if (currentTime.get(Calendar.DAY_OF_YEAR) == messageTime
                 .get(Calendar.DAY_OF_YEAR))
-            return ("today, " + dfShort.format(messageTime.getTime()));
+            return ("today, " + dfShort.format(messageTime.getTime())+" Uhr");
         else
-            return (dfDate.format(messageTime.getTime()));
+            return (dfDate.format(messageTime.getTime())+" Uhr");
     }
 
     public int getSpotId(){

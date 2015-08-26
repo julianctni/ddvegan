@@ -1,6 +1,8 @@
 package com.pasta.ddvegan.models;
 
 
+import com.pasta.ddvegan.utils.NavGridItem;
+
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,6 +31,7 @@ public class DataRepo {
     public static String apiVeganSpotUpdates = apiUrl + "post/veganSpotUpdates";
     public static String apiFeedback = apiUrl + "post/feedback";
     public static String apiReport = apiUrl + "post/report";
+    public static String apiImage = apiUrl + "get/image/";
 
     public static HashMap<Integer, VeganSpot> veganSpots = new HashMap<Integer, VeganSpot>();
     public static HashSet<Integer> chosenMapItems = new HashSet<Integer>();
@@ -40,6 +43,10 @@ public class DataRepo {
     public static ArrayList<VeganSpot> icecreamSpots = new ArrayList<VeganSpot>();
     public static HashMap<Integer,VeganSpot> favoriteMap = new HashMap<Integer,VeganSpot>();
     public static ArrayList<VeganSpot> favoriteSpots = new ArrayList<VeganSpot>();
+
+
+    public static ArrayList<NavGridItem> navGridItems = new ArrayList<NavGridItem>();
+
 
     public static void updateFavorites(){
         favoriteSpots.clear();

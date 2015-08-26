@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.pasta.ddvegan.R;
@@ -41,9 +42,8 @@ public class MainActivity extends ActionBarActivity
     private Toolbar toolbar;
     private ImageView homeButton;
     private Menu menu;
-    private GridView navigationGrid;
+    private ListView navList;
     private FragmentManager fragmentManager;
-    private ArrayList<NavGridItem> navGridItems = new ArrayList<NavGridItem>();
     private NavigationGridAdapter navAdapter;
 
     @Override
@@ -73,28 +73,29 @@ public class MainActivity extends ActionBarActivity
             getSupportActionBar().setTitle(null);
         }
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        navigationGrid = (GridView) findViewById(R.id.navigationGrid);
-        if (navGridItems.isEmpty())
+        navList = (ListView) findViewById(R.id.navigationGrid);
+        if (DataRepo.navGridItems.isEmpty())
             this.setUpGridItems();
-        navAdapter = new NavigationGridAdapter(this, navGridItems);
-        navigationGrid.setAdapter(navAdapter);
-        navigationGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        navAdapter = new NavigationGridAdapter(this, DataRepo.navGridItems);
+
+        navList.setAdapter(navAdapter);
+        navList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                selectItem((NavGridItem) navigationGrid.getItemAtPosition(position));
+                selectItem((NavGridItem) navList.getItemAtPosition(position));
             }
         });
     }
 
     public void setUpGridItems() {
-        navGridItems.add(new NavGridItem(DataRepo.SHOPPING, getResources().getDrawable(R.drawable.button_shopping)));
-        navGridItems.add(new NavGridItem(DataRepo.FOOD, getResources().getDrawable(R.drawable.button_food)));
-        navGridItems.add(new NavGridItem(DataRepo.BAKERY, getResources().getDrawable(R.drawable.button_bakery)));
-        navGridItems.add(new NavGridItem(DataRepo.CAFE, getResources().getDrawable(R.drawable.button_cafe)));
-        navGridItems.add(new NavGridItem(DataRepo.ICECREAM, getResources().getDrawable(R.drawable.button_icecream)));
-        navGridItems.add(new NavGridItem(DataRepo.VOKUE, getResources().getDrawable(R.drawable.button_vokue)));
-        navGridItems.add(new NavGridItem(DataRepo.MAP, getResources().getDrawable(R.drawable.button_map)));
-        navGridItems.add(new NavGridItem(DataRepo.ABOUT, getResources().getDrawable(R.drawable.button_info)));
+        DataRepo.navGridItems.add(new NavGridItem(DataRepo.SHOPPING, getResources().getDrawable(R.drawable.button_shopping),"Einkaufsmöglichkeiten"));
+        DataRepo.navGridItems.add(new NavGridItem(DataRepo.FOOD, getResources().getDrawable(R.drawable.button_food),"Essen und Trinken"));
+        DataRepo.navGridItems.add(new NavGridItem(DataRepo.BAKERY, getResources().getDrawable(R.drawable.button_bakery),"Backwaren"));
+        DataRepo.navGridItems.add(new NavGridItem(DataRepo.CAFE, getResources().getDrawable(R.drawable.button_cafe),"Kaffee und Kuchen"));
+        DataRepo.navGridItems.add(new NavGridItem(DataRepo.ICECREAM, getResources().getDrawable(R.drawable.button_icecream),"Eiscreme"));
+        DataRepo.navGridItems.add(new NavGridItem(DataRepo.VOKUE, getResources().getDrawable(R.drawable.button_vokue),"Volxküchen"));
+        DataRepo.navGridItems.add(new NavGridItem(DataRepo.MAP, getResources().getDrawable(R.drawable.button_map),"Kartenansicht"));
+        DataRepo.navGridItems.add(new NavGridItem(DataRepo.ABOUT, getResources().getDrawable(R.drawable.button_info),"Impressum"));
     }
 
     private void selectItem(NavGridItem item) {
@@ -103,7 +104,7 @@ public class MainActivity extends ActionBarActivity
             return;
         }
         Fragment fragment;
-        for (NavGridItem n : navGridItems)
+        for (NavGridItem n : DataRepo.navGridItems)
             n.setSelected(false);
         item.setSelected(true);
         navAdapter.notifyDataSetChanged();
@@ -126,7 +127,7 @@ public class MainActivity extends ActionBarActivity
     }
 
     private void setUpStartPage() {
-        for (NavGridItem n : navGridItems)
+        for (NavGridItem n : DataRepo.navGridItems)
             n.setSelected(false);
         navAdapter.notifyDataSetChanged();
         Fragment fragment = new StartPageFragment();

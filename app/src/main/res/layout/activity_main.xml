@@ -20,21 +20,25 @@
 
         <!-- The navigation drawer -->
         <!--<include layout="@layout/navigation_drawer"/>-->
-        <GridView
-            android:id="@+id/navigationGrid"
-            android:paddingLeft="4dp"
-            android:paddingRight="4dp"
-            android:layout_width="236dp"
+        <LinearLayout
+            android:layout_width="250dp"
             android:layout_height="match_parent"
-            android:background="@color/primary"
             android:layout_gravity="start"
             android:columnWidth="115dp"
-            android:numColumns="2"
-            android:verticalSpacing="4dp"
-            android:horizontalSpacing="4dp"
-            android:stretchMode="columnWidth"
-            android:gravity="center"
-            />
+            android:background="#EFFFFFFF"
+            android:orientation="vertical">
+
+            <ListView
+                android:id="@+id/navigationGrid"
+                android:layout_width="match_parent"
+                android:background="#EFFFFFFF"
+                android:scrollbars="none"
+                android:paddingTop="5dp"
+                android:dividerHeight="0dp"
+                android:layout_height="match_parent"
+                />
+
+        </LinearLayout>
     </android.support.v4.widget.DrawerLayout>
 
 </LinearLayout>

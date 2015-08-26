@@ -273,22 +273,14 @@ public class SpotDetailFragment extends Fragment {
                 foodPicture = BitmapFactory.decodeStream(fis);
                 Log.i("LOADING IMAGE", "loading image from internal storage");
             } catch (FileNotFoundException e) {
-                //e.printStackTrace();
+                e.printStackTrace();
                 Log.i("LOADING IMAGE", "loading image from web");
                 try {
-                    Log.i("LOADING IMAGE", "loading jpg");
                     foodPicture = BitmapFactory
-                            .decodeStream((InputStream) new URL("http://www.ddvegan.pastayouth.org/ddvegan/images/" + spot.getImgKey() + "_banner.jpg").getContent());
+                            .decodeStream((InputStream) new URL(DataRepo.apiImage + spot.getImgKey()).getContent());
 
                 } catch (Exception e1) {
-                    //e1.printStackTrace();
-                    try {
-                        Log.i("LOADING IMAGE", "loading png");
-                        foodPicture = BitmapFactory
-                                .decodeStream((InputStream) new URL("http://www.ddvegan.pastayouth.org/ddvegan/images/" + spot.getImgKey() + "_banner.png").getContent());
-                    } catch (Exception e2) {
-                        //e1.printStackTrace();
-                    }
+                    e1.printStackTrace();
                 }
                 if (foodPicture != null) {
                     FileOutputStream fos = null;
@@ -297,7 +289,7 @@ public class SpotDetailFragment extends Fragment {
                         foodPicture.compress(Bitmap.CompressFormat.PNG, 100, fos);
                         fos.close();
                     } catch (Exception e2) {
-                        //e2.printStackTrace();
+                        e2.printStackTrace();
                     }
                 }
             }

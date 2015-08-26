@@ -17,6 +17,7 @@
             android:layout_height="wrap_content"
             android:divider="#DDDDDD"
             android:dividerHeight="1dp"/>
+
     </android.support.v4.widget.SwipeRefreshLayout>
 
 </LinearLayout>
