@@ -1,9 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="5dp">
+
+    <ImageView
+        android:id="@+id/news_icon"
+        android:layout_marginTop="5dp"
+        android:layout_width="35dp"
+        android:layout_height="35dp" />
+
+    <View
+        android:layout_width="1dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_height="match_parent"
+        android:background="#33000000"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -42,6 +57,8 @@
             android:layout_below="@id/news_item_time"
             android:textColor="#333333"
             android:textSize="18sp" />
+
+
 
     </RelativeLayout>
 

@@ -9,8 +9,10 @@
         android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         android:background="#22666666"/>
 
 
@@ -18,7 +20,7 @@
         android:id="@+id/navItemLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="5dp"
+        android:paddingLeft="7dp"
         android:layout_below="@id/navListSeperator">
 
         <ImageView
@@ -30,8 +32,8 @@
             android:background="@android:color/transparent"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:layout_width="45dp"
-            android:layout_height="45dp"/>
+            android:layout_width="42dp"
+            android:layout_height="42dp"/>
 
         <TextView
             android:id="@+id/navigationText"
@@ -49,7 +51,7 @@
             android:layout_width="10dp"
             android:layout_height="60dp"
             android:layout_centerVertical="true"
-            android:background="@color/primary_bright"
+            android:background="@color/primary"
             android:layout_alignParentRight="true"
             android:layout_centerInParent="true"
             android:visibility="visible"/>

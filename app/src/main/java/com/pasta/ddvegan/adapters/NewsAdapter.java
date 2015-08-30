@@ -3,10 +3,12 @@ package com.pasta.ddvegan.adapters;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pasta.ddvegan.R;
@@ -49,6 +51,7 @@ public class NewsAdapter extends BaseAdapter {
             holder.header = (TextView) convertView.findViewById(R.id.news_item_header);
             holder.time = (TextView) convertView.findViewById(R.id.news_item_time);
             holder.type = (TextView) convertView.findViewById(R.id.news_item_type);
+            holder.newsIcon = (ImageView) convertView.findViewById(R.id.news_icon);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -58,13 +61,33 @@ public class NewsAdapter extends BaseAdapter {
         holder.time.setText(news.formatNewsTime());
 
         if (news.getNewsTypeInt() < 7) {
-            holder.header.setTextColor(Color.parseColor("#AA666666"));
-            holder.time.setTextColor(Color.parseColor("#AA888888"));
-            holder.type.setTextColor(Color.parseColor("#AA333333"));
+            holder.header.setTextColor(Color.parseColor("#DD666666"));
+            holder.time.setTextColor(Color.parseColor("#DD888888"));
+            holder.type.setTextColor(Color.parseColor("#DD333333"));
+            holder.header.setTextSize(18f);
+            switch (news.getNewsTypeInt()) {
+                case (1):
+                    holder.newsIcon.setImageResource(R.drawable.icon_news_contact);
+                    break;
+
+                case (2):
+                    holder.newsIcon.setImageResource(R.drawable.icon_news_address);
+                    break;
+
+                case (3):
+                    holder.newsIcon.setImageResource(R.drawable.icon_news_hours);
+                    break;
+
+                case (4):
+                    holder.newsIcon.setImageResource(R.drawable.icon_news_info);
+                    break;
+            }
         }else {
             holder.header.setTextColor(Color.parseColor("#FF444444"));
             holder.time.setTextColor(Color.parseColor("#FF888888"));
             holder.type.setTextColor(Color.parseColor("#FF333333"));
+            holder.header.setTextSize(20f);
+            holder.newsIcon.setImageResource(R.drawable.icon_news);
         }
 
 
@@ -75,6 +98,7 @@ public class NewsAdapter extends BaseAdapter {
         TextView type;
         TextView header;
         TextView time;
+        ImageView newsIcon;
     }
 
 }

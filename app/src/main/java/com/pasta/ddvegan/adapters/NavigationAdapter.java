@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -18,14 +17,12 @@ import com.pasta.ddvegan.R;
 import com.pasta.ddvegan.models.DataRepo;
 import com.pasta.ddvegan.utils.NavGridItem;
 
-import org.w3c.dom.Text;
-
-public class NavigationGridAdapter extends BaseAdapter {
+public class NavigationAdapter extends BaseAdapter {
     private Context mContext;
     private LayoutInflater mInflater;
     private ArrayList<NavGridItem> items;
 
-    public NavigationGridAdapter(Context c, ArrayList<NavGridItem> items) {
+    public NavigationAdapter(Context c, ArrayList<NavGridItem> items) {
         mContext = c;
         mInflater = (LayoutInflater)c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.items = items;
@@ -48,7 +45,7 @@ public class NavigationGridAdapter extends BaseAdapter {
         ViewHolder viewHolder;
         if(convertView == null) {
             LayoutInflater inflater = LayoutInflater.from(mContext);
-            convertView = inflater.inflate(R.layout.nav_grid_item, parent, false);
+            convertView = inflater.inflate(R.layout.nav_item, parent, false);
             viewHolder = new ViewHolder();
             viewHolder.navIcon = (ImageView) convertView.findViewById(R.id.navigationImage);
             viewHolder.navText = (TextView) convertView.findViewById(R.id.navigationText);

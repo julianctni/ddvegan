@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -127,9 +128,12 @@ public class SpotListFragment extends Fragment {
         View rootView = (View) inflater.inflate(R.layout.fragment_spot_list,
                 container, false);
         TextView tv = (TextView) rootView.findViewById(R.id.venue_list_header);
-        if (type == DataRepo.FAVORITES)
+        RelativeLayout noFavLayout = (RelativeLayout) rootView.findViewById(R.id.noFavLayout);
+        if (type == DataRepo.FAVORITES) {
             tv.setVisibility(View.GONE);
-        else
+            if (spots.isEmpty())
+                noFavLayout.setVisibility(View.VISIBLE);
+        } else
             tv.setText(title);
         setHasOptionsMenu(true);
         this.setUpRecyclerView(rootView);

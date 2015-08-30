@@ -13,13 +13,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.pasta.ddvegan.R;
-import com.pasta.ddvegan.adapters.NavigationGridAdapter;
+import com.pasta.ddvegan.adapters.NavigationAdapter;
 import com.pasta.ddvegan.fragments.AboutFragment;
 import com.pasta.ddvegan.fragments.MapFragment;
 import com.pasta.ddvegan.fragments.NewsFragment;
@@ -28,8 +27,6 @@ import com.pasta.ddvegan.fragments.SpotListFragment;
 import com.pasta.ddvegan.fragments.StartPageFragment;
 import com.pasta.ddvegan.models.DataRepo;
 import com.pasta.ddvegan.utils.NavGridItem;
-
-import java.util.ArrayList;
 
 
 public class MainActivity extends ActionBarActivity
@@ -44,7 +41,7 @@ public class MainActivity extends ActionBarActivity
     private Menu menu;
     private ListView navList;
     private FragmentManager fragmentManager;
-    private NavigationGridAdapter navAdapter;
+    private NavigationAdapter navAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +73,7 @@ public class MainActivity extends ActionBarActivity
         navList = (ListView) findViewById(R.id.navigationGrid);
         if (DataRepo.navGridItems.isEmpty())
             this.setUpGridItems();
-        navAdapter = new NavigationGridAdapter(this, DataRepo.navGridItems);
+        navAdapter = new NavigationAdapter(this, DataRepo.navGridItems);
 
         navList.setAdapter(navAdapter);
         navList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
