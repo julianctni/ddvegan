@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/menu_sort_alphab"
+            android:checked="true"
+            android:title="Alphabetisch" />
 
-    <item
-        android:id="@+id/menu_sort_distance"
-        android:title="Entfernung" />
-    <item
-        android:id="@+id/menu_sort_alphab"
-        android:title="Alphabetisch" />
-    <item
-        android:id="@+id/menu_sort_hours"
-        android:title="Öffnungszeiten" />
+        <item
+            android:id="@+id/menu_sort_distance"
+            android:title="Entfernung" />
 
+        <item
+            android:id="@+id/menu_sort_hours"
+            android:title="Öffnungszeiten" />
+    </group>
 </menu>

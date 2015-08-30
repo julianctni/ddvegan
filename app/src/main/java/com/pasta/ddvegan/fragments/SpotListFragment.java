@@ -47,6 +47,7 @@ public class SpotListFragment extends Fragment {
     public static Handler listHandler;
     GpsUtil gps;
     ProgressDialog dialog;
+    PopupMenu sortMenu;
 
 
     public static SpotListFragment create(int type) {
@@ -99,6 +100,7 @@ public class SpotListFragment extends Fragment {
                 spots = DataRepo.favoriteSpots;
                 break;
         }
+        DataRepo.sortByName(spots);
         gps = new GpsUtil(this);
         listHandler = new Handler() {
             public void handleMessage(Message msg) {
@@ -208,34 +210,39 @@ public class SpotListFragment extends Fragment {
             case R.id.menu_sort:
 
                 View menuItemView = this.getActivity().findViewById(R.id.menu_sort);
-                PopupMenu popupMenu = new PopupMenu(this.getActivity(), menuItemView);
-                popupMenu.inflate(R.menu.menu_spotlist_sort);
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem menuItem) {
-                        switch (menuItem.getItemId()) {
-                            case R.id.menu_sort_alphab:
-                                DataRepo.sortByName(spots);
-                                spotListAdapter.notifyDataSetChanged();
-                                return true;
-
-                            case R.id.menu_sort_distance:
-                                if (DataRepo.hasDistance) {
-                                    DataRepo.sortByDistance(spots);
+                if (sortMenu == null) {
+                    sortMenu = new PopupMenu(this.getActivity(), menuItemView);
+                    sortMenu.inflate(R.menu.menu_spotlist_sort);
+                    sortMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem menuItem) {
+                            switch (menuItem.getItemId()) {
+                                case R.id.menu_sort_alphab:
+                                    menuItem.setChecked(!menuItem.isChecked());
+                                    DataRepo.sortByName(spots);
                                     spotListAdapter.notifyDataSetChanged();
-                                } else
-                                    calculateDistances();
-                                return true;
+                                    return true;
 
-                            case R.id.menu_sort_hours:
-                                DataRepo.sortByHours(spots);
-                                spotListAdapter.notifyDataSetChanged();
-                                return true;
+                                case R.id.menu_sort_distance:
+                                    if (DataRepo.hasDistance) {
+                                        DataRepo.sortByDistance(spots);
+                                        spotListAdapter.notifyDataSetChanged();
+                                    } else if (calculateDistances())
+                                        menuItem.setChecked(!menuItem.isChecked());
+                                    return true;
+
+                                case R.id.menu_sort_hours:
+                                    menuItem.setChecked(!menuItem.isChecked());
+                                    menuItem.setChecked(true);
+                                    DataRepo.sortByHours(spots);
+                                    spotListAdapter.notifyDataSetChanged();
+                                    return true;
+                            }
+                            return false;
                         }
-                        return false;
-                    }
-                });
-                popupMenu.show();
+                    });
+                }
+                sortMenu.show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -245,11 +252,12 @@ public class SpotListFragment extends Fragment {
     /*
      * Get the current location and calculate the distances.
      */
-    public void calculateDistances() {
+    public boolean calculateDistances() {
         gps.updateLocation();
-        if (!gps.isOn())
+        if (!gps.isOn()) {
             AlertNoGPS();
-        else {
+            return false;
+        } else {
             if (!gps.newLocation) {
                 dialog = new ProgressDialog(getActivity());
                 dialog.setMessage("Calculating distances");
@@ -265,6 +273,7 @@ public class SpotListFragment extends Fragment {
                 dialog.show();
             }
         }
+        return true;
     }
 
     /*
