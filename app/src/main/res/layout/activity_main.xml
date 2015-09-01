@@ -25,7 +25,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="start"
             android:columnWidth="115dp"
-            android:background="#EFFFFFFF"
+            android:background="@color/drawer.background"
             android:orientation="vertical">
 
             <ListView

@@ -19,7 +19,7 @@
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp"
             android:layout_marginTop="8dp"
-            card_view:cardBackgroundColor="#FCFCFC"
+            card_view:cardBackgroundColor="@color/card.background"
             card_view:cardCornerRadius="2dp"
             card_view:cardElevation="4dp">
 
@@ -33,26 +33,26 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
                     android:text="@string/info.content.impressum"
-                    android:textColor="#666666"
+                    android:textColor="@color/text.header"
                     android:textSize="18sp" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginBottom="10dp"
-                    android:background="#88666666" />
+                    android:background="@color/text.seperator" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="#333333"
+                    android:textColor="@color/text.content"
                     android:text="@string/app_name"
                     android:textSize="20sp" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="#333333"
+                    android:textColor="@color/text.content"
                     android:text="@string/info.content.version"
                     android:layout_marginBottom="12dp"
                     android:textSize="14sp" />
@@ -60,7 +60,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="#333333"
+                    android:textColor="@color/text.content"
                     android:text="@string/info.content.developerz"
                     android:textSize="16sp" />
 
@@ -76,7 +76,7 @@
             android:layout_marginBottom="12dp"
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp"
-            card_view:cardBackgroundColor="#FCFCFC"
+            card_view:cardBackgroundColor="@color/card.background"
             card_view:cardCornerRadius="2dp"
             card_view:cardElevation="4dp">
 
@@ -91,47 +91,47 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
                     android:text="@string/info.content.annotations"
-                    android:textColor="#666666"
+                    android:textColor="@color/text.header"
                     android:textSize="18sp" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginBottom="10dp"
-                    android:background="#88666666" />
+                    android:background="@color/text.seperator" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="#333333"
+                    android:textColor="@color/text.content"
                     android:text="@string/info.content.thanks"
                     android:textSize="16sp" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="#333333"
+                    android:textColor="@color/text.content"
                     android:text="@string/info.content.disagree"
                     android:textSize="16sp" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="#333333"
+                    android:textColor="@color/text.content"
                     android:text="@string/info.content.noGuarantuee"
                     android:textSize="16sp" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="#333333"
+                    android:textColor="@color/text.content"
                     android:text="@string/info.content.notAll"
                     android:textSize="16sp" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="#333333"
+                    android:textColor="@color/text.content"
                     android:text="@string/info.content.mailUs"
                     android:textSize="16sp" />
             </LinearLayout>
@@ -144,7 +144,7 @@
             android:layout_marginBottom="12dp"
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp"
-            card_view:cardBackgroundColor="#FCFCFC"
+            card_view:cardBackgroundColor="@color/card.background"
             card_view:cardCornerRadius="2dp"
             card_view:cardElevation="4dp">
 
@@ -160,20 +160,20 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
                     android:text="@string/info.content.code.header"
-                    android:textColor="#666666"
+                    android:textColor="@color/text.header"
                     android:textSize="18sp" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginBottom="10dp"
-                    android:background="#88666666" />
+                    android:background="@color/text.seperator" />
 
                 <TextView
                     android:id="@+id/about_sourcecode"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="#333333"
+                    android:textColor="@color/text.content"
                     android:text="@string/info.content.code"
                     android:textSize="16sp" />
 
@@ -182,7 +182,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:text="@string/info.content.lovepasta"
-                    android:textColor="#333333"
+                    android:textColor="@color/text.content"
                     android:textStyle="bold"
                     android:textSize="18sp" />
 

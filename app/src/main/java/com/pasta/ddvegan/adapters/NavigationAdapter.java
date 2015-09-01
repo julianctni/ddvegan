@@ -11,18 +11,18 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
 import com.pasta.ddvegan.R;
 import com.pasta.ddvegan.models.DataRepo;
-import com.pasta.ddvegan.utils.NavGridItem;
+import com.pasta.ddvegan.utils.NavItem;
+
+import java.util.ArrayList;
 
 public class NavigationAdapter extends BaseAdapter {
     private Context mContext;
     private LayoutInflater mInflater;
-    private ArrayList<NavGridItem> items;
+    private ArrayList<NavItem> items;
 
-    public NavigationAdapter(Context c, ArrayList<NavGridItem> items) {
+    public NavigationAdapter(Context c, ArrayList<NavItem> items) {
         mContext = c;
         mInflater = (LayoutInflater)c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.items = items;
@@ -32,7 +32,7 @@ public class NavigationAdapter extends BaseAdapter {
         return items.size();
     }
 
-    public NavGridItem getItem(int position) {
+    public NavItem getItem(int position) {
         return items.get(position);
     }
 
@@ -56,7 +56,7 @@ public class NavigationAdapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        NavGridItem item = items.get(position);
+        NavItem item = items.get(position);
 
 
         viewHolder.navText.setText(item.getName());

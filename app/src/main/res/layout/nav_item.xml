@@ -41,8 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/navigationImage"
             android:layout_centerVertical="true"
-            android:text="Hello World!"
-            android:textColor="#666666"
+            android:textColor="@color/drawer.text"
             android:layout_marginLeft="14dp"
             android:textSize="16sp"/>
 

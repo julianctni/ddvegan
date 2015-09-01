@@ -94,11 +94,10 @@ public class StartPageFragment extends Fragment {
         @Override
         public CharSequence getPageTitle(int position) {
             if (position == 0)
-                return "Pinnwand";
+                return getString(R.string.startpage_tab_dashboard);
             else
-                return "Favoriten";
+                return getString(R.string.startpage_tab_fav);
         }
-
 
     }
 

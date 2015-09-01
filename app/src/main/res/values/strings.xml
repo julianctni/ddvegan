@@ -1,12 +1,75 @@
 <resources>
     <string name="app_name">Dresden Vegan</string>
 
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
-    <string name="drawer_open">open</string>
-    <string name="drawer_closed">closed</string>
+    <string name="category.bakery">Backwaren</string>
+    <string name="category.shopping">Einkaufsmöglichkeiten</string>
+    <string name="category.food">Essen und Trinken</string>
+    <string name="category.vokue">Volxküchen</string>
+    <string name="category.cafe">Café und Kuchen</string>
+    <string name="category.icecream">Eiscreme</string>
+    <string name="category.map">Kartenansicht</string>
+    <string name="category.about">Impressum</string>
 
+    <string name="nav.toast.twice">Du befindest dich schon auf dieser Seite.</string>
 
+    <string name="report.choosecategory">Wähle mindestens eine Fehlerkategorie aus.</string>
+    <string name="report.address">Adresse</string>
+    <string name="report.hours">Öffnungszeiten</string>
+    <string name="report.info">Infoangaben</string>
+    <string name="report.contact">Kontaktdaten</string>
+
+    <string name="share.text">Dresden Vegan - Die App für veganes Leben in Dresden und Umgebung!\nhttps://goo.gl/hLkl1s</string>
+    <string name="share.choice">Wähle eine App aus:</string>
+
+    <string name="contact.toast.minlength">Deine Nachricht sollte mehr als ein paar Buchstaben enthalten.</string>
+    <string name="contact.toast.validmail">Gebe bitte eine gültige E-Mail Adresse an.</string>
+    <string name="contact.toast.success">Nachricht wurde übermittelt!</string>
+    <string name="contact.toast.fail">Aus technischen Gründen kann gerade keine Nachricht versandt werden.</string>
+    <string name="contact.feedback.writeus">Schreib uns eine Nachricht!</string>
+
+    <string name="map.position.success">Deine Position wurde ermittelt.</string>
+    <string name="map.overlay.nohours">keine Öffnungszeiten vorhanden</string>
+    <string name="map.overlay.moredetails">mehr Details</string>
+    <string name="map.toast.nofav">Keine Favoriten vorhanden.</string>
+    <string name="map.dialog.searching">Position wird ermittelt...</string>
+    <string name="map.menu.showAll">Alle anzeigen</string>
+    <string name="map.menu.hideAll">Alle verbergen</string>
+    <string name="map.menu.showLocation">Standort ermitteln</string>
+
+    <string name="button.error">Fehler gefunden?</string>
+    <string name="dialog.send">Senden</string>
+    <string name="dialog.cancel">Abbrechen</string>
+    <string name="dialog.continue">Fortfahren</string>
+    <string name="dialog.msg.nogps">Um diese Funktion zu nutzen, musst du erst deine Ortung aktivieren.</string>
+
+    <string name="spot.detail.nocontact">keine Kontaktdaten vorhanden</string>
+    <string name="spot.mail.choice">Wähle E-Mail App</string>
+    <string name="spot.toast.nomail">Keine E-Mail vorhanden.</string>
+    <string name="spot.toast.nophone">Keine Telefonnummer vorhanden.</string>
+    <string name="spot.toast.nourl">Keine Homepage vorhanden.</string>
+    <string name="spot.toast.nogsm">Du kannst mit diesem Gerät nicht telefonieren.</string>
+    <string name="spot.hours.header">Öffnungszeiten</string>
+    <string name="spot.info.header">Angebot</string>
+    <string name="spot.contact.header">Kontakt</string>
+    <string name="spot.hours.monday">Mo:</string>
+    <string name="spot.hours.tuesday">Di:</string>
+    <string name="spot.hours.wednesday">Mi:</string>
+    <string name="spot.hours.thursday">Do:</string>
+    <string name="spot.hours.friday">Fr:</string>
+    <string name="spot.hours.saturday">Sa:</string>
+    <string name="spot.hours.sunday">So:</string>
+
+    <string name="spotlist.toast.gps.success">Entfernungen wurden ermittelt.</string>
+    <string name="spotlist.dialog.gps.calc">Entfernungen werden ermittelt.</string>
+    <string name="spotlist.nofav">Du hast noch keine Favoriten. Füge eine Lokalität hinzu, indem du in der Detailansicht auf das Herz oben rechts klickst!</string>
+    <string name="spotlist.menu.alph">Alphabetisch</string>
+    <string name="spotlist.menu.distance">Entfernung</string>
+    <string name="spotlist.menu.hours">Öffnungszeiten</string>
+
+    <string name="startpage.tab.dashboard">Pinnwand</string>
+    <string name="startpage.tab.fav">Favoriten</string>
+
+    <string name="splash.text">Daten werden geladen...</string>
 
     <string name="info.content.annotations">Anmerkungen</string>
     <string name="info.content.impressum">Impressum</string>
@@ -22,18 +85,4 @@
     <string name="info.content.notAll"><b>#</b> wir möchten darauf hinweisen, dass die hier vorzufindenden Listen kein vollständiges Abbild des veganen Angebots in Dresden darstellen, da sie aus nicht offiziell zusammengetragenen Daten stammen.\n</string>
     <string name="info.content.mailUs"><b>#</b> habt Ihr Fehler gefunden oder allgemein Verbesserungsvorschläge? Dann klickt einfach oben auf den Kontakt-Button und schreibt uns eine Nachricht. Gleiches gilt für unvollständige Informationen zu den Angeboten der verschiedenen Geschäfte/Restaurants.\n</string>
     <string name="info.content.feedback">Feedback</string>
-
-
-    <string name="map.menu.back">Backwaren</string>
-    <string name="map.menu.shopping">Einkaufsmöglichkeiten</string>
-    <string name="map.menu.vokue">Volxküchen</string>
-    <string name="map.menu.food">Essen &amp; Trinken</string>
-    <string name="map.menu.cafe">Cafés</string>
-    <string name="map.menu.icecream">Eisverkauf</string>
-    <string name="map.menu.showAll">Alle anzeigen</string>
-    <string name="map.menu.hideAll">Alle verbergen</string>
-    <string name="map.menu.showLocation">Standort ermitteln</string>
-    <string name="map.menu.showFav">Favoriten</string>
-    <string name="map.label">Kartenansicht</string>
-    <string name="title_activity_loading">LoadingActivity</string>
 </resources>

@@ -26,7 +26,7 @@ import com.pasta.ddvegan.fragments.SpotDetailFragment;
 import com.pasta.ddvegan.fragments.SpotListFragment;
 import com.pasta.ddvegan.fragments.StartPageFragment;
 import com.pasta.ddvegan.models.DataRepo;
-import com.pasta.ddvegan.utils.NavGridItem;
+import com.pasta.ddvegan.utils.NavItem;
 
 
 public class MainActivity extends ActionBarActivity
@@ -71,37 +71,37 @@ public class MainActivity extends ActionBarActivity
         }
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         navList = (ListView) findViewById(R.id.navigationGrid);
-        if (DataRepo.navGridItems.isEmpty())
+        if (DataRepo.navItems.isEmpty())
             this.setUpGridItems();
-        navAdapter = new NavigationAdapter(this, DataRepo.navGridItems);
+        navAdapter = new NavigationAdapter(this, DataRepo.navItems);
 
         navList.setAdapter(navAdapter);
         navList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                selectItem((NavGridItem) navList.getItemAtPosition(position));
+                selectItem((NavItem) navList.getItemAtPosition(position));
             }
         });
     }
 
     public void setUpGridItems() {
-        DataRepo.navGridItems.add(new NavGridItem(DataRepo.SHOPPING, getResources().getDrawable(R.drawable.button_shopping),"Einkaufsmöglichkeiten"));
-        DataRepo.navGridItems.add(new NavGridItem(DataRepo.FOOD, getResources().getDrawable(R.drawable.button_food),"Essen und Trinken"));
-        DataRepo.navGridItems.add(new NavGridItem(DataRepo.BAKERY, getResources().getDrawable(R.drawable.button_bakery),"Backwaren"));
-        DataRepo.navGridItems.add(new NavGridItem(DataRepo.CAFE, getResources().getDrawable(R.drawable.button_cafe),"Kaffee und Kuchen"));
-        DataRepo.navGridItems.add(new NavGridItem(DataRepo.ICECREAM, getResources().getDrawable(R.drawable.button_icecream),"Eiscreme"));
-        DataRepo.navGridItems.add(new NavGridItem(DataRepo.VOKUE, getResources().getDrawable(R.drawable.button_vokue),"Volxküchen"));
-        DataRepo.navGridItems.add(new NavGridItem(DataRepo.MAP, getResources().getDrawable(R.drawable.button_map),"Kartenansicht"));
-        DataRepo.navGridItems.add(new NavGridItem(DataRepo.ABOUT, getResources().getDrawable(R.drawable.button_info),"Impressum"));
+        DataRepo.navItems.add(new NavItem(DataRepo.SHOPPING, getResources().getDrawable(R.drawable.button_shopping), getString(R.string.category_shopping)));
+        DataRepo.navItems.add(new NavItem(DataRepo.FOOD, getResources().getDrawable(R.drawable.button_food), getString(R.string.category_food)));
+        DataRepo.navItems.add(new NavItem(DataRepo.BAKERY, getResources().getDrawable(R.drawable.button_bakery), getString(R.string.category_bakery)));
+        DataRepo.navItems.add(new NavItem(DataRepo.CAFE, getResources().getDrawable(R.drawable.button_cafe), getString(R.string.category_cafe)));
+        DataRepo.navItems.add(new NavItem(DataRepo.ICECREAM, getResources().getDrawable(R.drawable.button_icecream), getString(R.string.category_icecream)));
+        DataRepo.navItems.add(new NavItem(DataRepo.VOKUE, getResources().getDrawable(R.drawable.button_vokue), getString(R.string.category_vokue)));
+        DataRepo.navItems.add(new NavItem(DataRepo.MAP, getResources().getDrawable(R.drawable.button_map), getString(R.string.category_map)));
+        DataRepo.navItems.add(new NavItem(DataRepo.ABOUT, getResources().getDrawable(R.drawable.button_info), getString(R.string.category_about)));
     }
 
-    private void selectItem(NavGridItem item) {
+    private void selectItem(NavItem item) {
         if (item.isSelected()) {
-            Toast.makeText(this, "Du befindest dich schon auf dieser Seite.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.nav_toast_twice), Toast.LENGTH_SHORT).show();
             return;
         }
         Fragment fragment;
-        for (NavGridItem n : DataRepo.navGridItems)
+        for (NavItem n : DataRepo.navItems)
             n.setSelected(false);
         item.setSelected(true);
         navAdapter.notifyDataSetChanged();
@@ -124,7 +124,7 @@ public class MainActivity extends ActionBarActivity
     }
 
     private void setUpStartPage() {
-        for (NavGridItem n : DataRepo.navGridItems)
+        for (NavItem n : DataRepo.navItems)
             n.setSelected(false);
         navAdapter.notifyDataSetChanged();
         Fragment fragment = new StartPageFragment();
@@ -136,7 +136,7 @@ public class MainActivity extends ActionBarActivity
     }
 
     private void setDrawerToggle() {
-        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_closed) {
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, 0, 0) {
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);

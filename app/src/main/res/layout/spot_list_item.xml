@@ -10,7 +10,7 @@
     android:layout_marginBottom="6dp"
     android:clickable="true"
     android:foreground="@drawable/ripple_card"
-    card_view:cardBackgroundColor="#FDFDFD"
+    card_view:cardBackgroundColor="@color/card.background"
     card_view:cardCornerRadius="2dp" >
 
     <RelativeLayout
@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:textColor="#222222"
+            android:textColor="@color/text.darkgrey"
             android:textSize="20sp" />
 
         <TextView
@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/spotName"
             android:layout_marginBottom="8dp"
-            android:textColor="#222222"
+            android:textColor="@color/text.darkgrey"
             android:textSize="14sp" />
 
         <TextView
@@ -43,8 +43,7 @@
             android:layout_alignParentTop="true"
             android:layout_margin="2dp"
             android:layout_alignRight="@id/spotName"
-            android:textColor="#888888"
-            android:text="5km"
+            android:textColor="@color/text.grey"
             android:textSize="12sp" />
 
         <ImageView
@@ -54,7 +53,6 @@
             android:layout_margin="2dp"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"/>
-
     </RelativeLayout>
 
 </android.support.v7.widget.CardView>

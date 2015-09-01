@@ -1,7 +1,7 @@
 package com.pasta.ddvegan.models;
 
 
-import com.pasta.ddvegan.utils.NavGridItem;
+import com.pasta.ddvegan.utils.NavItem;
 
 import java.text.Collator;
 import java.util.ArrayList;
@@ -45,7 +45,7 @@ public class DataRepo {
     public static ArrayList<VeganSpot> favoriteSpots = new ArrayList<VeganSpot>();
 
 
-    public static ArrayList<NavGridItem> navGridItems = new ArrayList<NavGridItem>();
+    public static ArrayList<NavItem> navItems = new ArrayList<NavItem>();
 
 
     public static void updateFavorites(){

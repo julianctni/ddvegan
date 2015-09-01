@@ -20,7 +20,7 @@
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp"
             android:layout_marginTop="8dp"
-            card_view:cardBackgroundColor="#FCFCFC"
+            card_view:cardBackgroundColor="@color/card.background"
             card_view:cardCornerRadius="2dp"
             card_view:cardElevation="4dp">
 
@@ -43,11 +43,11 @@
                     android:visibility="gone" />
 
                 <TextView
-                    android:id="@+id/spot_detail_header"
+                    android:id="@+id/spot_detail_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:textColor="#333333"
+                    android:textColor="@color/text.content"
                     android:textSize="25sp"
                     android:textStyle="bold" />
 
@@ -55,9 +55,9 @@
                     android:id="@+id/spot_detail_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/spot_detail_header"
+                    android:layout_below="@id/spot_detail_name"
                     android:layout_marginBottom="4dp"
-                    android:textColor="#333333"
+                    android:textColor="@color/text.content"
                     android:textSize="16sp" />
             </LinearLayout>
         </android.support.v7.widget.CardView>
@@ -69,7 +69,7 @@
             android:layout_marginBottom="16dp"
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp"
-            card_view:cardBackgroundColor="#FCFCFC"
+            card_view:cardBackgroundColor="@color/card.background"
             card_view:cardCornerRadius="2dp"
             card_view:cardElevation="4dp">
 
@@ -83,15 +83,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
-                    android:text="Kontakt"
-                    android:textColor="#666666"
+                    android:text="@string/spot.contact.header"
+                    android:textColor="@color/text.header"
                     android:textSize="18sp" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginBottom="10dp"
-                    android:background="#88666666" />
+                    android:background="@color/text.seperator" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -131,7 +131,7 @@
                     android:id="@+id/spot_detail_contact"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="#333333"
+                    android:textColor="@color/text.content"
                     android:textSize="16sp" />
             </LinearLayout>
         </android.support.v7.widget.CardView>
@@ -143,7 +143,7 @@
             android:layout_marginBottom="16dp"
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp"
-            card_view:cardBackgroundColor="#FCFCFC"
+            card_view:cardBackgroundColor="@color/card.background"
             card_view:cardCornerRadius="2dp"
             card_view:cardElevation="4dp">
 
@@ -158,15 +158,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
-                    android:text="Öffnungszeiten"
-                    android:textColor="#666666"
+                    android:text="@string/spot.hours.header"
+                    android:textColor="@color/text.header"
                     android:textSize="18sp" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginBottom="10dp"
-                    android:background="#88666666" />
+                    android:background="@color/text.seperator" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -182,44 +182,44 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Mo: "
-                            android:textColor="#333333" />
+                            android:text="@string/spot.hours.monday"
+                            android:textColor="@color/text.content" />
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Di: "
-                            android:textColor="#333333" />
+                            android:text="@string/spot.hours.tuesday"
+                            android:textColor="@color/text.content" />
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Mi: "
-                            android:textColor="#333333" />
+                            android:text="@string/spot.hours.wednesday"
+                            android:textColor="@color/text.content" />
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Do: "
-                            android:textColor="#333333" />
+                            android:text="@string/spot.hours.thursday"
+                            android:textColor="@color/text.content" />
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Fr: "
-                            android:textColor="#333333" />
+                            android:text="@string/spot.hours.friday"
+                            android:textColor="@color/text.content" />
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Sa: "
-                            android:textColor="#333333" />
+                            android:text="@string/spot.hours.saturday"
+                            android:textColor="@color/text.content" />
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="So: "
-                            android:textColor="#333333" />
+                            android:text="@string/spot.hours.sunday"
+                            android:textColor="@color/text.content" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -231,50 +231,43 @@
                             android:id="@+id/spot_detail_hours_mon"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Mo: "
-                            android:textColor="#333333" />
+                            android:textColor="@color/text.content" />
 
                         <TextView
                             android:id="@+id/spot_detail_hours_tue"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Di: "
-                            android:textColor="#333333" />
+                            android:textColor="@color/text.content" />
 
                         <TextView
                             android:id="@+id/spot_detail_hours_wed"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Mi: "
-                            android:textColor="#333333" />
+                            android:textColor="@color/text.content" />
 
                         <TextView
                             android:id="@+id/spot_detail_hours_thu"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Do: "
-                            android:textColor="#333333" />
+                            android:textColor="@color/text.content" />
 
                         <TextView
                             android:id="@+id/spot_detail_hours_fri"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Fr: "
-                            android:textColor="#333333" />
+                            android:textColor="@color/text.content" />
 
                         <TextView
                             android:id="@+id/spot_detail_hours_sat"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Sa: "
-                            android:textColor="#333333" />
+                            android:textColor="@color/text.content" />
 
                         <TextView
                             android:id="@+id/spot_detail_hours_sun"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="So: "
-                            android:textColor="#333333" />
+                            android:textColor="@color/text.content" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -287,7 +280,7 @@
             android:layout_marginBottom="16dp"
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp"
-            card_view:cardBackgroundColor="#FCFCFC"
+            card_view:cardBackgroundColor="@color/card.background"
             card_view:cardCornerRadius="2dp"
             card_view:cardElevation="4dp">
 
@@ -301,22 +294,22 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
-                    android:text="Angebot"
-                    android:textColor="#666666"
+                    android:text="@string/spot.info.header"
+                    android:textColor="@color/text.header"
                     android:textSize="18sp" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginBottom="10dp"
-                    android:background="#88666666" />
+                    android:background="@color/text.seperator" />
 
                 <TextView
                     android:id="@+id/spot_detail_info"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
-                    android:textColor="#333333"
+                    android:textColor="@color/text.content"
                     android:textSize="16sp" />
 
 
@@ -332,7 +325,7 @@
             android:layout_marginTop="20dp"
             android:background="@drawable/shape_error_button"
             android:padding="5dp"
-            android:text="Fehler gefunden?" />
+            android:text="@string/button.error" />
     </LinearLayout>
 
 

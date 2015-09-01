@@ -2,8 +2,6 @@ package com.pasta.ddvegan.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Typeface;
-import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,7 +65,7 @@ public class NewsAdapter extends BaseAdapter {
             holder.header.setTextSize(18f);
             switch (news.getNewsTypeInt()) {
                 case (1):
-                    holder.newsIcon.setImageResource(R.drawable.icon_news_contact);
+                    holder.newsIcon.setImageResource(R.drawable.icon_news_contact2);
                     break;
 
                 case (2):

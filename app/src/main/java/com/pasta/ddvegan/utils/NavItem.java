@@ -5,14 +5,14 @@ import android.graphics.drawable.Drawable;
 /**
  * Created by julian on 28.03.15.
  */
-public class NavGridItem {
+public class NavItem {
 
     int type;
     String name;
     Drawable tileImage;
     boolean selected;
 
-    public NavGridItem(int type, Drawable image, String name) {
+    public NavItem(int type, Drawable image, String name) {
         this.type = type;
         tileImage = image;
         this.name = name;

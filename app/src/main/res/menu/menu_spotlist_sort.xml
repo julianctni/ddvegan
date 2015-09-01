@@ -4,14 +4,14 @@
         <item
             android:id="@+id/menu_sort_alphab"
             android:checked="true"
-            android:title="Alphabetisch" />
+            android:title="@string/spotlist.menu.alph" />
 
         <item
             android:id="@+id/menu_sort_distance"
-            android:title="Entfernung" />
+            android:title="@string/spotlist.menu.distance" />
 
         <item
             android:id="@+id/menu_sort_hours"
-            android:title="Öffnungszeiten" />
+            android:title="@string/spotlist.menu.hours" />
     </group>
 </menu>

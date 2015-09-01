@@ -28,13 +28,13 @@
                 android:id="@+id/checkbox_address"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Adresse" />
+                android:text="@string/report.address" />
 
             <CheckBox
                 android:id="@+id/checkbox_contact"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Kontaktdaten" />
+                android:text="@string/report.contact" />
         </LinearLayout>
 
         <LinearLayout
@@ -47,13 +47,13 @@
                 android:id="@+id/checkbox_hours"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Öffnungszeiten" />
+                android:text="@string/report.hours" />
 
             <CheckBox
                 android:id="@+id/checkbox_offer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Angebot" />
+                android:text="@string/report.info" />
         </LinearLayout>
     </RelativeLayout>
 
@@ -68,10 +68,10 @@
         android:layout_marginBottom="10dp"
         android:layout_marginRight="50dp"
         android:hint="Deine E-Mail"
-        android:textColorHint="#888888"
+        android:textColorHint="@color/text.edit.hint"
         android:maxLength="500"
         android:padding="6dp"
-        android:textColor="#666666"
+        android:textColor="@color/text.edit.content"
         android:textCursorDrawable="@null" />
 
     <EditText
@@ -86,8 +86,8 @@
         android:inputType="textMultiLine"
         android:maxLength="750"
         android:padding="6dp"
-        android:textColor="#666666"
-        android:textColorHint="#888888"
+        android:textColor="@color/text.edit.content"
+        android:textColorHint="@color/text.edit.hint"
         android:textCursorDrawable="@null" />
 
     <TextView
@@ -98,7 +98,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="1dp"
         android:text="0 / 750"
-        android:textColor="#DDDDDD"
+        android:textColor="@color/white"
         android:textSize="10sp" />
 
     <Button
@@ -111,8 +111,8 @@
         android:background="@color/primary"
         android:padding="4dp"
         android:stateListAnimator="@null"
-        android:text="send"
-        android:textColor="#FFFFFF"
+        android:text="@string/dialog.send"
+        android:textColor="@color/white"
         android:textSize="14sp" />
 
 

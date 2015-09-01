@@ -1,10 +1,5 @@
 package com.pasta.ddvegan.adapters;
 
-import java.util.ArrayList;
-
-import android.content.Context;
-import android.content.res.TypedArray;
-import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -15,11 +10,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pasta.ddvegan.R;
-import com.pasta.ddvegan.activities.MainActivity;
 import com.pasta.ddvegan.fragments.SpotDetailFragment;
 import com.pasta.ddvegan.fragments.SpotListFragment;
 import com.pasta.ddvegan.fragments.StartPageFragment;
 import com.pasta.ddvegan.models.VeganSpot;
+
+import java.util.ArrayList;
 
 
 public class SpotListAdapter extends RecyclerView.Adapter<SpotListAdapter.ViewHolder> {

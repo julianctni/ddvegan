@@ -7,8 +7,10 @@
 
     <ImageView
         android:id="@+id/news_icon"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="6dp"
         android:layout_width="35dp"
+        android:scaleType="fitStart"
+        android:src="@drawable/icon_news_contact2"
         android:layout_height="35dp" />
 
     <View
@@ -41,7 +43,7 @@
             android:id="@+id/news_item_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#888888"
+            android:textColor="@color/text.grey"
             android:textSize="12sp"
             android:layout_toRightOf="@id/news_item_type"
             android:layout_marginLeft="4dp"
@@ -55,7 +57,7 @@
             android:layout_marginBottom="5dp"
             android:layout_marginTop="8dp"
             android:layout_below="@id/news_item_time"
-            android:textColor="#333333"
+            android:textColor="@color/text.content"
             android:textSize="18sp" />
 
 

@@ -15,7 +15,7 @@
             android:id="@+id/news_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:divider="#DDDDDD"
+            android:divider="@color/divider.list.news"
             android:dividerHeight="1dp"/>
 
     </android.support.v4.widget.SwipeRefreshLayout>

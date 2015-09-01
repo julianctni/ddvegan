@@ -1,12 +1,10 @@
 package com.pasta.ddvegan.fragments;
 
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -21,7 +19,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -34,7 +31,6 @@ import com.pasta.ddvegan.models.DataRepo;
 import com.pasta.ddvegan.models.VeganSpot;
 import com.pasta.ddvegan.sync.DatabaseManager;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -43,9 +39,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-/**
- * A simple {@link Fragment} subclass.
- */
+
 public class SpotDetailFragment extends Fragment {
 
     VeganSpot spot;
@@ -56,7 +50,6 @@ public class SpotDetailFragment extends Fragment {
 
     public SpotDetailFragment() {
     }
-
 
     public static SpotDetailFragment create(int spotId) {
         SpotDetailFragment fragment = new SpotDetailFragment();
@@ -96,7 +89,7 @@ public class SpotDetailFragment extends Fragment {
         });
         ImageLoader loader = new ImageLoader();
         loader.execute();
-        TextView header = (TextView) view.findViewById(R.id.spot_detail_header);
+        TextView header = (TextView) view.findViewById(R.id.spot_detail_name);
         TextView address = (TextView) view.findViewById(R.id.spot_detail_address);
 
         ArrayList<TextView> hours = new ArrayList<TextView>();
@@ -162,7 +155,7 @@ public class SpotDetailFragment extends Fragment {
         if (spot.getMail().equals("") || spot.getMail().toLowerCase().equals("null"))
             mail = "";
         if (spot.getPhone().equals("") && spot.getMail().equals("") && spot.getURL().equals(""))
-            contact.setText("keine Kontaktdaten vorhanden");
+            contact.setText(getString(R.string.spot_detail_nocontact));
         else
             contact.setText(phone + mail + web);
         info.setText(spot.getInfo());
@@ -174,9 +167,9 @@ public class SpotDetailFragment extends Fragment {
             Intent email = new Intent(Intent.ACTION_SEND);
             email.putExtra(Intent.EXTRA_EMAIL, new String[]{spot.getMail()});
             email.setType("message/rfc822");
-            startActivity(Intent.createChooser(email, "Wähle E-Mail App"));
+            startActivity(Intent.createChooser(email, getString(R.string.spot_mail_choice)));
         } else
-            Toast.makeText(getActivity(), "Keine E-Mail vorhanden.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), getString(R.string.spot_toast_nomail), Toast.LENGTH_SHORT).show();
     }
 
 
@@ -187,9 +180,9 @@ public class SpotDetailFragment extends Fragment {
                 call.setData(Uri.parse("tel:" + spot.getPhone().replaceAll("\\s+", "")));
                 startActivity(call);
             } else
-                Toast.makeText(getActivity(), "Keine Telefonnummer vorhanden.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), getString(R.string.spot_toast_nophone), Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
-            Toast.makeText(getActivity(), "Du kannst mit diesem Gerät nicht telefonieren.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), getString(R.string.spot_toast_nogsm), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -199,7 +192,7 @@ public class SpotDetailFragment extends Fragment {
             Intent browse = new Intent(Intent.ACTION_VIEW, Uri.parse("http://" + spot.getURL()));
             startActivity(browse);
         } else
-            Toast.makeText(getActivity(), "Keine Webseite vorhanden.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), getString(R.string.spot_toast_nourl), Toast.LENGTH_SHORT).show();
     }
 
     @Override

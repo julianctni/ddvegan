@@ -4,39 +4,37 @@
         android:id="@+id/back_items_map"
         android:checkable="true"
         android:orderInCategory="100"
-        
-        android:title="@string/map.menu.back"/>
+        android:title="@string/category.bakery"/>
     <item
         android:id="@+id/cafe_items_map"
         android:checkable="true"
         android:orderInCategory="100"
-        
-        android:title="@string/map.menu.cafe"/>
+        android:title="@string/category.cafe"/>
     <item
         android:id="@+id/ice_items_map"
         android:checkable="true"
         android:orderInCategory="100"
-        android:title="@string/map.menu.icecream"/>
+        android:title="@string/category.icecream"/>
     <item
         android:id="@+id/food_items_map"
         android:checkable="true"
         android:orderInCategory="100"
-        android:title="@string/map.menu.food"/>
+        android:title="@string/category.food"/>
     <item
         android:id="@+id/shopping_items_map"
         android:checkable="true"
         android:orderInCategory="100"
-        android:title="@string/map.menu.shopping"/>
+        android:title="@string/category.shopping"/>
     <item
         android:id="@+id/vokue_items_map"
         android:checkable="true"
         android:orderInCategory="100"
-        android:title="@string/map.menu.vokue"/>
+        android:title="@string/category.vokue"/>
     <item
         android:id="@+id/fav_items_map"
         android:checkable="true"
         android:orderInCategory="100"
-        android:title="@string/map.menu.showFav"/>
+        android:title="@string/startpage.tab.fav"/>
     <item
         android:id="@+id/showAll_items_map"
         android:orderInCategory="100"

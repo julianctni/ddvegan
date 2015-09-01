@@ -23,8 +23,8 @@
             android:layout_centerHorizontal="true"
             android:gravity="center_horizontal"
             android:textSize="18sp"
-            android:textColor="#33000000"
-            android:text="Du hast noch keine Favoriten. Füge eine Lokalität hinzu, indem du in der Detailansicht auf das Herz oben rechts klickst!"/>
+            android:textColor="@color/text.lightgrey"
+            android:text="@string/spotlist.nofav"/>
 
     </RelativeLayout>
     <LinearLayout

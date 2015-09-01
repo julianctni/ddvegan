@@ -70,11 +70,11 @@ public class FeedbackFragment extends DialogFragment {
                 if (message.getText().toString().length() < 5
                         || message.getText().toString().trim().length() == 0)
                     Toast.makeText(getActivity(),
-                            "Deine Nachricht sollte mehr als ein paar Buchstaben enthalten.",
+                            getString(R.string.contact_toast_minlength),
                             Toast.LENGTH_SHORT).show();
                 else if (!(android.util.Patterns.EMAIL_ADDRESS.matcher(from.getText().toString()).matches()))
                     Toast.makeText(getActivity(),
-                            "Gebe bitte eine gültige E-Mail Adresse an.",
+                            getString(R.string.contact_toast_validmail),
                             Toast.LENGTH_SHORT).show();
                 else {
                     MailSender ms = new MailSender(message.getText().toString(), from.getText().toString(), DataRepo.appVersion);
@@ -137,9 +137,9 @@ public class FeedbackFragment extends DialogFragment {
         protected void onPostExecute(Integer result) {
             if (result < 1) {
                 getDialog().dismiss();
-                Toast.makeText(getActivity(), "Nachricht wurde übermittelt!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), getString(R.string.contact_toast_success), Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(getActivity(), "Aus technischen Gründen kann gerade keine Nachricht versandt werden.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), getString(R.string.contact_toast_fail), Toast.LENGTH_SHORT).show();
             }
         }
     }

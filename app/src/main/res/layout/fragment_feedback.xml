@@ -18,8 +18,8 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
-        android:text="Schreib uns eine Nachricht!"
-        android:textColor="#FFFFFF"
+        android:text="@string/contact.feedback.writeus"
+        android:textColor="@color/white"
         android:textSize="16sp" />
 
     <EditText
@@ -33,10 +33,10 @@
         android:layout_marginBottom="10dp"
         android:layout_marginRight="50dp"
         android:hint="Deine E-Mail"
-        android:textColorHint="#888888"
+        android:textColorHint="@color/text.edit.hint"
         android:maxLength="500"
         android:padding="6dp"
-        android:textColor="#666666"
+        android:textColor="@color/text.edit.content"
         android:textCursorDrawable="@null" />
 
 
@@ -53,8 +53,8 @@
         android:gravity="top|left"
         android:hint="Deine Nachricht an uns"
         android:padding="6dp"
-        android:textColor="#666666"
-        android:textColorHint="#888888"
+        android:textColor="@color/text.edit.content"
+        android:textColorHint="@color/text.edit.hint"
         android:textCursorDrawable="@null" />
 
     <TextView
@@ -65,7 +65,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="1dp"
         android:text="0 / 750"
-        android:textColor="#DDDDDD"
+        android:textColor="@color/white"
         android:textSize="10sp" />
 
     <Button
@@ -78,8 +78,8 @@
         android:background="@color/primary"
         android:stateListAnimator="@null"
         android:padding="4dp"
-        android:text="send"
-        android:textColor="#FFFFFF"
+        android:text="@string/dialog.send"
+        android:textColor="@color/white"
         android:textSize="14sp" />
 
 

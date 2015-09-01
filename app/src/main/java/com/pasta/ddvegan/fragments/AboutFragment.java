@@ -55,8 +55,8 @@ public class AboutFragment extends Fragment {
     public void shareThisGreatApp() {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("text/plain");
-        shareIntent.putExtra(Intent.EXTRA_TEXT, "Dresden Vegan - Die App für veganes Leben in Dresden und Umgebung!\nhttps://goo.gl/hLkl1s");
-        startActivity(Intent.createChooser(shareIntent, "Wähle eine App aus:"));
+        shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_text));
+        startActivity(Intent.createChooser(shareIntent, getString(R.string.share_choice)));
     }
 
     @Override

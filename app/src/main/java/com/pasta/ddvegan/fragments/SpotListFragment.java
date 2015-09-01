@@ -74,27 +74,27 @@ public class SpotListFragment extends Fragment {
         switch (type) {
             case (DataRepo.FOOD):
                 spots = DataRepo.foodSpots;
-                title = "Restaurants & co.";
+                title = getString(R.string.category_food);
                 break;
             case (DataRepo.SHOPPING):
                 spots = DataRepo.shoppingSpots;
-                title = "Einkaufsmöglichkeiten";
+                title = getString(R.string.category_shopping);
                 break;
             case (DataRepo.BAKERY):
                 spots = DataRepo.bakerySpots;
-                title = "Backwaren";
+                title = getString(R.string.category_bakery);
                 break;
             case (DataRepo.ICECREAM):
                 spots = DataRepo.icecreamSpots;
-                title = "Eiscreme";
+                title = getString(R.string.category_icecream);
                 break;
             case (DataRepo.VOKUE):
                 spots = DataRepo.vokueSpots;
-                title = "Volxküchen";
+                title = getString(R.string.category_vokue);
                 break;
             case (DataRepo.CAFE):
                 spots = DataRepo.cafeSpots;
-                title = "Café & Kuchen";
+                title = getString(R.string.category_cafe);
                 break;
             case (DataRepo.FAVORITES):
                 spots = DataRepo.favoriteSpots;
@@ -111,7 +111,7 @@ public class SpotListFragment extends Fragment {
                             current.setDistance(gps.calculateDistance(current.getGPS_lat(), current.getGPS_long()));
                         }
                         dialog.dismiss();
-                        Toast.makeText(getActivity(), "Entfernungen wurden ermittelt!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), getString(R.string.spotlist_toast_gps_success), Toast.LENGTH_SHORT).show();
                         DataRepo.hasDistance = true;
                         DataRepo.sortByDistance(spots);
                         spotListAdapter.notifyDataSetChanged();
@@ -260,10 +260,10 @@ public class SpotListFragment extends Fragment {
         } else {
             if (!gps.newLocation) {
                 dialog = new ProgressDialog(getActivity());
-                dialog.setMessage("Calculating distances");
+                dialog.setMessage(getString(R.string.spotlist_dialog_gps_calc));
                 dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                 dialog.setCancelable(false);
-                dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
+                dialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
@@ -276,20 +276,17 @@ public class SpotListFragment extends Fragment {
         return true;
     }
 
-    /*
- * Alert, if Location is switched off.
- */
     private void AlertNoGPS() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage("no gps").setCancelable(false)
-                .setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+        builder.setMessage(getString(R.string.dialog_msg_nogps)).setCancelable(false)
+                .setPositiveButton(getString(R.string.dialog_continue), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         Intent callGPSSettingIntent = new Intent(
                                 android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                         startActivity(callGPSSettingIntent);
                     }
                 });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getString(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 dialog.cancel();
             }
@@ -303,7 +300,6 @@ public class SpotListFragment extends Fragment {
     }
 
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         public void onFragmentInteraction(int id);
     }
 

@@ -2,9 +2,11 @@ package com.pasta.ddvegan.fragments;
 
 import android.animation.ObjectAnimator;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
@@ -38,28 +40,23 @@ import com.pasta.ddvegan.utils.GpsUtil;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 
 
 public class MapFragment extends Fragment {
 
-
+    public static Handler mapHandler;
     OnFragmentInteractionListener mListener;
     MapView mapView;
     ProgressDialog dialog;
-    public static Handler mapHandler;
     GpsUtil gps = new GpsUtil(this);
     PopupMenu popupMenu;
     boolean singleSpot;
     int singleSpotId;
-
-    LatLng mapCenter;
     float mapZoom;
+    LatLng mapCenter;
     HashSet<Integer> visibleMarkers = new HashSet<Integer>();
-
     SpotOverlay bakeryOverlay;
     SpotOverlay cafeOverlay;
     SpotOverlay foodOverlay;
@@ -67,7 +64,6 @@ public class MapFragment extends Fragment {
     SpotOverlay shoppingOverlay;
     SpotOverlay vokueOverlay;
     SpotOverlay favOverlay;
-
     ArrayList<Marker> bakeryMarkers = new ArrayList<Marker>();
     ArrayList<Marker> cafeMarkers = new ArrayList<Marker>();
     ArrayList<Marker> foodMarkers = new ArrayList<Marker>();
@@ -75,10 +71,8 @@ public class MapFragment extends Fragment {
     ArrayList<Marker> shoppingMarkers = new ArrayList<Marker>();
     ArrayList<Marker> vokueMarkers = new ArrayList<Marker>();
     ArrayList<Marker> favMarkers = new ArrayList<Marker>();
-
     Marker singleSpotMarker;
     Marker currentPositionMarker;
-
     LinearLayout spotDetailView;
     ObjectAnimator transDown;
     ObjectAnimator transUp;
@@ -100,7 +94,6 @@ public class MapFragment extends Fragment {
             mapCenter = new LatLng(savedInstanceState.getDouble("mapCenterLat"), savedInstanceState.getDouble("mapCenterLng"));
             mapZoom = savedInstanceState.getFloat("mapZoom");
             visibleMarkers.addAll(savedInstanceState.getIntegerArrayList("visibleMarkers"));
-            Log.i("VISIBLE MARKERS", visibleMarkers.size()+"");
         } else {
             mapCenter = new LatLng(51.056553, 13.742202);
             mapZoom = 14;
@@ -112,7 +105,7 @@ public class MapFragment extends Fragment {
         mapHandler = new Handler() {
             public void handleMessage(Message msg) {
                 dialog.dismiss();
-                Toast.makeText(getActivity(), "Hier bist du!", Toast.LENGTH_LONG)
+                Toast.makeText(getActivity(), getString(R.string.map_position_success), Toast.LENGTH_SHORT)
                         .show();
                 mapView.setZoom(14);
                 mapView.setCenter(new LatLng(gps.getLatitude(), gps.getLongitude()));
@@ -185,7 +178,7 @@ public class MapFragment extends Fragment {
 
     public void setUpSpotDetailView(final int spotId) {
         VeganSpot spot = DataRepo.veganSpots.get(spotId);
-        TextView name = (TextView) getView().findViewById(R.id.spot_detail_header);
+        TextView name = (TextView) getView().findViewById(R.id.spot_detail_name);
         TextView address = (TextView) getView().findViewById(R.id.spot_detail_address);
         TextView hours = (TextView) getView().findViewById(R.id.spot_detail_hours);
         TextView info = (TextView) getView().findViewById(R.id.spot_detail_info);
@@ -198,7 +191,7 @@ public class MapFragment extends Fragment {
             else
                 hours.setTextColor(Color.RED);
         } else {
-            hours.setText("keine Öffnungszeiten angegeben");
+            hours.setText(getString(R.string.map_overlay_nohours));
             hours.setTextColor(Color.parseColor("#333333"));
         }
         name.setText(spot.getName());
@@ -438,7 +431,7 @@ public class MapFragment extends Fragment {
                                 case R.id.fav_items_map:
                                     if (!menuItem.isChecked()) {
                                         if (DataRepo.favoriteSpots.isEmpty()) {
-                                            Toast.makeText(getActivity(), "Keine Favoriten vorhanden.", Toast.LENGTH_LONG).show();
+                                            Toast.makeText(getActivity(), getString(R.string.map_toast_nofav), Toast.LENGTH_SHORT).show();
                                             return true;
                                         }
                                         menuItem.setChecked(true);
@@ -477,14 +470,14 @@ public class MapFragment extends Fragment {
             case R.id.menu_show_location:
                 gps.updateLocation();
                 if (!gps.isOn())
-                    Toast.makeText(getActivity(), "Sie müssen erst die Ortung einschalten!", Toast.LENGTH_SHORT).show();
+                    AlertNoGPS();
                 else {
                     if (!gps.newLocation) {
                         dialog = new ProgressDialog(getActivity());
-                        dialog.setMessage("Searching location...");
+                        dialog.setMessage(getString(R.string.map_dialog_searching));
                         dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                         dialog.setCancelable(false);
-                        dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Abbrechen",
+                        dialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.dialog_cancel),
                                 new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -499,6 +492,25 @@ public class MapFragment extends Fragment {
 
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void AlertNoGPS() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage(getString(R.string.dialog_msg_nogps)).setCancelable(false)
+                .setPositiveButton(getString(R.string.dialog_continue), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Intent callGPSSettingIntent = new Intent(
+                                android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        startActivity(callGPSSettingIntent);
+                    }
+                });
+        builder.setNegativeButton(getString(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
 
@@ -537,14 +549,10 @@ public class MapFragment extends Fragment {
             super(pContext, pList, new OnItemGestureListener<Marker>() {
                 @Override
                 public boolean onItemSingleTapUp(int i, Marker m) {
-                    //VeganSpot spot = DataRepo.veganSpots.get(Integer.parseInt(m.getTitle()));
                     int spotId = Integer.parseInt(m.getTitle());
                     if (!DataRepo.chosenMapItems.contains(spotId)) {
                         setUpSpotDetailView(spotId);
                         transDown.start();
-
-                        //spotDetailView.setVisibility(View.VISIBLE);
-
                         DataRepo.chosenMapItems.add(spotId);
                     }
                     return false;

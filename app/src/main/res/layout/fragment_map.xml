@@ -29,7 +29,7 @@
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="6dp"
-            card_view:cardBackgroundColor="#EFFCFCFC"
+            card_view:cardBackgroundColor="@color/card.map.background"
             card_view:cardCornerRadius="2dp"
             card_view:cardElevation="4dp">
 
@@ -45,10 +45,10 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/spot_detail_header"
+                        android:id="@+id/spot_detail_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="#333333"
+                        android:textColor="@color/text.content"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -56,7 +56,7 @@
                         android:id="@+id/spot_detail_address"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="#333333"
+                        android:textColor="@color/text.content"
                         android:textSize="14sp" />
 
                     <View
@@ -64,15 +64,14 @@
                         android:layout_height="1dp"
                         android:layout_marginTop="4dp"
                         android:layout_marginBottom="4dp"
-                        android:background="#66666666" />
+                        android:background="@color/text.seperator" />
 
 
                     <TextView
                         android:id="@+id/spot_detail_hours"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="test"
-                        android:textColor="#333333"
+                        android:textColor="@color/text.content"
                         android:textSize="14sp" />
 
                     <View
@@ -80,13 +79,13 @@
                         android:layout_height="1dp"
                         android:layout_marginTop="4dp"
                         android:layout_marginBottom="4dp"
-                        android:background="#66666666" />
+                        android:background="@color/text.seperator" />
 
                     <TextView
                         android:id="@+id/spot_detail_info"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="#333333"
+                        android:textColor="@color/text.content"
                         android:textSize="12sp" />
                 </LinearLayout>
 
@@ -98,8 +97,8 @@
                     android:layout_alignParentRight="true"
 
                     android:padding="4dp"
-                    android:text="mehr Details"
-                    android:textColor="#333333"
+                    android:text="@string/map.overlay.moredetails"
+                    android:textColor="@color/text.content"
                     android:textStyle="bold" />
 
             </RelativeLayout>
