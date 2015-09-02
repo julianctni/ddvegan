@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_marginLeft="4dp"
     android:layout_marginRight="4dp"
-    android:background="@color/primary"
+    android:background="@color/dialog.contact"
     android:minWidth="250dp"
     android:orientation="vertical"
     android:padding="10dp"
@@ -19,7 +19,7 @@
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
         android:text="@string/contact.feedback.writeus"
-        android:textColor="@color/white"
+        android:textColor="@color/text.darkgrey"
         android:textSize="16sp" />
 
     <EditText
@@ -38,7 +38,6 @@
         android:padding="6dp"
         android:textColor="@color/text.edit.content"
         android:textCursorDrawable="@null" />
-
 
 
     <EditText
@@ -65,7 +64,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="1dp"
         android:text="0 / 750"
-        android:textColor="@color/white"
+        android:textColor="@color/text.darkgrey"
         android:textSize="10sp" />
 
     <Button
@@ -75,11 +74,11 @@
         android:layout_alignParentRight="true"
         android:layout_below="@id/messageInput"
         android:layout_marginTop="10dp"
-        android:background="@color/primary"
+        android:background="@color/dialog.contact"
         android:stateListAnimator="@null"
         android:padding="4dp"
         android:text="@string/dialog.send"
-        android:textColor="@color/white"
+        android:textColor="@color/text.darkgrey"
         android:textSize="14sp" />
 
 

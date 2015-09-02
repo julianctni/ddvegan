@@ -87,6 +87,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
 
     public void getVeganNewsFromDatabase() {
         SQLiteDatabase db = this.getReadableDatabase();
+        DataRepo.veganNews.clear();
         Log.i("SQLite", "importing vegan news");
         String[] projection = { "newsId", "spotId", "newsType", "newsContent", "newsTime"};
         Cursor c = db.query("veganNews", projection, null, null, null, null, null);

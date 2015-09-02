@@ -6,9 +6,4 @@
         <solid android:color="@color/primary_transp"></solid>
     </shape>
 </item>
-<item>
-    <shape>
-        <solid android:color="@color/primary_transp"></solid>
-    </shape>
-</item>
 </selector>

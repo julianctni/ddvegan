@@ -113,6 +113,7 @@ public class DatabaseUpdater extends AsyncTask<Integer, Integer, Integer> {
                     values.put("spotLocLat", gpsLat);
                     db.insert("veganSpots", null, values);
                 }
+                dbMan.getVeganSpotsFromDatabase();
             } catch (JSONException e) {
                 e.printStackTrace();
                 ret = NetworkUtil.serverError;

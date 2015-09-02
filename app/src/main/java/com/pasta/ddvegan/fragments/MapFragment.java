@@ -228,6 +228,7 @@ public class MapFragment extends Fragment {
                     spot.getGPS_lat(), spot.getGPS_long()));
             singleSpotMarker.setIcon(new Icon(this.getResources().getDrawable(R.drawable.marker_single)));
             singleSpotMarker.setHotspot(Marker.HotspotPlace.BOTTOM_CENTER);
+            mapView.setCenter(new LatLng(spot.getGPS_lat(),spot.getGPS_long()));
             mapView.addMarker(singleSpotMarker);
             mapView.postInvalidate();
         }

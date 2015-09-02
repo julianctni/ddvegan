@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_marginLeft="4dp"
     android:layout_marginRight="4dp"
-    android:background="@color/primary"
+    android:background="@color/dialog.contact"
     android:minWidth="250dp"
     android:orientation="vertical"
     android:padding="10dp"
@@ -28,12 +28,14 @@
                 android:id="@+id/checkbox_address"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/text.darkgrey"
                 android:text="@string/report.address" />
 
             <CheckBox
                 android:id="@+id/checkbox_contact"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/text.darkgrey"
                 android:text="@string/report.contact" />
         </LinearLayout>
 
@@ -47,12 +49,14 @@
                 android:id="@+id/checkbox_hours"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/text.darkgrey"
                 android:text="@string/report.hours" />
 
             <CheckBox
                 android:id="@+id/checkbox_offer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/text.darkgrey"
                 android:text="@string/report.info" />
         </LinearLayout>
     </RelativeLayout>
@@ -98,7 +102,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="1dp"
         android:text="0 / 750"
-        android:textColor="@color/white"
+        android:textColor="@color/text.darkgrey"
         android:textSize="10sp" />
 
     <Button
@@ -108,11 +112,11 @@
         android:layout_alignParentRight="true"
         android:layout_below="@id/messageInput"
         android:layout_marginTop="10dp"
-        android:background="@color/primary"
+        android:background="@color/dialog.contact"
         android:padding="4dp"
         android:stateListAnimator="@null"
         android:text="@string/dialog.send"
-        android:textColor="@color/white"
+        android:textColor="@color/text.darkgrey"
         android:textSize="14sp" />
 
 

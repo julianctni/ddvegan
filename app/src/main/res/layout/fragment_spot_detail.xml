@@ -38,8 +38,9 @@
                 <ImageView
                     android:id="@+id/spot_detail_image"
                     android:layout_width="wrap_content"
-                    android:layout_height="150dp"
+                    android:layout_height="wrap_content"
                     android:scaleType="fitStart"
+                    android:src="@drawable/nobanner"
                     android:visibility="gone" />
 
                 <TextView
@@ -325,7 +326,8 @@
             android:layout_marginTop="20dp"
             android:textColor="@color/white"
             android:background="@drawable/shape_error_button"
-            android:padding="5dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
             android:text="@string/button.error" />
     </LinearLayout>
 

@@ -14,7 +14,7 @@
     <color name="text.seperator">#88666666</color>
     <color name="text.content">#333333</color>
 
-    <color name="text.edit.hint">#888888</color>
+    <color name="text.edit.hint">#AAAAAA</color>
     <color name="text.edit.content">#666666</color>
     <color name="text.darkgrey">#333333</color>
     <color name="text.grey">#888888</color>
@@ -22,6 +22,7 @@
 
     <color name="divider.list.news">#DDDDDD</color>
 
+    <color name="dialog.contact">#EEEEEE</color>
     <color name="drawer.background">#EFFFFFFF</color>
     <color name="drawer.text">#666666</color>
     <color name="card.background">#FCFCFC</color>
