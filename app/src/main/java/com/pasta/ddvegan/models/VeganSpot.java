@@ -4,9 +4,11 @@ import android.util.Log;
 
 import java.text.Collator;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.regex.Pattern;
 
 /**
  * Created by julian on 28.03.15.
@@ -120,19 +122,28 @@ public class VeganSpot implements Comparable<VeganSpot> {
         isFavorite = b;
     }
 
-    // Hours
-    public void addHours(int day, String timeString) {
-        if (timeString.equals("null"))
+
+    public void addHours(String timeString) {
+        if (timeString.equals("null") || timeString.isEmpty())
             return;
-        timeMap.put(day, new ArrayList<Integer>());
-        timeMap.get(day).add(Integer.parseInt(timeString.substring(0, 4)));
-        timeMap.get(day).add(Integer.parseInt(timeString.substring(5, 9)));
+        String[] days = timeString.split(Pattern.quote(";"));
+        Log.i("ADDHOURS - " + getName(), "days: " + days.length);
+        int dayNr = 2;
+        for (String day : days) {
+            timeMap.put(dayNr, new ArrayList<Integer>());
+            String[] hours = day.split(Pattern.quote("."));
+            Log.i("ADDHOURS - "+getName(),"hours: "+hours.length);
+            for (String hour : hours) {
+                Log.i("ADDHOURS - "+getName()+ " "+dayNr,hour);
+                timeMap.get(dayNr).add(Integer.parseInt(hour));
+            }
+            if (dayNr == 7)
+                dayNr = 1;
+            else
+                dayNr++;
+        }
         if (!hasHours)
             hasHours = true;
-        if (timeString.length() == 19) {
-            timeMap.get(day).add(Integer.parseInt(timeString.substring(10, 14)));
-            timeMap.get(day).add(Integer.parseInt(timeString.substring(15, 19)));
-        }
     }
 
     public String getHoursForDay(int day){

@@ -32,7 +32,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
 		String[] projection = { "spotId", "spotName", "spotAddress", "spotPhone",
 				"spotUrl", "spotMail", "spotInfo", "spotLocLong", "spotLocLat",
                 "catFood", "catShopping", "catCafe", "catIcecream", "catVokue", "catBakery", "isFavorite",
-                "hoursMon","hoursTue","hoursWed","hoursThu","hoursFri","hoursSat","hoursSun", "spotImgKey"};
+                "spotHours", "spotImgKey"};
 		Cursor c = db.query("veganSpots", projection, null, null, null, null, null);
 		while (c.moveToNext()) {
 			int spotId = c.getInt(c.getColumnIndex("spotId"));
@@ -43,6 +43,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
             String spotMail = c.getString(c.getColumnIndex("spotMail"));
             String spotInfo = c.getString(c.getColumnIndex("spotInfo"));
             String spotImgKey = c.getString(c.getColumnIndex("spotImgKey"));
+            String spotHours = c.getString(c.getColumnIndex("spotHours"));
             double locLong = c.getDouble(c.getColumnIndex("spotLocLong"));
             double locLat = c.getDouble(c.getColumnIndex("spotLocLat"));
             int catFood = c.getInt(c.getColumnIndex("catFood"));
@@ -55,13 +56,8 @@ public class DatabaseManager extends SQLiteOpenHelper {
 			VeganSpot s = new VeganSpot(spotName, spotAddress, spotUrl, "", locLat,
             locLong, spotMail, spotInfo, spotId,  spotPhone, spotImgKey);
 
-            s.addHours(1, c.getString(c.getColumnIndex("hoursSun")));
-            s.addHours(2, c.getString(c.getColumnIndex("hoursMon")));
-            s.addHours(3, c.getString(c.getColumnIndex("hoursTue")));
-            s.addHours(4, c.getString(c.getColumnIndex("hoursWed")));
-            s.addHours(5, c.getString(c.getColumnIndex("hoursThu")));
-            s.addHours(6, c.getString(c.getColumnIndex("hoursFri")));
-            s.addHours(7, c.getString(c.getColumnIndex("hoursSat")));
+            s.addHours(spotHours);
+
             DataRepo.veganSpots.put(s.getID(),s);
             if (catFood == 1)
                 DataRepo.foodSpots.add(s);
@@ -85,7 +81,8 @@ public class DatabaseManager extends SQLiteOpenHelper {
 	}
 
     public void getVeganNewsFromDatabase() {
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db;
+        db = this.getReadableDatabase();
         DataRepo.veganNews.clear();
         Log.i("SQLite", "importing vegan news");
         String[] projection = { "newsId", "spotId", "newsType", "newsContent", "newsTime"};
@@ -101,6 +98,15 @@ public class DatabaseManager extends SQLiteOpenHelper {
             DataRepo.veganNews.add(n);
             Log.i("SQLITE", "getting stored news " + newsId);
         }
+
+        if (DataRepo.veganNews.size() > 50){
+            Log.i("SQLite", "deleting some old vegan news");
+            int maxId = this.getMaxNewsId();
+            String query = "DELETE FROM veganNews WHERE newsId < "+(maxId-50)+";";
+            db = this.getWritableDatabase();
+            db.execSQL(query);
+        }
+
         db.close();
     }
 
@@ -135,7 +141,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
 				+ "spotId INTEGER PRIMARY KEY, spotName TEXT, spotAddress TEXT, spotPhone TEXT," +
                 "spotUrl TEXT, spotMail TEXT, spotInfo TEXT, spotLocLong REAL, spotLocLat REAL, spotImgKey TEXT," +
                 "catFood INTEGER, catShopping INTEGER, catCafe INTEGER, catIcecream INTEGER, catVokue INTEGER, catBakery INTEGER," +
-                "hoursMon TEXT, hoursTue TEXT, hoursWed TEXT, hoursThu TEXT, hoursFri TEXT, hoursSat TEXT, hoursSun TEXT, isFavorite INTEGER);";
+                "spotHours TEXT, isFavorite INTEGER);";
 		db.execSQL(query);
 	}
 

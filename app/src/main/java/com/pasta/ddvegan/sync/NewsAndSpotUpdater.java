@@ -171,13 +171,7 @@ public class NewsAndSpotUpdater extends AsyncTask<Integer, Integer, Integer> {
                 String url = jsonSpot.getString("spotUrl");
                 String info = jsonSpot.getString("spotInfo");
                 String imgKey = jsonSpot.getString("spotImgKey");
-                String hoursMon = jsonSpot.getString("hoursMon");
-                String hoursTue = jsonSpot.getString("hoursTue");
-                String hoursWed = jsonSpot.getString("hoursWed");
-                String hoursThu = jsonSpot.getString("hoursThu");
-                String hoursFri = jsonSpot.getString("hoursFri");
-                String hoursSat = jsonSpot.getString("hoursSat");
-                String hoursSun = jsonSpot.getString("hoursSun");
+                String hours = jsonSpot.getString("spotHours");
                 int catFood = jsonSpot.getInt("catFood");
                 int catBakery = jsonSpot.getInt("catBakery");
                 int catShopping = jsonSpot.getInt("catShopping");
@@ -186,7 +180,6 @@ public class NewsAndSpotUpdater extends AsyncTask<Integer, Integer, Integer> {
                 int catIcecream = jsonSpot.getInt("catIcecream");
                 double gpsLat = Float.parseFloat(jsonSpot.getString("spotLocLat"));
                 double gpsLong = Float.parseFloat(jsonSpot.getString("spotLocLong"));
-
                 Log.i("NewsAndSpotUpdater", "updating vegan spot: " + name);
                 ContentValues values = new ContentValues();
                 values.put("spotId", id);
@@ -197,13 +190,7 @@ public class NewsAndSpotUpdater extends AsyncTask<Integer, Integer, Integer> {
                 values.put("spotUrl", url);
                 values.put("spotInfo", info);
                 values.put("spotImgKey", imgKey);
-                values.put("hoursMon", hoursMon);
-                values.put("hoursTue", hoursTue);
-                values.put("hoursWed", hoursWed);
-                values.put("hoursThu", hoursThu);
-                values.put("hoursFri", hoursFri);
-                values.put("hoursSat", hoursSat);
-                values.put("hoursSun", hoursSun);
+                values.put("spotHours", hours.replace("\n", "").replace("\r", ""));
                 values.put("catFood", catFood);
                 values.put("catShopping", catShopping);
                 values.put("catCafe", catCafe);

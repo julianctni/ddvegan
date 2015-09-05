@@ -81,10 +81,10 @@ public class VeganNews {
 
         if (currentTime.get(Calendar.DAY_OF_YEAR) == (messageTime
                 .get(Calendar.DAY_OF_YEAR) + 1))
-            return ("yesterday, " + dfShort.format(messageTime.getTime())+" Uhr");
+            return ("gestern, " + dfShort.format(messageTime.getTime())+" Uhr");
         else if (currentTime.get(Calendar.DAY_OF_YEAR) == messageTime
                 .get(Calendar.DAY_OF_YEAR))
-            return ("today, " + dfShort.format(messageTime.getTime())+" Uhr");
+            return ("heute, " + dfShort.format(messageTime.getTime())+" Uhr");
         else
             return (dfDate.format(messageTime.getTime())+" Uhr");
     }
