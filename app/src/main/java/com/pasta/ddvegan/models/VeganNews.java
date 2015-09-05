@@ -44,7 +44,7 @@ public class VeganNews {
             case 4:
                 return "Infoangaben bei "+content+" geändert.";
             case 5:
-                return "Neuer Laden: "+content;
+                return content+" wurde zur Datenbank hinzugefügt.";
             case 6:
                 return content+" wurde aus der Datenbank entfernt.";
             case 7:

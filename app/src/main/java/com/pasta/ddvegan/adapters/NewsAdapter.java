@@ -65,7 +65,7 @@ public class NewsAdapter extends BaseAdapter {
             holder.header.setTextSize(18f);
             switch (news.getNewsTypeInt()) {
                 case (1):
-                    holder.newsIcon.setImageResource(R.drawable.icon_news_contact2);
+                    holder.newsIcon.setImageResource(R.drawable.icon_news_contact);
                     break;
 
                 case (2):
@@ -78,6 +78,12 @@ public class NewsAdapter extends BaseAdapter {
 
                 case (4):
                     holder.newsIcon.setImageResource(R.drawable.icon_news_info);
+                    break;
+                case (5):
+                    holder.newsIcon.setImageResource(R.drawable.icon_news_new);
+                    break;
+                case (6):
+                    holder.newsIcon.setImageResource(R.drawable.icon_news_del);
                     break;
             }
         }else {

@@ -10,7 +10,7 @@
         android:layout_marginTop="6dp"
         android:layout_width="35dp"
         android:scaleType="fitStart"
-        android:src="@drawable/icon_news_contact2"
+        android:src="@drawable/icon_news_contact"
         android:layout_height="35dp" />
 
     <View

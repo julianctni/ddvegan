@@ -30,7 +30,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getReadableDatabase();
 		Log.i("SQLite", "importing vegan spots");
 		String[] projection = { "spotId", "spotName", "spotAddress", "spotPhone",
-				"spotUrl", "spotMail", "spotHours", "spotInfo", "spotLocLong", "spotLocLat",
+				"spotUrl", "spotMail", "spotInfo", "spotLocLong", "spotLocLat",
                 "catFood", "catShopping", "catCafe", "catIcecream", "catVokue", "catBakery", "isFavorite",
                 "hoursMon","hoursTue","hoursWed","hoursThu","hoursFri","hoursSat","hoursSun", "spotImgKey"};
 		Cursor c = db.query("veganSpots", projection, null, null, null, null, null);
@@ -41,7 +41,6 @@ public class DatabaseManager extends SQLiteOpenHelper {
             String spotPhone = c.getString(c.getColumnIndex("spotPhone"));
             String spotUrl = c.getString(c.getColumnIndex("spotUrl"));
             String spotMail = c.getString(c.getColumnIndex("spotMail"));
-            String spotHours = c.getString(c.getColumnIndex("spotHours"));
             String spotInfo = c.getString(c.getColumnIndex("spotInfo"));
             String spotImgKey = c.getString(c.getColumnIndex("spotImgKey"));
             double locLong = c.getDouble(c.getColumnIndex("spotLocLong"));
@@ -53,7 +52,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
             int catVokue = c.getInt(c.getColumnIndex("catVokue"));
             int catBakery = c.getInt(c.getColumnIndex("catBakery"));
             int isFavorite = c.getInt(c.getColumnIndex("isFavorite"));
-			VeganSpot s = new VeganSpot(spotName, spotAddress, spotHours, spotUrl, "", locLat,
+			VeganSpot s = new VeganSpot(spotName, spotAddress, spotUrl, "", locLat,
             locLong, spotMail, spotInfo, spotId,  spotPhone, spotImgKey);
 
             s.addHours(1, c.getString(c.getColumnIndex("hoursSun")));
@@ -134,7 +133,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
 	public void createSpotTable(SQLiteDatabase db) {
 		String query = "CREATE TABLE IF NOT EXISTS veganSpots ("
 				+ "spotId INTEGER PRIMARY KEY, spotName TEXT, spotAddress TEXT, spotPhone TEXT," +
-                "spotUrl TEXT, spotMail TEXT, spotHours TEXT, spotInfo TEXT, spotLocLong REAL, spotLocLat REAL, spotImgKey TEXT," +
+                "spotUrl TEXT, spotMail TEXT, spotInfo TEXT, spotLocLong REAL, spotLocLat REAL, spotImgKey TEXT," +
                 "catFood INTEGER, catShopping INTEGER, catCafe INTEGER, catIcecream INTEGER, catVokue INTEGER, catBakery INTEGER," +
                 "hoursMon TEXT, hoursTue TEXT, hoursWed TEXT, hoursThu TEXT, hoursFri TEXT, hoursSat TEXT, hoursSun TEXT, isFavorite INTEGER);";
 		db.execSQL(query);

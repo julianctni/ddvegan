@@ -67,7 +67,6 @@ public class DatabaseUpdater extends AsyncTask<Integer, Integer, Integer> {
                     String mail = jsonSpot.getString("spotMail");
                     String url = jsonSpot.getString("spotUrl");
                     String info = jsonSpot.getString("spotInfo");
-                    String hours = jsonSpot.getString("spotHours");
                     String imgKey = jsonSpot.getString("spotImgKey");
                     String hoursMon = jsonSpot.getString("hoursMon");
                     String hoursTue = jsonSpot.getString("hoursTue");
@@ -94,7 +93,6 @@ public class DatabaseUpdater extends AsyncTask<Integer, Integer, Integer> {
                     values.put("spotMail", mail);
                     values.put("spotUrl", url);
                     values.put("spotInfo", info);
-                    values.put("spotHours", hours);
                     values.put("spotImgKey", imgKey);
                     values.put("hoursMon", hoursMon);
                     values.put("hoursTue", hoursTue);

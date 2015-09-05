@@ -21,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -76,6 +77,7 @@ public class MapFragment extends Fragment {
     LinearLayout spotDetailView;
     ObjectAnimator transDown;
     ObjectAnimator transUp;
+    boolean detailVisible = false;
 
 
     public static MapFragment create(boolean showSingleSpot, int id) {
@@ -160,6 +162,7 @@ public class MapFragment extends Fragment {
                     @Override
                     public void onClick(View view) {
                         transUp.start();
+                        detailVisible = false;
                         DataRepo.chosenMapItems.clear();
                     }
                 });
@@ -173,6 +176,17 @@ public class MapFragment extends Fragment {
         mapView.setCenter(mapCenter);
         mapView.setMaxZoomLevel(20);
         mapView.setZoom(mapZoom);
+        mapView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (detailVisible) {
+                    detailVisible = false;
+                    DataRepo.chosenMapItems.clear();
+                    transUp.start();
+                }
+                return false;
+            }
+        });
     }
 
 
@@ -554,6 +568,7 @@ public class MapFragment extends Fragment {
                     if (!DataRepo.chosenMapItems.contains(spotId)) {
                         setUpSpotDetailView(spotId);
                         transDown.start();
+                        detailVisible = true;
                         DataRepo.chosenMapItems.add(spotId);
                     }
                     return false;

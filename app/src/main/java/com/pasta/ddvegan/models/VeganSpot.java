@@ -14,7 +14,6 @@ import java.util.Locale;
 public class VeganSpot implements Comparable<VeganSpot> {
     private String name;
     private String adresse;
-    private String hours;
     private String URL;
     private String mail;
     private String phone;
@@ -23,18 +22,16 @@ public class VeganSpot implements Comparable<VeganSpot> {
     private double GPS_lat;
     private double GPS_long;
     private String info;
-    private String offer;
     public boolean hasHours = false;
     private boolean isFavorite = false;
     private float distance = -1f;
     public HashMap<Integer, ArrayList<Integer>> timeMap = new HashMap<Integer, ArrayList<Integer>>();
     Calendar cal = Calendar.getInstance();
 
-    public VeganSpot(String name, String adresse, String hours, String URL, String imgkey, double GPS_lat,
+    public VeganSpot(String name, String adresse, String URL, String imgkey, double GPS_lat,
                      double GPS_long, String mail, String info, int id, String phone, String imgKey) {
         this.name = name;
         this.adresse = adresse;
-        this.hours = hours;
         this.URL = URL;
         this.mail = mail;
         this.phone = phone;
@@ -89,11 +86,6 @@ public class VeganSpot implements Comparable<VeganSpot> {
         return URL;
     }
 
-    public String getHours() {
-        if (this.hours == null)
-            return "";
-        return hours;
-    }
 
     public double getGPS_lat() {
         return GPS_lat;
@@ -107,9 +99,6 @@ public class VeganSpot implements Comparable<VeganSpot> {
         return info;
     }
 
-    public String getOffer() {
-        return offer;
-    }
 
     public String getDistance() {
         if (distance == -1f)
