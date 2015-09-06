@@ -37,6 +37,7 @@
     <string name="map.menu.showLocation">Standort ermitteln</string>
 
     <string name="button.error">Fehler gefunden?</string>
+    <string name="toast.emptylist">Die Liste enthält keine Elemente.</string>
     <string name="dialog.send">Senden</string>
     <string name="dialog.cancel">Abbrechen</string>
     <string name="dialog.continue">Fortfahren</string>

@@ -48,6 +48,7 @@ public class SpotListFragment extends Fragment {
     GpsUtil gps;
     ProgressDialog dialog;
     PopupMenu sortMenu;
+    public boolean sortDistance;
 
 
     public static SpotListFragment create(int type) {
@@ -110,9 +111,11 @@ public class SpotListFragment extends Fragment {
                             if (current.getGPS_long() != 0) ;
                             current.setDistance(gps.calculateDistance(current.getGPS_lat(), current.getGPS_long()));
                         }
+                        DataRepo.lastDistanceUpdate = System.currentTimeMillis();
                         dialog.dismiss();
                         Toast.makeText(getActivity(), getString(R.string.spotlist_toast_gps_success), Toast.LENGTH_SHORT).show();
                         DataRepo.hasDistance = true;
+                        sortDistance = true;
                         DataRepo.sortByDistance(spots);
                         spotListAdapter.notifyDataSetChanged();
                         gps.stop();
@@ -216,24 +219,31 @@ public class SpotListFragment extends Fragment {
                     sortMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                         @Override
                         public boolean onMenuItemClick(MenuItem menuItem) {
+                            if (spots.isEmpty()) {
+                                Toast.makeText(getActivity(), getString(R.string.toast_emptylist), Toast.LENGTH_SHORT).show();
+                                return true;
+                            }
                             switch (menuItem.getItemId()) {
                                 case R.id.menu_sort_alphab:
                                     menuItem.setChecked(!menuItem.isChecked());
                                     DataRepo.sortByName(spots);
+                                    sortDistance = false;
                                     spotListAdapter.notifyDataSetChanged();
                                     return true;
 
                                 case R.id.menu_sort_distance:
-                                    if (DataRepo.hasDistance) {
+                                    if (DataRepo.hasDistance && (System.currentTimeMillis() - DataRepo.lastDistanceUpdate) < 5000 * 60) {
                                         DataRepo.sortByDistance(spots);
-                                        spotListAdapter.notifyDataSetChanged();
-                                    } else if (calculateDistances())
                                         menuItem.setChecked(!menuItem.isChecked());
+                                        spotListAdapter.notifyDataSetChanged();
+                                    } else
+                                        calculateDistances();
                                     return true;
 
                                 case R.id.menu_sort_hours:
                                     menuItem.setChecked(!menuItem.isChecked());
                                     menuItem.setChecked(true);
+                                    sortDistance = false;
                                     DataRepo.sortByHours(spots);
                                     spotListAdapter.notifyDataSetChanged();
                                     return true;
@@ -242,6 +252,8 @@ public class SpotListFragment extends Fragment {
                         }
                     });
                 }
+                if (sortDistance)
+                    sortMenu.getMenu().findItem(R.id.menu_sort_distance).setChecked(true);
                 sortMenu.show();
                 return true;
             default:

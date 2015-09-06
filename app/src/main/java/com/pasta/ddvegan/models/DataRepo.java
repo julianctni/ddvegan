@@ -34,7 +34,6 @@ public class DataRepo {
     public static String apiImage = apiUrl + "get/image/";
 
     public static HashMap<Integer, VeganSpot> veganSpots = new HashMap<Integer, VeganSpot>();
-    public static HashSet<Integer> chosenMapItems = new HashSet<Integer>();
     public static ArrayList<VeganSpot> foodSpots = new ArrayList<VeganSpot>();
     public static ArrayList<VeganSpot> shoppingSpots = new ArrayList<VeganSpot>();
     public static ArrayList<VeganSpot> cafeSpots = new ArrayList<VeganSpot>();
@@ -46,6 +45,11 @@ public class DataRepo {
 
 
     public static ArrayList<NavItem> navItems = new ArrayList<NavItem>();
+
+    public static HashSet<Integer> chosenMapItems = new HashSet<Integer>();
+    public static HashSet<Integer> mapMind = new HashSet<Integer>();
+
+    public static long lastDistanceUpdate;
 
 
     public static void updateFavorites(){

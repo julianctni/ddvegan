@@ -97,9 +97,11 @@ public class MapFragment extends Fragment {
             mapZoom = savedInstanceState.getFloat("mapZoom");
             visibleMarkers.addAll(savedInstanceState.getIntegerArrayList("visibleMarkers"));
         } else {
+            visibleMarkers.addAll(DataRepo.mapMind);
             mapCenter = new LatLng(51.056553, 13.742202);
             mapZoom = 14;
         }
+
         if (getArguments() != null) {
             singleSpot = getArguments().getBoolean("showSingleSpot");
             singleSpotId = getArguments().getInt("spotId");
@@ -142,6 +144,12 @@ public class MapFragment extends Fragment {
         setHasOptionsMenu(true);
         return inflater.inflate(R.layout.fragment_map, container, false);
 
+    }
+
+    @Override
+    public void onPause (){
+        super.onPause();
+        DataRepo.mapMind = visibleMarkers;
     }
 
     @Override
@@ -231,16 +239,16 @@ public class MapFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        loadOverlays();
         if (!singleSpot) {
-            loadOverlays();
             this.reloadMapMind();
         } else {
             Drawable spotMarker = this.getResources().getDrawable(R.drawable.marker_single);
             spotMarker.setBounds(0, 0, 20, 20);
             VeganSpot spot = DataRepo.veganSpots.get(singleSpotId);
-            singleSpotMarker = new Marker("" + spot.getID(), spot.getName(), new LatLng(
+            singleSpotMarker = new Marker(spot.getName(), "", new LatLng(
                     spot.getGPS_lat(), spot.getGPS_long()));
-            singleSpotMarker.setIcon(new Icon(this.getResources().getDrawable(R.drawable.marker_single)));
+            singleSpotMarker.setMarker(spotMarker);
             singleSpotMarker.setHotspot(Marker.HotspotPlace.BOTTOM_CENTER);
             mapView.setCenter(new LatLng(spot.getGPS_lat(),spot.getGPS_long()));
             mapView.addMarker(singleSpotMarker);
@@ -406,6 +414,7 @@ public class MapFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.menu_show_layers:
                 View menuItemView = this.getActivity().findViewById(R.id.menu_show_layers);
+                if (popupMenu == null) {
                     popupMenu = new PopupMenu(this.getActivity(), menuItemView);
                     popupMenu.inflate(R.menu.menu_map_layers);
                     if (!singleSpot) {
@@ -479,6 +488,7 @@ public class MapFragment extends Fragment {
                             return false;
                         }
                     });
+                }
                 popupMenu.show();
                 return true;
 

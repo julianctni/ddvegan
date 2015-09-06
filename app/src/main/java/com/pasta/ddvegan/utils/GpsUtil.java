@@ -20,7 +20,6 @@ public class GpsUtil extends Handler implements LocationListener {
     protected static final int UPDATE_LOCATION = 0;
 
     private LocationManager locationManager;
-    private static final long MIN_TIME = 5 * 60 * 1000; // 5 Minuten
 
     private double latitude, longitude;
     public boolean newLocation = false;
@@ -40,11 +39,11 @@ public class GpsUtil extends Handler implements LocationListener {
         if (mapContext != null)
             locationManager = (LocationManager) mapContext.getActivity().getSystemService(Context.LOCATION_SERVICE);
 
-        if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME, 5000, this);
-        } else if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME, 5000, this);
-        }
+        if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+
     }
 
     public double getLatitude() {
@@ -58,16 +57,17 @@ public class GpsUtil extends Handler implements LocationListener {
     public void stop() {
         locationManager.removeUpdates(this);
         locationManager = null;
+        newLocation = false;
     }
 
     public float calculateDistance(double dist_lat, double dist_lng) {
-        Location standort = new Location("current");
-        standort.setLatitude(this.latitude);
-        standort.setLongitude(this.longitude);
-        Location ziel = new Location("target");
-        ziel.setLatitude(dist_lat);
-        ziel.setLongitude(dist_lng);
-        return standort.distanceTo(ziel) / 1000;
+        Location current = new Location("current");
+        current.setLatitude(this.latitude);
+        current.setLongitude(this.longitude);
+        Location target = new Location("target");
+        target.setLatitude(dist_lat);
+        target.setLongitude(dist_lng);
+        return current.distanceTo(target) / 1000;
     }
 
     public boolean isOn() {

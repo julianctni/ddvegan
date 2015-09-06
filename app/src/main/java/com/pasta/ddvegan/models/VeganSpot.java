@@ -179,6 +179,8 @@ public class VeganSpot implements Comparable<VeganSpot> {
         }
         int time = (hour * 100) + (cal.get(Calendar.MINUTE));
         ArrayList<Integer> timeList = timeMap.get(day);
+        if (timeList.get(0) == 0)
+            return false;
         if (timeList.get(0) <= time && time <= timeList.get(1))
             return true;
         else {
