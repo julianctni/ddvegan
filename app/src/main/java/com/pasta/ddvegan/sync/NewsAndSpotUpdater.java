@@ -25,9 +25,11 @@ import org.json.JSONObject;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -249,6 +251,11 @@ public class NewsAndSpotUpdater extends AsyncTask<Integer, Integer, Integer> {
         } catch (JSONException e) {
             ret = NetworkUtil.serverError;
             //e.printStackTrace();
+        }
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        if (prefs.getBoolean("firstStart2", true)) {
+            VeganNews tutNews = new VeganNews(-1, 8, -1, context.getString(R.string.news_tutorial), "", false);
+            DataRepo.veganNews.add(tutNews);
         }
 
         Collections.reverse(DataRepo.veganNews);

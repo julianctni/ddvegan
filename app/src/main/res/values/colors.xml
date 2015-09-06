@@ -19,6 +19,7 @@
     <color name="text.darkgrey">#333333</color>
     <color name="text.grey">#888888</color>
     <color name="text.lightgrey">#DDDDDD</color>
+    <color name="text.link">#AA0000FF</color>
 
     <color name="divider.list.news">#DDDDDD</color>
 

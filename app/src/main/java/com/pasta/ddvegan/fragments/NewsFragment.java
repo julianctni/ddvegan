@@ -53,7 +53,12 @@ public class NewsFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 VeganNews news = (VeganNews)newsList.getItemAtPosition(i);
                 if (!DataRepo.veganSpots.containsKey(news.getSpotId()))
-                    Toast.makeText(getActivity(), news.getNewsContent(), Toast.LENGTH_SHORT).show();
+                    if (news.getNewsTypeInt() != 8)
+                        Toast.makeText(getActivity(), news.getNewsContent(), Toast.LENGTH_SHORT).show();
+                    else {
+                        HelpFragment hf = new HelpFragment();
+                        hf.show(getFragmentManager(), "HELPFRAG");
+                    }
                 else {
                     SpotDetailFragment detailFragment = SpotDetailFragment.create(news.getSpotId());
                     getParentFragment().getFragmentManager().beginTransaction()

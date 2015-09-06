@@ -12,11 +12,28 @@
 
     <string name="nav.toast.twice">Du befindest dich schon auf dieser Seite.</string>
 
+    <string name="news.tutorial">Willkommen zur neuen Version von Dresden Vegan! Klicke hier für eine kurze Übersicht zu allen Neuerungen.</string>
+
     <string name="report.choosecategory">Wähle mindestens eine Fehlerkategorie aus.</string>
     <string name="report.address">Adresse</string>
     <string name="report.hours">Öffnungszeiten</string>
     <string name="report.info">Infoangaben</string>
     <string name="report.contact">Kontaktdaten</string>
+
+    <string name="tutorial.button.finish">Tutorial beenden</string>
+    <string name="tutorial.navigation.header">Navigation</string>
+    <string name="tutorial.navigation.content">Das neue Navigationsmenü öffnest du, indem du vom linken Displayrand nach rechts wischt. Dort findest du die altbekannten Kategorien wieder.</string>
+
+    <string name="tutorial.dashboard.header">Pinnwand &amp; News</string>
+    <string name="tutorial.dashboard.content">Auf der Pinnwand siehst du diverse Updates der Datenbank (#info) und individuelle News (#news) zu Veranstaltungen und Ähnlichem. Achja, die Datenbank aktualisiert sich nun komplett selbstständig!</string>
+
+    <string name="tutorial.startpage.header">Startseite</string>
+    <string name="tutorial.startpage.content">Dresden Vegan öffnet sich nun stets mit der Startseite. Dort siehst du die Pinnwand bzw. deine Favoriten. Zwischen den Ansichten kannst du wechseln, indem du nach links bzw. rechts wischt.</string>
+
+    <string name="tutorial.mail.header">Kontaktaufnahme</string>
+    <string name="tutorial.mail.content">Du kannst Feedback Mails bzw. Fehlerberichte zu veganen Lokalitäten nun direkt über die Dresden Vegan App und ohne Umweg über eine E-Mail App versenden.</string>
+
+    <string name="tutorial.havefun">Die restlichen Neuerungen darfst du nun selbst entdecken! Wir wünschen dabei viel Spaß und freuen uns stets über Feedback.</string>
 
     <string name="share.text">Dresden Vegan - Die App für veganes Leben in Dresden und Umgebung!\nhttps://goo.gl/hLkl1s</string>
     <string name="share.choice">Wähle eine App aus:</string>

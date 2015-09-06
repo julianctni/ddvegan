@@ -1,11 +1,14 @@
 package com.pasta.ddvegan.sync;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.pasta.ddvegan.R;
 import com.pasta.ddvegan.models.DataRepo;
 import com.pasta.ddvegan.models.VeganNews;
 import com.pasta.ddvegan.models.VeganSpot;
@@ -14,9 +17,11 @@ public class DatabaseManager extends SQLiteOpenHelper {
 
 	private static final String DATABASE_NAME = "ddvegan.db";
 	private static final int DATABASE_VERSION = 1;
+    private Context context;
 
 	public DatabaseManager(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.context = context;
 	}
 
 	@Override

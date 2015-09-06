@@ -49,6 +49,8 @@ public class VeganNews {
                 return content+" wurde aus der Datenbank entfernt.";
             case 7:
                 return content;
+            case 8:
+                return content;
         }
         return "";
     }
@@ -58,13 +60,16 @@ public class VeganNews {
             type = "#update ";
         if (newsType < 7)
             return type + "#info";
-        else
+        else if (newsType == 7)
             return "#news";
+        else
+            return "#welcome";
     }
 
     public int getNewsTypeInt(){
         return newsType;
     }
+
     public String formatNewsTime() {
         Calendar currentTime = Calendar.getInstance();
         Calendar messageTime = Calendar.getInstance();
@@ -77,6 +82,7 @@ public class VeganNews {
             messageTime.setTime(df.parse(newsTime));
         } catch (ParseException e) {
             e.printStackTrace();
+            return "";
         }
 
         if (currentTime.get(Calendar.DAY_OF_YEAR) == (messageTime

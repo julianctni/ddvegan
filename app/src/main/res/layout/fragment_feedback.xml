@@ -73,7 +73,7 @@
         android:layout_alignParentRight="true"
         android:layout_below="@id/messageInput"
         android:layout_marginTop="10dp"
-        android:background="@color/dialog.contact"
+        android:background="@drawable/ripple_card"
         android:stateListAnimator="@null"
         android:padding="4dp"
         android:text="@string/dialog.send"
