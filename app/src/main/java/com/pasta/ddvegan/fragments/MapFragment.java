@@ -1,6 +1,7 @@
 package com.pasta.ddvegan.fragments;
 
 import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -11,6 +12,7 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -25,11 +27,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mapbox.mapboxsdk.geometry.LatLng;
-import com.mapbox.mapboxsdk.overlay.Icon;
 import com.mapbox.mapboxsdk.overlay.ItemizedIconOverlay;
 import com.mapbox.mapboxsdk.overlay.Marker;
 import com.mapbox.mapboxsdk.tileprovider.tilesource.MapboxTileLayer;
@@ -57,7 +59,7 @@ public class MapFragment extends Fragment {
     int singleSpotId;
     float mapZoom;
     LatLng mapCenter;
-    HashSet<Integer> visibleMarkers = new HashSet<Integer>();
+    HashSet<Integer> visibleMarkers = new HashSet<>();
     SpotOverlay bakeryOverlay;
     SpotOverlay cafeOverlay;
     SpotOverlay foodOverlay;
@@ -65,19 +67,20 @@ public class MapFragment extends Fragment {
     SpotOverlay shoppingOverlay;
     SpotOverlay vokueOverlay;
     SpotOverlay favOverlay;
-    ArrayList<Marker> bakeryMarkers = new ArrayList<Marker>();
-    ArrayList<Marker> cafeMarkers = new ArrayList<Marker>();
-    ArrayList<Marker> foodMarkers = new ArrayList<Marker>();
-    ArrayList<Marker> icecreamMarkers = new ArrayList<Marker>();
-    ArrayList<Marker> shoppingMarkers = new ArrayList<Marker>();
-    ArrayList<Marker> vokueMarkers = new ArrayList<Marker>();
-    ArrayList<Marker> favMarkers = new ArrayList<Marker>();
+    ArrayList<Marker> bakeryMarkers = new ArrayList<>();
+    ArrayList<Marker> cafeMarkers = new ArrayList<>();
+    ArrayList<Marker> foodMarkers = new ArrayList<>();
+    ArrayList<Marker> icecreamMarkers = new ArrayList<>();
+    ArrayList<Marker> shoppingMarkers = new ArrayList<>();
+    ArrayList<Marker> vokueMarkers = new ArrayList<>();
+    ArrayList<Marker> favMarkers = new ArrayList<>();
     Marker singleSpotMarker;
     Marker currentPositionMarker;
     LinearLayout spotDetailView;
     ObjectAnimator transDown;
     ObjectAnimator transUp;
     boolean detailVisible = false;
+    int currentapiVersion = android.os.Build.VERSION.SDK_INT;
 
 
     public static MapFragment create(boolean showSingleSpot, int id) {
@@ -135,7 +138,7 @@ public class MapFragment extends Fragment {
         savedInstanceState.putDouble("mapCenterLng", mapView.getCenter().getLongitude());
         savedInstanceState.putDouble("mapCenterLat", mapView.getCenter().getLatitude());
         savedInstanceState.putFloat("mapZoom", mapView.getZoomLevel());
-        savedInstanceState.putIntegerArrayList("visibleMarkers", new ArrayList<Integer>(visibleMarkers));
+        savedInstanceState.putIntegerArrayList("visibleMarkers", new ArrayList<>(visibleMarkers));
     }
 
     @Override
@@ -156,21 +159,22 @@ public class MapFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         view.post(new Runnable() {
+            @SuppressLint("NewApi")
             @Override
             public void run() {
                 spotDetailView = (LinearLayout) getView().findViewById(R.id.map_spot_details);
 
-                transDown = ObjectAnimator.ofFloat(spotDetailView, "translationY", spotDetailView.getMeasuredHeight());
-                transDown.setDuration(200);
+                if (currentapiVersion >= Build.VERSION_CODES.HONEYCOMB) {
+                    transDown = ObjectAnimator.ofFloat(spotDetailView, "translationY", spotDetailView.getMeasuredHeight());
+                    transDown.setDuration(200);
 
-                transUp = ObjectAnimator.ofFloat(spotDetailView, "translationY", -spotDetailView.getMeasuredHeight());
-                transUp.setDuration(200);
-
+                    transUp = ObjectAnimator.ofFloat(spotDetailView, "translationY", -spotDetailView.getMeasuredHeight());
+                    transUp.setDuration(200);
+                }
                 spotDetailView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        transUp.start();
-                        detailVisible = false;
+                        showSpotDetail(false);
                         DataRepo.chosenMapItems.clear();
                     }
                 });
@@ -188,9 +192,8 @@ public class MapFragment extends Fragment {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if (detailVisible) {
-                    detailVisible = false;
                     DataRepo.chosenMapItems.clear();
-                    transUp.start();
+                    showSpotDetail(false);
                 }
                 return false;
             }
@@ -567,6 +570,26 @@ public class MapFragment extends Fragment {
         public void onFragmentInteraction(Uri uri);
     }
 
+    @SuppressLint("NewApi")
+    public void showSpotDetail(boolean show){
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) spotDetailView.getLayoutParams();
+        if (show){
+            if (currentapiVersion >= Build.VERSION_CODES.HONEYCOMB)
+                transDown.start();
+            else {
+                params.setMargins(0,0,0,0);
+                spotDetailView.setLayoutParams(params);
+            }
+        } else {
+            if (currentapiVersion >= Build.VERSION_CODES.HONEYCOMB)
+                transUp.start();
+            else {
+                params.setMargins(0,-220,0,0);
+                spotDetailView.setLayoutParams(params);
+            }
+        }
+        detailVisible = show;
+    }
 
     public class SpotOverlay extends ItemizedIconOverlay {
 
@@ -577,8 +600,7 @@ public class MapFragment extends Fragment {
                     int spotId = Integer.parseInt(m.getTitle());
                     if (!DataRepo.chosenMapItems.contains(spotId)) {
                         setUpSpotDetailView(spotId);
-                        transDown.start();
-                        detailVisible = true;
+                        showSpotDetail(true);
                         DataRepo.chosenMapItems.add(spotId);
                     }
                     return false;
