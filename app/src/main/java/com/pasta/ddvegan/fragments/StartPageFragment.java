@@ -19,7 +19,7 @@ import com.pasta.ddvegan.utils.SlidingTabLayout;
 public class StartPageFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
-    private SlidingTabLayout mSlidingTabLayout;
+    SlidingTabLayout mSlidingTabLayout;
     public ViewPager mViewPager;
 
 
@@ -70,7 +70,7 @@ public class StartPageFragment extends Fragment {
     }
 
     public interface OnFragmentInteractionListener {
-        public void onFragmentInteraction(Uri uri);
+        void onFragmentInteraction(Uri uri);
     }
 
     class SamplePagerAdapter extends FragmentPagerAdapter {

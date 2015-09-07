@@ -2,9 +2,7 @@ package com.pasta.ddvegan.utils;
 
 import android.graphics.drawable.Drawable;
 
-/**
- * Created by julian on 28.03.15.
- */
+
 public class NavItem {
 
     int type;

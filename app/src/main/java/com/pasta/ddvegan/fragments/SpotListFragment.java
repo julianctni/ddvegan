@@ -71,7 +71,7 @@ public class SpotListFragment extends Fragment {
         }
         if (type != DataRepo.FAVORITES)
             setRetainInstance(true);
-        spots = new ArrayList<VeganSpot>();
+        spots = new ArrayList<>();
         switch (type) {
             case (DataRepo.FOOD):
                 spots = DataRepo.foodSpots;
@@ -104,12 +104,13 @@ public class SpotListFragment extends Fragment {
         DataRepo.sortByName(spots);
         gps = new GpsUtil(this);
         listHandler = new Handler() {
+            @Override
             public void handleMessage(Message msg) {
                 switch (msg.what) {
                     case 0:
                         for (VeganSpot current : DataRepo.veganSpots.values()) {
-                            if (current.getGPS_long() != 0) ;
-                            current.setDistance(gps.calculateDistance(current.getGPS_lat(), current.getGPS_long()));
+                            if (current.getGPS_long() != 0)
+                                current.setDistance(gps.calculateDistance(current.getGPS_lat(), current.getGPS_long()));
                         }
                         DataRepo.lastDistanceUpdate = System.currentTimeMillis();
                         dialog.dismiss();
@@ -130,7 +131,7 @@ public class SpotListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = (View) inflater.inflate(R.layout.fragment_spot_list,
+        View rootView = inflater.inflate(R.layout.fragment_spot_list,
                 container, false);
         TextView tv = (TextView) rootView.findViewById(R.id.venue_list_header);
         RelativeLayout noFavLayout = (RelativeLayout) rootView.findViewById(R.id.noFavLayout);
@@ -312,7 +313,7 @@ public class SpotListFragment extends Fragment {
     }
 
     public interface OnFragmentInteractionListener {
-        public void onFragmentInteraction(int id);
+        void onFragmentInteraction(int id);
     }
 
 }

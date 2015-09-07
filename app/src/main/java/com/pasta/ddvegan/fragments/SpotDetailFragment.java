@@ -1,6 +1,7 @@
 package com.pasta.ddvegan.fragments;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -92,7 +93,7 @@ public class SpotDetailFragment extends Fragment {
         TextView header = (TextView) view.findViewById(R.id.spot_detail_name);
         TextView address = (TextView) view.findViewById(R.id.spot_detail_address);
 
-        ArrayList<TextView> hours = new ArrayList<TextView>();
+        ArrayList<TextView> hours = new ArrayList<>();
         hours.add((TextView) view.findViewById(R.id.spot_detail_hours_sun));
         hours.add((TextView) view.findViewById(R.id.spot_detail_hours_mon));
         hours.add((TextView) view.findViewById(R.id.spot_detail_hours_tue));
@@ -251,7 +252,6 @@ public class SpotDetailFragment extends Fragment {
 
     private class ImageLoader extends AsyncTask<Void, Integer, Integer> {
         Bitmap foodPicture;
-        String pictureName = "";
 
         @Override
         protected void onPreExecute() {
@@ -276,9 +276,9 @@ public class SpotDetailFragment extends Fragment {
                     e1.printStackTrace();
                 }
                 if (foodPicture != null) {
-                    FileOutputStream fos = null;
+                    FileOutputStream fos;
                     try {
-                        fos = getActivity().openFileOutput(spot.getImgKey() + ".png", getActivity().MODE_PRIVATE);
+                        fos = getActivity().openFileOutput(spot.getImgKey() + ".png", Context.MODE_PRIVATE);
                         foodPicture.compress(Bitmap.CompressFormat.PNG, 100, fos);
                         fos.close();
                     } catch (Exception e2) {

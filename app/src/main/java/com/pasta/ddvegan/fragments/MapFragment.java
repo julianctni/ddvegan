@@ -182,7 +182,7 @@ public class MapFragment extends Fragment {
             }
         });
 
-        mapView = (MapView) getView().findViewById(R.id.mapview);
+        mapView = (MapView) view.findViewById(R.id.mapview);
         mapView.setAccessToken("pk.eyJ1IjoicGFzdGFzb2Z0d2FyZSIsImEiOiJhZjJkYjBhNzMyMTNiMzI4ZmY5NDM0MDU1YjJmNTlmZCJ9.-nkTpeqduWxnSeizwuyV2Q");
         mapView.setTileSource(new MapboxTileLayer("mapbox.streets"));
         mapView.setCenter(mapCenter);
@@ -567,7 +567,7 @@ public class MapFragment extends Fragment {
 
 
     public interface OnFragmentInteractionListener {
-        public void onFragmentInteraction(Uri uri);
+        void onFragmentInteraction(Uri uri);
     }
 
     @SuppressLint("NewApi")

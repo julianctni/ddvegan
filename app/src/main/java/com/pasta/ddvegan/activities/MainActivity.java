@@ -34,14 +34,14 @@ public class MainActivity extends ActionBarActivity
         StartPageFragment.OnFragmentInteractionListener,
         MapFragment.OnFragmentInteractionListener {
 
-    private DrawerLayout drawerLayout;
-    private ActionBarDrawerToggle drawerToggle;
-    private Toolbar toolbar;
-    private ImageView homeButton;
-    private Menu menu;
-    private ListView navList;
-    private FragmentManager fragmentManager;
-    private NavigationAdapter navAdapter;
+    DrawerLayout drawerLayout;
+    ActionBarDrawerToggle drawerToggle;
+    Toolbar toolbar;
+    ImageView homeButton;
+    Menu menu;
+    ListView navList;
+    FragmentManager fragmentManager;
+    NavigationAdapter navAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +105,7 @@ public class MainActivity extends ActionBarActivity
             n.setSelected(false);
         item.setSelected(true);
         navAdapter.notifyDataSetChanged();
-        String fragTag = "";
+        String fragTag;
         if (item.getType() == DataRepo.MAP) {
             fragment = new MapFragment();
             fragTag = "MAP";

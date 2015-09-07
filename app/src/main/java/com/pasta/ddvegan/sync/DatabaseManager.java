@@ -2,6 +2,7 @@ package com.pasta.ddvegan.sync;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -13,15 +14,19 @@ import com.pasta.ddvegan.models.DataRepo;
 import com.pasta.ddvegan.models.VeganNews;
 import com.pasta.ddvegan.models.VeganSpot;
 
+import java.util.Map;
+
 public class DatabaseManager extends SQLiteOpenHelper {
 
 	private static final String DATABASE_NAME = "ddvegan.db";
 	private static final int DATABASE_VERSION = 1;
     private Context context;
+    SharedPreferences prefs;
 
 	public DatabaseManager(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;
+        prefs = PreferenceManager.getDefaultSharedPreferences(context);
 	}
 
 	@Override
@@ -30,7 +35,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
         createNewsTable(db);
 	}
 
-	public void getVeganSpotsFromDatabase() {
+	public void getVeganSpotsFromDatabase(boolean firstStart) {
         DataRepo.clearSpotLists();
 		SQLiteDatabase db = this.getReadableDatabase();
 		Log.i("SQLite", "importing vegan spots");
@@ -82,8 +87,27 @@ public class DatabaseManager extends SQLiteOpenHelper {
             }
 		}
 		db.close();
+
+        if (firstStart)
+            this.loadFavFromOldVersion();
         DataRepo.updateFavorites();
 	}
+
+    public void loadFavFromOldVersion(){
+        Log.i("DATABASE", "Loading favorites from old app");
+        context.deleteDatabase("ddvegan_db");
+        prefs.edit().remove("LAST_DB_UPDATE").commit();
+        Map<String, ?> prefMap = prefs.getAll();
+        prefMap.remove(DataRepo.APP_VERSION_KEY);
+        for (String x : prefMap.keySet()) {
+            if (DataRepo.veganSpots.containsKey(Integer.parseInt(x))) {
+                VeganSpot vs = DataRepo.veganSpots.get(Integer.parseInt(x));
+                prefs.edit().remove(x).commit();
+                vs.setFavorite(true);
+                DataRepo.favoriteMap.put(vs.getID(), vs);
+            }
+        }
+    }
 
     public void getVeganNewsFromDatabase() {
         SQLiteDatabase db;

@@ -122,7 +122,7 @@ public class SpotReportFragment extends DialogFragment {
                     if (wrongContact.isChecked())
                         errors += "Kontaktdaten\n";
                     String content = "Fehlerreport " + spot.getName() + " (" + spot.getID() + ")\n\n" + errors + "\n\nPersönliche Nachricht:\n\n" + message.getText().toString();
-                    MailSender ms = new MailSender(content, from.getText().toString(), DataRepo.appVersion, spot.getName());
+                    MailSender ms = new MailSender(content, from.getText().toString(), DataRepo.appVersionCode+"/"+DataRepo.appVersionName, spot.getName());
                     ms.execute();
                 }
             }
@@ -163,7 +163,7 @@ public class SpotReportFragment extends DialogFragment {
                     "application/x-www-form-urlencoded;charset=UTF-8");
 
             try {
-                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(4);
+                List<NameValuePair> nameValuePairs = new ArrayList<>(4);
 
                 nameValuePairs.add(new BasicNameValuePair("msg", msg));
                 nameValuePairs.add(new BasicNameValuePair("version", version));

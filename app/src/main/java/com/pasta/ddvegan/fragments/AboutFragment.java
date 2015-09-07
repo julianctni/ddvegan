@@ -33,7 +33,7 @@ public class AboutFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        TextView sourcecode = (TextView) getView()
+        TextView sourcecode = (TextView) view
                 .findViewById(R.id.about_sourcecode);
         sourcecode.setMovementMethod(LinkMovementMethod.getInstance());
         sourcecode.setText(Html

@@ -1,28 +1,30 @@
 package com.pasta.ddvegan.sync;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
+import android.util.Log;
+
+import com.pasta.ddvegan.R;
+import com.pasta.ddvegan.activities.SplashActivity;
+import com.pasta.ddvegan.models.DataRepo;
+import com.pasta.ddvegan.utils.NetworkUtil;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.content.ContentValues;
-import android.database.sqlite.SQLiteDatabase;
-import android.os.AsyncTask;
-import android.util.Log;
-import android.widget.Toast;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
-import com.pasta.ddvegan.activities.SplashActivity;
-import com.pasta.ddvegan.models.DataRepo;
-import com.pasta.ddvegan.utils.NetworkUtil;
+import static android.widget.Toast.LENGTH_SHORT;
+import static android.widget.Toast.makeText;
 
 
 public class DatabaseUpdater extends AsyncTask<Integer, Integer, Integer> {
@@ -40,9 +42,8 @@ public class DatabaseUpdater extends AsyncTask<Integer, Integer, Integer> {
     @Override
     protected Integer doInBackground(Integer... ints) {
         int ret = 0;
-        String result = "";
+        String result;
         DatabaseManager dbMan = new DatabaseManager(context);
-        dbMan.getVeganSpotsFromDatabase();
 
         if (!dbMan.dbEmpty()) {
             Log.i("DatabaseUpdater", "Database has already been downloaded.");
@@ -55,10 +56,10 @@ public class DatabaseUpdater extends AsyncTask<Integer, Integer, Integer> {
             result = requestVeganSpots();
             SQLiteDatabase db = dbMan.getWritableDatabase();
             db.execSQL ("DELETE FROM veganSpots");
-            JSONArray jArray = null;
+            JSONArray jArray;
             try {
                 jArray = new JSONArray(result);
-                for (int i = 0; i < jArray.length(); i++) {
+                for (int i = 0; jArray.length() > i; i++) {
                     JSONObject jsonSpot = jArray.getJSONObject(i);
                     int id = jsonSpot.getInt("spotId");
                     String name = jsonSpot.getString("spotName");
@@ -98,14 +99,15 @@ public class DatabaseUpdater extends AsyncTask<Integer, Integer, Integer> {
                     values.put("spotLocLat", gpsLat);
                     db.insert("veganSpots", null, values);
                 }
-                dbMan.getVeganSpotsFromDatabase();
+                dbMan.getVeganSpotsFromDatabase(true);
             } catch (JSONException e) {
                 e.printStackTrace();
-                ret = NetworkUtil.serverError;
+                db.close();
+                return NetworkUtil.serverError;
             }
             db.close();
         } else {
-            ret = NetworkUtil.connectionError;
+            return NetworkUtil.connectionError;
         }
 
         return -1;
@@ -117,10 +119,10 @@ public class DatabaseUpdater extends AsyncTask<Integer, Integer, Integer> {
             NewsAndSpotUpdater updater = new NewsAndSpotUpdater(context, result);
             updater.execute();
         } else if (result == NetworkUtil.connectionError){
-            Toast.makeText(context, "Um die Appdaten zu initialisieren, benötigst du eine Internetverbindung.", Toast.LENGTH_SHORT).show();
+            makeText(context, context.getString(R.string.init_fail_internet), LENGTH_SHORT).show();
             context.finish();
-        } else if (result == NetworkUtil.serverError){
-            Toast.makeText(context, "Aus technischen Gründen können die Appdaten nicht initialisiert werden. Versuche es später erneut.", Toast.LENGTH_SHORT).show();
+        } else if (result == NetworkUtil.serverError) {
+            makeText(context, context.getString(R.string.init_fail_server), LENGTH_SHORT).show();
             context.finish();
         }
     }
@@ -142,17 +144,17 @@ public class DatabaseUpdater extends AsyncTask<Integer, Integer, Integer> {
                     inputStream, "UTF-8"), 8);
             StringBuilder sb = new StringBuilder();
 
-            String line = null;
+            String line;
             while ((line = reader.readLine()) != null) {
-                sb.append(line + "\n");
+                sb.append(line).append("\n");
             }
             result = sb.toString();
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         } finally {
             try {
                 if (inputStream != null)
                     inputStream.close();
-            } catch (Exception squish) {
+            } catch (Exception ignored) {
             }
         }
         return result;

@@ -28,8 +28,10 @@ public class SplashActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         try {
-            DataRepo.appVersion = getPackageManager()
+            DataRepo.appVersionName = getPackageManager()
                     .getPackageInfo(this.getPackageName(), 0).versionName;
+            DataRepo.appVersionCode = getPackageManager()
+                    .getPackageInfo(this.getPackageName(), 0).versionCode;
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }

@@ -19,12 +19,10 @@ import java.util.ArrayList;
 
 public class NavigationAdapter extends BaseAdapter {
     private Context mContext;
-    private LayoutInflater mInflater;
     private ArrayList<NavItem> items;
 
     public NavigationAdapter(Context c, ArrayList<NavItem> items) {
         mContext = c;
-        mInflater = (LayoutInflater)c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.items = items;
     }
 

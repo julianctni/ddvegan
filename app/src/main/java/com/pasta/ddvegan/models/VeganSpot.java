@@ -4,16 +4,13 @@ import android.util.Log;
 
 import java.text.Collator;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
-/**
- * Created by julian on 28.03.15.
- */
-public class VeganSpot implements Comparable<VeganSpot> {
+
+public class VeganSpot {
     private String name;
     private String adresse;
     private String URL;
@@ -27,7 +24,7 @@ public class VeganSpot implements Comparable<VeganSpot> {
     public boolean hasHours = false;
     private boolean isFavorite = false;
     private float distance = -1f;
-    public HashMap<Integer, ArrayList<Integer>> timeMap = new HashMap<Integer, ArrayList<Integer>>();
+    public HashMap<Integer, ArrayList<Integer>> timeMap = new HashMap<>();
     Calendar cal = Calendar.getInstance();
 
     public VeganSpot(String name, String adresse, String URL, String imgkey, double GPS_lat,
@@ -188,31 +185,7 @@ public class VeganSpot implements Comparable<VeganSpot> {
         }
         int time = (hour * 100) + (cal.get(Calendar.MINUTE));
         ArrayList<Integer> timeList = timeMap.get(day);
-        if (timeList.get(0) == 0)
-            return false;
-        if (timeList.get(0) <= time && time <= timeList.get(1))
-            return true;
-        else {
-            if (timeList.size() == 2)
-                return false;
-            else {
-                if (timeList.get(2) <= time && time <= timeList.get(3))
-                    return true;
-                else
-                    return false;
-            }
-        }
-    }
-
-    public HashMap<Integer, ArrayList<Integer>> getTimeMap() {
-        return timeMap;
-    }
-
-    // verschiedenes
-    public int compareTo(VeganSpot spot) {
-        Collator collator = Collator.getInstance(Locale.GERMAN);
-        collator.setStrength(Collator.SECONDARY);
-        return collator.compare(getName(), spot.getName());
+        return timeList.get(0) != 0 && (timeList.get(0) <= time && time <= timeList.get(1) || timeList.size() != 2 && (timeList.get(2) <= time && time <= timeList.get(3)));
     }
 
     public String toString() {

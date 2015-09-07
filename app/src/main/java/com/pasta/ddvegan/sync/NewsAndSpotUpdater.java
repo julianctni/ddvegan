@@ -1,27 +1,5 @@
 package com.pasta.ddvegan.sync;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -36,13 +14,35 @@ import android.view.animation.Animation;
 import android.widget.Toast;
 
 import com.pasta.ddvegan.R;
-import com.pasta.ddvegan.activities.SplashActivity;
 import com.pasta.ddvegan.activities.MainActivity;
+import com.pasta.ddvegan.activities.SplashActivity;
 import com.pasta.ddvegan.fragments.NewsFragment;
 import com.pasta.ddvegan.fragments.SpotListFragment;
 import com.pasta.ddvegan.models.DataRepo;
 import com.pasta.ddvegan.models.VeganNews;
 import com.pasta.ddvegan.utils.NetworkUtil;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
 
 
 public class NewsAndSpotUpdater extends AsyncTask<Integer, Integer, Integer> {
@@ -51,20 +51,19 @@ public class NewsAndSpotUpdater extends AsyncTask<Integer, Integer, Integer> {
     DatabaseManager dbMan;
     SQLiteDatabase db;
     int ret = 0;
-    boolean freshDB = false;
+    boolean firstStart = false;
 
     boolean updateSpots = false;
-    boolean spotDeleted = false;
 
     public NewsAndSpotUpdater(SplashActivity splashActivity, int result) {
         this.splashActivity = splashActivity;
         this.context = splashActivity.getApplicationContext();
-        freshDB = (result == -1);
+        firstStart = (result == -1);
     }
 
     public NewsAndSpotUpdater(Context c, int result) {
         this.context = c;
-        freshDB = (result == -1);
+        firstStart = (result == -1);
     }
 
     @Override
@@ -79,7 +78,7 @@ public class NewsAndSpotUpdater extends AsyncTask<Integer, Integer, Integer> {
 
         if (NetworkUtil.isConnected(context)) {
             HashSet<Integer> spots = updateNews();
-            if (!freshDB)
+            if (!firstStart)
                 updateVeganSpots(spots);
         } else {
             ret = NetworkUtil.connectionError;
@@ -92,10 +91,10 @@ public class NewsAndSpotUpdater extends AsyncTask<Integer, Integer, Integer> {
         super.onPostExecute(result);
         switch (result) {
             case NetworkUtil.connectionError:
-                Toast.makeText(context, "Zum Aktualisieren der Daten ist eine Internetverbindung notwendig.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, context.getString(R.string.sync_fail_internet), Toast.LENGTH_SHORT).show();
                 break;
             case NetworkUtil.serverError:
-                Toast.makeText(context, "Aus technischen Gründen konnten keine Daten aktualisiert werden.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, context.getString(R.string.sync_fail_server), Toast.LENGTH_SHORT).show();
                 break;
         }
 
@@ -138,11 +137,10 @@ public class NewsAndSpotUpdater extends AsyncTask<Integer, Integer, Integer> {
 
 
     public void updateVeganSpots(HashSet<Integer> spots) {
-        if (spots.isEmpty() && spotDeleted)
-            dbMan.getVeganSpotsFromDatabase();
 
         if (spots.isEmpty()) {
             Log.i("NewsAndSpotUpdater", "No spot updates!");
+            dbMan.getVeganSpotsFromDatabase(false);
             return;
         }
 
@@ -159,12 +157,13 @@ public class NewsAndSpotUpdater extends AsyncTask<Integer, Integer, Integer> {
         Log.i("NewsAndSpotUpdater", spotObj.toString());
 
         String result = requestSpotUpdates(spotObj.toString());
-        JSONArray jArray = null;
+        JSONArray jArray;
         db = dbMan.getWritableDatabase();
         try {
             jArray = new JSONArray(result);
             for (int i = 0; i < jArray.length(); i++) {
-                JSONObject jsonSpot = jArray.getJSONObject(i);
+                JSONObject jsonSpot;
+                jsonSpot = jArray.getJSONObject(i);
                 int id = jsonSpot.getInt("spotId");
                 String name = jsonSpot.getString("spotName");
                 String address = jsonSpot.getString("spotAddress");
@@ -207,21 +206,22 @@ public class NewsAndSpotUpdater extends AsyncTask<Integer, Integer, Integer> {
             e.printStackTrace();
             ret = NetworkUtil.serverError;
         }
-        dbMan.getVeganSpotsFromDatabase();
+        dbMan.getVeganSpotsFromDatabase(false);
 
     }
 
 
     public HashSet<Integer> updateNews() {
         dbMan.getVeganNewsFromDatabase();
-        HashSet<Integer> updateTheseSpots = new HashSet<Integer>();
+        HashSet<Integer> updateTheseSpots = new HashSet<>();
         String result = requestNews(dbMan.getMaxNewsId());
         db = dbMan.getWritableDatabase();
-        JSONArray jArray = null;
+        JSONArray jArray;
         try {
             jArray = new JSONArray(result);
             for (int i = 0; i < jArray.length(); i++) {
-                JSONObject jsonNews = jArray.getJSONObject(i);
+                JSONObject jsonNews;
+                jsonNews = jArray.getJSONObject(i);
                 int newsId = jsonNews.getInt("newsId");
                 int newsType = jsonNews.getInt("newsType");
                 int spotId = jsonNews.getInt("spotId");
@@ -233,7 +233,6 @@ public class NewsAndSpotUpdater extends AsyncTask<Integer, Integer, Integer> {
                         Log.i("NewsAndSpotUpdater", "Deleting vegan spot: " + newsContent);
                         String query = "DELETE FROM veganSpots WHERE spotId = " + spotId;
                         db.execSQL(query);
-                        spotDeleted = true;
                     } else {
                         updateTheseSpots.add(spotId);
                     }
@@ -250,13 +249,13 @@ public class NewsAndSpotUpdater extends AsyncTask<Integer, Integer, Integer> {
             }
         } catch (JSONException e) {
             ret = NetworkUtil.serverError;
-            //e.printStackTrace();
         }
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        if (prefs.getBoolean("firstStart2", true)) {
+        if (prefs.getInt(DataRepo.APP_VERSION_KEY, 0) < DataRepo.appVersionCode) {
             VeganNews tutNews = new VeganNews(-1, 8, -1, context.getString(R.string.news_tutorial), "", false);
             DataRepo.veganNews.add(tutNews);
         }
+        db.close();
 
         Collections.reverse(DataRepo.veganNews);
 
@@ -280,17 +279,17 @@ public class NewsAndSpotUpdater extends AsyncTask<Integer, Integer, Integer> {
                     inputStream, "UTF-8"), 8);
             StringBuilder sb = new StringBuilder();
 
-            String line = null;
+            String line;
             while ((line = reader.readLine()) != null) {
-                sb.append(line + "\n");
+                sb.append(line).append("\n");
             }
             result = sb.toString();
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         } finally {
             try {
                 if (inputStream != null)
                     inputStream.close();
-            } catch (Exception squish) {
+            } catch (Exception ignored) {
             }
         }
         return result;
@@ -302,10 +301,10 @@ public class NewsAndSpotUpdater extends AsyncTask<Integer, Integer, Integer> {
         HttpPost httpPost = new HttpPost(DataRepo.apiVeganSpotUpdates);
 
         try {
-            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+            List<NameValuePair> nameValuePairs = new ArrayList<>(1);
             nameValuePairs.add(new BasicNameValuePair("spotIds", "" + spotIds));
             httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-        } catch (IOException e) {
+        } catch (IOException ignored) {
         }
 
         InputStream inputStream = null;
@@ -320,17 +319,16 @@ public class NewsAndSpotUpdater extends AsyncTask<Integer, Integer, Integer> {
                     inputStream, "UTF-8"), 8);
             StringBuilder sb = new StringBuilder();
 
-            String line = null;
-            while ((line = reader.readLine()) != null) {
-                sb.append(line + "\n");
-            }
+            String line;
+            while ((line = reader.readLine()) != null)
+                sb.append(line).append("\n");
             result = sb.toString();
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         } finally {
             try {
                 if (inputStream != null)
                     inputStream.close();
-            } catch (Exception squish) {
+            } catch (Exception ignored) {
             }
         }
         return result;

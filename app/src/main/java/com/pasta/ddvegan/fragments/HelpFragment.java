@@ -1,36 +1,17 @@
 package com.pasta.ddvegan.fragments;
 
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.pasta.ddvegan.R;
 import com.pasta.ddvegan.models.DataRepo;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.protocol.HTTP;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class HelpFragment extends DialogFragment {
 
@@ -53,7 +34,7 @@ public class HelpFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                prefs.edit().putBoolean("firstStart2", false).commit();
+                prefs.edit().putInt(DataRepo.APP_VERSION_KEY, DataRepo.appVersionCode).apply();
                 getDialog().dismiss();
             }
         });

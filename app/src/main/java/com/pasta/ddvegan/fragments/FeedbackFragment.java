@@ -77,7 +77,7 @@ public class FeedbackFragment extends DialogFragment {
                             getString(R.string.contact_toast_validmail),
                             Toast.LENGTH_SHORT).show();
                 else {
-                    MailSender ms = new MailSender(message.getText().toString(), from.getText().toString(), DataRepo.appVersion);
+                    MailSender ms = new MailSender(message.getText().toString(), from.getText().toString(), DataRepo.appVersionCode+"/"+DataRepo.appVersionName);
                     ms.execute();
                 }
             }
@@ -116,7 +116,7 @@ public class FeedbackFragment extends DialogFragment {
                     "application/x-www-form-urlencoded;charset=UTF-8");
 
             try {
-                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(3);
+                List<NameValuePair> nameValuePairs = new ArrayList<>(3);
 
                 nameValuePairs.add(new BasicNameValuePair("msg", msg));
                 nameValuePairs.add(new BasicNameValuePair("version", version));

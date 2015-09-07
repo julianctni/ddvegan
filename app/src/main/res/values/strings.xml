@@ -44,6 +44,12 @@
     <string name="contact.toast.fail">Aus technischen Gründen kann gerade keine Nachricht versandt werden.</string>
     <string name="contact.feedback.writeus">Schreib uns eine Nachricht!</string>
 
+    <string name="sync.fail.server">Aus technischen Gründen konnten keine Daten aktualisiert werden.</string>
+    <string name="sync.fail.internet">Zum Aktualisieren der Daten ist eine Internetverbindung notwendig.</string>
+
+    <string name="init.fail.server">Aus technischen Gründen können die Appdaten momentan nicht initialisiert werden.</string>
+    <string name="init.fail.internet">Zum Initialisieren der Daten ist eine Internetverbindung notwendig.</string>
+
     <string name="map.position.success">Deine Position wurde ermittelt.</string>
     <string name="map.overlay.nohours">keine Öffnungszeiten vorhanden</string>
     <string name="map.overlay.moredetails">mehr Details</string>

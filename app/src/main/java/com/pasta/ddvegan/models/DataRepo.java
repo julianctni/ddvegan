@@ -23,7 +23,9 @@ public class DataRepo {
             MAP = 8,
             ABOUT = 9;
 
-    public static String appVersion = "";
+    public static String appVersionName = "";
+    public static int appVersionCode;
+    public static String APP_VERSION_KEY = "PREFS_VERSION_KEY";
 
     public static String apiUrl = "http://www.pastayouth.org/ddvegan/api/v1/";
     public static String apiVeganNews = apiUrl + "get/veganNews";
@@ -33,21 +35,21 @@ public class DataRepo {
     public static String apiReport = apiUrl + "post/report";
     public static String apiImage = apiUrl + "get/image/";
 
-    public static HashMap<Integer, VeganSpot> veganSpots = new HashMap<Integer, VeganSpot>();
-    public static ArrayList<VeganSpot> foodSpots = new ArrayList<VeganSpot>();
-    public static ArrayList<VeganSpot> shoppingSpots = new ArrayList<VeganSpot>();
-    public static ArrayList<VeganSpot> cafeSpots = new ArrayList<VeganSpot>();
-    public static ArrayList<VeganSpot> bakerySpots = new ArrayList<VeganSpot>();
-    public static ArrayList<VeganSpot> vokueSpots = new ArrayList<VeganSpot>();
-    public static ArrayList<VeganSpot> icecreamSpots = new ArrayList<VeganSpot>();
-    public static HashMap<Integer,VeganSpot> favoriteMap = new HashMap<Integer,VeganSpot>();
-    public static ArrayList<VeganSpot> favoriteSpots = new ArrayList<VeganSpot>();
+    public static HashMap<Integer, VeganSpot> veganSpots = new HashMap<>();
+    public static ArrayList<VeganSpot> foodSpots = new ArrayList<>();
+    public static ArrayList<VeganSpot> shoppingSpots = new ArrayList<>();
+    public static ArrayList<VeganSpot> cafeSpots = new ArrayList<>();
+    public static ArrayList<VeganSpot> bakerySpots = new ArrayList<>();
+    public static ArrayList<VeganSpot> vokueSpots = new ArrayList<>();
+    public static ArrayList<VeganSpot> icecreamSpots = new ArrayList<>();
+    public static HashMap<Integer,VeganSpot> favoriteMap = new HashMap<>();
+    public static ArrayList<VeganSpot> favoriteSpots = new ArrayList<>();
 
 
-    public static ArrayList<NavItem> navItems = new ArrayList<NavItem>();
+    public static ArrayList<NavItem> navItems = new ArrayList<>();
 
-    public static HashSet<Integer> chosenMapItems = new HashSet<Integer>();
-    public static HashSet<Integer> mapMind = new HashSet<Integer>();
+    public static HashSet<Integer> chosenMapItems = new HashSet<>();
+    public static HashSet<Integer> mapMind = new HashSet<>();
 
     public static long lastDistanceUpdate;
 
@@ -57,7 +59,7 @@ public class DataRepo {
         favoriteSpots.addAll(favoriteMap.values());
     }
 
-    public static ArrayList<VeganNews> veganNews = new ArrayList<VeganNews>();
+    public static ArrayList<VeganNews> veganNews = new ArrayList<>();
 
     public static boolean hasDistance = false;
 

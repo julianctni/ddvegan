@@ -36,7 +36,7 @@ public class NewsFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        newsRefresher = (SwipeRefreshLayout) getView().findViewById(R.id.news_refresher);
+        newsRefresher = (SwipeRefreshLayout) view.findViewById(R.id.news_refresher);
         newsRefresher.setColorSchemeResources(R.color.primary, R.color.primary_bright, R.color.primary_dark);
         newsRefresher.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -45,7 +45,7 @@ public class NewsFragment extends Fragment {
                 updater.execute();
             }
         });
-        newsList = (ListView)getView().findViewById(R.id.news_list);
+        newsList = (ListView)view.findViewById(R.id.news_list);
         newsList.setAdapter(newsAdapter);
         newsList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         newsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {

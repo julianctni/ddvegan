@@ -18,72 +18,39 @@ public class NetworkUtil {
     public final static int serverError = 1;
     public final static int connectionError = 2;
 
-    /**
-     * Get the network info
-     *
-     * @param context
-     * @return
-     */
+
     public static NetworkInfo getNetworkInfo(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm.getActiveNetworkInfo();
     }
 
-    /**
-     * Check if there is any connectivity
-     *
-     * @param context
-     * @return
-     */
+
     public static boolean isConnected(Context context) {
         NetworkInfo info = NetworkUtil.getNetworkInfo(context);
         return (info != null && info.isConnected()); //&& isOnline());
     }
 
-    /**
-     * Check if there is any connectivity to a Wifi network
-     *
-     * @param context
-     * @param type
-     * @return
-     */
+
     public static boolean isConnectedWifi(Context context) {
         NetworkInfo info = NetworkUtil.getNetworkInfo(context);
         return (info != null && info.isConnected() && info.getType() == ConnectivityManager.TYPE_WIFI);
     }
 
-    /**
-     * Check if there is any connectivity to a mobile network
-     *
-     * @param context
-     * @param type
-     * @return
-     */
+
     public static boolean isConnectedMobile(Context context) {
         NetworkInfo info = NetworkUtil.getNetworkInfo(context);
         return (info != null && info.isConnected() && info.getType() == ConnectivityManager.TYPE_MOBILE);
     }
 
-    /**
-     * Check if there is fast connectivity
-     *
-     * @param context
-     * @return
-     */
+
     public static boolean isConnectedFast(Context context) {
         NetworkInfo info = NetworkUtil.getNetworkInfo(context);
         return (info != null && info.isConnected() && NetworkUtil
                 .isConnectionFast(info.getType(), info.getSubtype()));
     }
 
-    /**
-     * Check if the connection is fast
-     *
-     * @param type
-     * @param subType
-     * @return
-     */
+
     public static boolean isConnectionFast(int type, int subType) {
         if (type == ConnectivityManager.TYPE_WIFI) {
             return true;
@@ -130,15 +97,12 @@ public class NetworkUtil {
     }
 
     public static boolean isOnline() {
-
         Runtime runtime = Runtime.getRuntime();
         try {
             Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
             int exitValue = ipProcess.waitFor();
             return (exitValue == 0);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
 
