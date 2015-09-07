@@ -150,19 +150,28 @@ public class VeganSpot implements Comparable<VeganSpot> {
         if (timeMap.get(day).get(0) == 0)
             return "geschlossen";
         String hours = "";
-        String h1 = ""+timeMap.get(day).get(0);
-        if (h1.length() < 4)
-            h1 = "0"+h1;
-        String h2 = ""+timeMap.get(day).get(1);
-        if (h2.length() < 4)
-            h2 = "0"+h2;
+        String h1 = timeIntToString(timeMap.get(day).get(0) % 2400);
+        String h2 = timeIntToString(timeMap.get(day).get(1)%2400);
         hours += (h1.substring(0,2)+":"+h1.substring(2,4)+" - "+h2.substring(0,2)+":"+h2.substring(2,4));
         if (timeMap.get(day).size()>2) {
-            h1 = "" + timeMap.get(day).get(2);
-            h2 = "" + timeMap.get(day).get(3);
+            h1 = timeIntToString(timeMap.get(day).get(2)%2400);
+            h2 = timeIntToString(timeMap.get(day).get(3)%2400);
             hours += (", " + h1.substring(0, 2) + ":" + h1.substring(2, 4) + " - " + h2.substring(0, 2) + ":" + h2.substring(2, 4));
         }
         return hours;
+    }
+
+    public String timeIntToString(int i){
+        String s = ""+i;
+        switch (s.length()){
+            case 1:
+                return "000"+s;
+            case 2:
+                return "00"+s;
+            case 3:
+                return "0"+s;
+        }
+        return s;
     }
 
     public boolean checkIfOpen() {
