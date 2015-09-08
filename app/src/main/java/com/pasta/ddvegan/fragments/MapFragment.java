@@ -50,7 +50,6 @@ import java.util.List;
 public class MapFragment extends Fragment {
 
     public static Handler mapHandler;
-    OnFragmentInteractionListener mListener;
     MapView mapView;
     ProgressDialog dialog;
     GpsUtil gps = new GpsUtil(this);
@@ -188,6 +187,7 @@ public class MapFragment extends Fragment {
         mapView.setCenter(mapCenter);
         mapView.setMaxZoomLevel(20);
         mapView.setZoom(mapZoom);
+        mapView.setDiskCacheEnabled(true);
         mapView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -542,16 +542,6 @@ public class MapFragment extends Fragment {
     }
 
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
 
     @Override
     public void onStart() {
@@ -559,16 +549,6 @@ public class MapFragment extends Fragment {
         DataRepo.chosenMapItems.clear();
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(Uri uri);
-    }
 
     @SuppressLint("NewApi")
     public void showSpotDetail(boolean show){

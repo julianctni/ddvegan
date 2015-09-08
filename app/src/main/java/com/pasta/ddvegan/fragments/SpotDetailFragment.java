@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -134,7 +135,7 @@ public class SpotDetailFragment extends Fragment {
         Calendar cal = Calendar.getInstance();
         int today = cal.get(Calendar.DAY_OF_WEEK);
         int day = 1;
-        LinearLayout hourLayout = (LinearLayout) view.findViewById(R.id.spot_hours_layout);
+        CardView hourLayout = (CardView) view.findViewById(R.id.spot_hours_layout);
         if (!spot.hasHours)
             hourLayout.setVisibility(View.GONE);
         else
@@ -155,7 +156,9 @@ public class SpotDetailFragment extends Fragment {
             phone = "";
         if (spot.getMail().equals("") || spot.getMail().toLowerCase().equals("null"))
             mail = "";
-        if (spot.getPhone().equals("") && spot.getMail().equals("") && spot.getURL().equals(""))
+        if (spot.getURL().equals("") || spot.getURL().toLowerCase().equals("null"))
+            web = "";
+        if (phone.equals("") && web.equals("") && mail.equals(""))
             contact.setText(getString(R.string.spot_detail_nocontact));
         else
             contact.setText(phone + mail + web);

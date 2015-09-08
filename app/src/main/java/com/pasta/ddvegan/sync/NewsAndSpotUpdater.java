@@ -82,6 +82,9 @@ public class NewsAndSpotUpdater extends AsyncTask<Integer, Integer, Integer> {
                 updateVeganSpots(spots);
         } else {
             ret = NetworkUtil.connectionError;
+            dbMan.getVeganNewsFromDatabase();
+            dbMan.getVeganSpotsFromDatabase(false);
+            Collections.reverse(DataRepo.veganNews);
         }
 
         return ret;
@@ -206,6 +209,7 @@ public class NewsAndSpotUpdater extends AsyncTask<Integer, Integer, Integer> {
             e.printStackTrace();
             ret = NetworkUtil.serverError;
         }
+        db.close();
         dbMan.getVeganSpotsFromDatabase(false);
 
     }

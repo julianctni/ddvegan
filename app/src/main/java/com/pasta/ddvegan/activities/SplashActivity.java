@@ -3,6 +3,7 @@ package com.pasta.ddvegan.activities;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.view.Display;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
@@ -43,11 +44,12 @@ public class SplashActivity extends ActionBarActivity {
         icon.setVisibility(View.VISIBLE);
         TextView tv = (TextView)findViewById(R.id.loading_text);
         tv.setVisibility(View.VISIBLE);
-
-        transUp = new TranslateAnimation(icon.getLeft(), icon.getLeft(), icon.getTop(), icon.getTop()-300);
+        Display display = getWindowManager().getDefaultDisplay();
+        double height = display.getHeight()*0.3;
+        transUp = new TranslateAnimation(icon.getLeft(), icon.getLeft(), icon.getTop(), icon.getTop()-(int)height);
         transUp.setDuration(600);
 
-        transDown = new TranslateAnimation(icon.getLeft(), icon.getLeft(), icon.getTop()-300, icon.getTop());
+        transDown = new TranslateAnimation(icon.getLeft(), icon.getLeft(), icon.getTop()-(int)height, icon.getTop());
         transDown.setDuration(600);
 
         rotate = new RotateAnimation(0,360, Animation.RELATIVE_TO_SELF,0.5f , Animation.RELATIVE_TO_SELF,0.5f);

@@ -29,10 +29,7 @@ import com.pasta.ddvegan.models.DataRepo;
 import com.pasta.ddvegan.utils.NavItem;
 
 
-public class MainActivity extends ActionBarActivity
-        implements SpotListFragment.OnFragmentInteractionListener,
-        StartPageFragment.OnFragmentInteractionListener,
-        MapFragment.OnFragmentInteractionListener {
+public class MainActivity extends ActionBarActivity {
 
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle drawerToggle;
@@ -194,10 +191,4 @@ public class MainActivity extends ActionBarActivity
                 super.onBackPressed();
         }
     }
-
-    @Override
-    public void onFragmentInteraction(int venueId) {}
-
-    @Override
-    public void onFragmentInteraction(Uri uri) {}
 }

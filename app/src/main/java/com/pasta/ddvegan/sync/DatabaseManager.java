@@ -86,6 +86,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
                 s.setFavorite(true);
             }
 		}
+        c.close();
 		db.close();
 
         if (firstStart)
@@ -135,7 +136,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
             db = this.getWritableDatabase();
             db.execSQL(query);
         }
-
+        c.close();
         db.close();
     }
 
@@ -160,8 +161,11 @@ public class DatabaseManager extends SQLiteOpenHelper {
         String count = "SELECT count(*) FROM veganSpots";
         Cursor c = db.rawQuery(count, null);
         if (c != null && c.moveToFirst()) {
-            return (c.getInt(0) == 0);
+            boolean empty = c.getInt(0) == 0;
+            c.close();
+            return empty;
         }
+        c.close();
         return false;
     }
 
@@ -189,6 +193,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
         while (c.moveToNext()) {
             maxId = c.getInt(c.getColumnIndex("newsId"));
         }
+        c.close();
         db.close();
         return maxId;
     }

@@ -1,6 +1,5 @@
 package com.pasta.ddvegan.fragments;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -36,7 +35,6 @@ import java.util.ArrayList;
 
 public class SpotListFragment extends Fragment {
 
-    private OnFragmentInteractionListener mListener;
     int type;
     String title = "";
     ArrayList<VeganSpot> spots;
@@ -185,23 +183,6 @@ public class SpotListFragment extends Fragment {
 
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
         inflater.inflate(R.menu.menu_spotlist, menu);
@@ -311,9 +292,4 @@ public class SpotListFragment extends Fragment {
     public Handler getHandler(){
         return listHandler;
     }
-
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(int id);
-    }
-
 }

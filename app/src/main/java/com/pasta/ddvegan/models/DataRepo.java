@@ -121,7 +121,7 @@ public class DataRepo {
             if (v1.getFloatDistance() < v2.getFloatDistance())
                 return -1;
             else
-                return 1;
+                return 0;
         }
     }
 
@@ -134,7 +134,7 @@ public class DataRepo {
             if (v1.checkIfOpen() && !v2.checkIfOpen())
                 return -1;
             else
-                return 1;
+                return 0;
         }
     }
 

@@ -121,17 +121,17 @@ public class VeganSpot {
 
 
     public void addHours(String timeString) {
-        if (timeString.equals("null") || timeString.isEmpty())
+        if (timeString.equals("null") || timeString.length() == 0)
             return;
         String[] days = timeString.split(Pattern.quote(";"));
-        Log.i("ADDHOURS - " + getName(), "days: " + days.length);
+        //Log.i("ADDHOURS - " + getName(), "days: " + days.length);
         int dayNr = 2;
         for (String day : days) {
             timeMap.put(dayNr, new ArrayList<Integer>());
             String[] hours = day.split(Pattern.quote("."));
-            Log.i("ADDHOURS - "+getName(),"hours: "+hours.length);
+            //Log.i("ADDHOURS - "+getName(),"hours: "+hours.length);
             for (String hour : hours) {
-                Log.i("ADDHOURS - "+getName()+ " "+dayNr,hour);
+                //Log.i("ADDHOURS - "+getName()+ " "+dayNr,hour);
                 timeMap.get(dayNr).add(Integer.parseInt(hour));
             }
             if (dayNr == 7)
