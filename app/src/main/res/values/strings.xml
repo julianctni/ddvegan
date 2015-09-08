@@ -35,7 +35,7 @@
 
     <string name="tutorial.havefun">Die restlichen Neuerungen darfst du nun selbst entdecken! Wir wünschen dabei viel Spaß und freuen uns stets über Feedback.</string>
 
-    <string name="share.text">Dresden Vegan - Die App für veganes Leben in Dresden und Umgebung!\nhttps://goo.gl/hLkl1s</string>
+    <string name="share.text">Dresden Vegan - Die App für veganes Leben in Dresden und Umgebung!\ngoo.gl/ChTTSD</string>
     <string name="share.choice">Wähle eine App aus:</string>
 
     <string name="contact.toast.minlength">Deine Nachricht sollte mehr als ein paar Buchstaben enthalten.</string>
@@ -97,10 +97,10 @@
 
     <string name="info.content.annotations">Anmerkungen</string>
     <string name="info.content.impressum">Impressum</string>
-    <string name="info.content.version">Version 2.0 / Aug 2015</string>
+    <string name="info.content.version">Version 2.0 / Sep 2015</string>
     <string name="info.content.code.header">Lizenz</string>
     <string name="info.content.rating">Über eine Bewertung im Appstore oder per Mail würden wir uns sehr freuen. </string>
-    <string name="info.content.code">Der Quellcode ist auf <![CDATA[<a href="https://github.com/pastayouth/ddvegan">GitHub</a>]]> verfügbar und unter der <![CDATA[<a href="http://www.gnu.org/licenses/gpl-3.0.de.html">GNU General Public License</a> lizensiert.]]></string>
+    <string name="info.content.code">Der Quellcode ist auf <![CDATA[<a href="https://github.com/pastayouth/ddvegan">GitHub</a>]]> verfügbar und unter der <![CDATA[<a href="http://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</a> lizensiert.]]></string>
     <string name="info.content.lovepasta">Love pasta, hate racism!</string>
     <string name="info.content.developerz">Pasta Software\naka Julian Catoni / Stephan Dinter</string>
     <string name="info.content.thanks"><b>#</b> ein dickes Dankeschön geht an die Admins/Mitglieder der \'Dresden Vegan\' Facebook-Gruppe (www.dresdenvegan.de) für die Bereitstellung ihrer Essens- und Einkaufslisten.\n</string>

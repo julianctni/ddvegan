@@ -9,6 +9,8 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:background="@color/dialog.contact"
         android:minWidth="260dp"
         android:orientation="vertical"
