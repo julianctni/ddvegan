@@ -27,7 +27,7 @@ public class DataRepo {
     public static int appVersionCode;
     public static String APP_VERSION_KEY = "PREFS_VERSION_KEY";
 
-    public static String apiUrl = "http://www.pastayouth.org/ddvegan/api/v1/";
+    public static String apiUrl = "https://jvlian.uber.space/ddvegan/api/v1/";
     public static String apiVeganNews = apiUrl + "get/veganNews";
     public static String apiVeganSpots = apiUrl + "get/veganSpots";
     public static String apiVeganSpotUpdates = apiUrl + "post/veganSpotUpdates";

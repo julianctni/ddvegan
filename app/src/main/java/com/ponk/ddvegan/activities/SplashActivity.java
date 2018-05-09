@@ -2,7 +2,7 @@ package com.ponk.ddvegan.activities;
 
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Display;
 import android.view.View;
 import android.view.animation.Animation;
@@ -16,7 +16,7 @@ import com.ponk.ddvegan.R;
 import com.ponk.ddvegan.models.DataRepo;
 import com.ponk.ddvegan.sync.DatabaseUpdater;
 
-public class SplashActivity extends ActionBarActivity {
+public class SplashActivity extends AppCompatActivity {
 
     public Animation transUp;
     public Animation transDown;

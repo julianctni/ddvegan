@@ -269,10 +269,10 @@ public class SpotDetailFragment extends Fragment {
                 Log.i("LOADING IMAGE", "loading image from internal storage");
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
-                Log.i("LOADING IMAGE", "loading image from web");
+                Log.i("LOADING IMAGE", "loading image from web " + DataRepo.apiImage + spot.getImgKey());
                 try {
-                    foodPicture = BitmapFactory
-                            .decodeStream((InputStream) new URL(DataRepo.apiImage + spot.getImgKey()).getContent());
+                    InputStream in = new java.net.URL(DataRepo.apiImage + spot.getImgKey()).openStream();
+                    foodPicture = BitmapFactory.decodeStream(in);
 
                 } catch (Exception e1) {
                     e1.printStackTrace();
